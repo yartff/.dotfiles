@@ -8,7 +8,7 @@ readonly DIR_HOME="$HOME"
 readonly DIR_FILE="$DIR_HOME/.dotfiles/files"
 
 readonly SYNC_CMD="rsync -va --delete"
-readonly RM_CMD="echo rm -rfv"
+readonly RM_CMD="rm -rfv"
 shopt -s dotglob
 
 usage() {
