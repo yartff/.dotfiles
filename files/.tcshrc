@@ -4,7 +4,7 @@
 limit coredumpsize 0
 
 setenv EDITOR	"emacs -nw"
-setenv PAGER	"/home/carbon_q/.dotfiles/submodules/vimpager/vimpager"
+setenv PAGER	"$HOME/.dotfiles/submodules/vimpager/vimpager"
 
 set autolist
 set complete
@@ -21,6 +21,7 @@ alias j		'jobs'
 alias :q	'exit'
 alias vi	'vim -O2'
 alias ne	'emacs -nw'
+alias vcat	''
 
 bindkey '^[[1;5D'	backward-word
 bindkey '^[[1;5C'	forward-word
