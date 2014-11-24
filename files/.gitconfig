@@ -1,0 +1,11 @@
+[color]
+	diff = auto
+	status = auto
+	branch = origin
+[user]
+	name = yartFF
+	email = carbonel.q@gmail.com
+[core]
+	editor = vim
+[web]
+	browser = google-chrome
