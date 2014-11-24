@@ -1,0 +1,34 @@
+## BOCAL STAFF 2010-2011
+## FEDORA DUMP
+
+limit coredumpsize 0
+
+setenv EDITOR	"emacs -nw"
+setenv PAGER	"/home/carbon_q/.dotfiles/submodules/vimpager/vimpager"
+
+set autolist
+set complete
+set history=1000
+set path=(/usr/{sbin,bin} /{sbin,bin})
+set prompt='%%%n@%M %h:'
+set savehist=1000
+set watch=(1 any any)
+
+alias ll	'ls -l'
+alias la	'ls -a'
+alias l		'clear ; ll -a'
+alias j		'jobs'
+alias :q	'exit'
+alias vi	'vim -O2'
+alias ne	'emacs -nw'
+
+bindkey '^[[1;5D'	backward-word
+bindkey '^[[1;5C'	forward-word
+##bindkey '^H'		backward-delete-word
+##bindkey '^[[1;5A'	backward-word
+##bindkey '^[[1;5B'	backward-word
+##bindkey '5~'		delete-word
+
+alias 7up	'svn up'
+
+# EOF
