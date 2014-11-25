@@ -9,3 +9,9 @@
 	editor = vim
 [web]
 	browser = google-chrome
+[push]
+	default = simple
+[filter "media"]
+	clean = git media clean %f
+	smudge = git media smudge %f
+	required = true
