@@ -1,6 +1,3 @@
-## BOCAL STAFF 2010-2011
-## FEDORA DUMP
-
 limit coredumpsize 0
 
 setenv EDITOR	"emacs -nw"
