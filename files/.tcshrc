@@ -1,6 +1,4 @@
 limit coredumpsize 0
-FILE_SPEC="${HOME}/.tcshrc_sp
-
 
 setenv EDITOR	"emacs -nw"
 setenv PAGER	"${HOME}/.dotfiles/submodules/vimpager/vimpager"
@@ -31,8 +29,9 @@ bindkey '^[[1;5C'	forward-word
 
 alias 7up	'svn up'
 
-if ( -f FILE_SPEC ) then
-  source FILE_SPEC
+set FILE_SPEC="$HOME/.tcshrc_sp"
+if ( -f $FILE_SPEC ) then
+  source $FILE_SPEC
 endif
 
 # EOF
