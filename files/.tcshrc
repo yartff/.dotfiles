@@ -1,7 +1,9 @@
 limit coredumpsize 0
+FILE_SPEC="${HOME}/.tcshrc_sp
+
 
 setenv EDITOR	"emacs -nw"
-setenv PAGER	"$HOME/.dotfiles/submodules/vimpager/vimpager"
+setenv PAGER	"${HOME}/.dotfiles/submodules/vimpager/vimpager"
 
 set autolist
 set complete
@@ -18,7 +20,7 @@ alias j		'jobs'
 alias :q	'exit'
 alias vi	'vim -O2'
 alias ne	'emacs -nw'
-alias vcat	"$HOME/.dotfiles/submodules/vimpager/vimcat"
+alias vcat	"${HOME}/.dotfiles/submodules/vimpager/vimcat"
 
 bindkey '^[[1;5D'	backward-word
 bindkey '^[[1;5C'	forward-word
@@ -28,5 +30,9 @@ bindkey '^[[1;5C'	forward-word
 ##bindkey '5~'		delete-word
 
 alias 7up	'svn up'
+
+if ( -f FILE_SPEC ) then
+  source FILE_SPEC
+endif
 
 # EOF
