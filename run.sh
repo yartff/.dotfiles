@@ -29,12 +29,14 @@ sync_dotfiles() {
 if [ $# -eq 0 ]; then
   usage;
 elif [ $# -le 1 ]; then
-  all_files="`find $DIR_FILE -name '.*'`"
+  all_files="$DIR_FILE/.*"
   for tmp in $all_files
   do
     tmp=`echo $tmp | grep -o '[^/]*$'`
-    args[$count]="$tmp"
-    count=$((count + 1))
+    if [ $tmp != "." ] && [ $tmp != ".." ]; then
+      args[$count]="$tmp"
+      count=$((count + 1))
+    fi
   done
 else
   count=2
