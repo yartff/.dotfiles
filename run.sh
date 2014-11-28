@@ -5,8 +5,6 @@ readonly CMD_PULL='install'
 readonly DIR_HOME="$HOME"
 readonly DIR_FILE="$DIR_HOME/.dotfiles/files"
 
-count=0;
-
 usage() {
   echo -n Usage:' '
   echo sh $0 "{$CMD_PUSH,$CMD_PULL}" [FILE]...;
@@ -18,6 +16,7 @@ sync_dotfiles() {
   count_sync=0
   while [ "${args[$count_sync]}" ]
   do
+    diff "$1/${args[$count_sync]}" "$2/${args[$count_sync]}" -qr > /dev/null
     if [ $? -eq 1 ]; then
       cp -vr "$1/${args[$count_sync]}" "$2"
     fi
@@ -30,6 +29,9 @@ if [ $# -eq 0 ]; then
   usage;
 elif [ $# -le 1 ]; then
   all_files="$DIR_FILE/.*"
+  count=0;
+
+  echo $all_files
   for tmp in $all_files
   do
     tmp=`echo $tmp | grep -o '[^/]*$'`
