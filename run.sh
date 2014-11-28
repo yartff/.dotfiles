@@ -1,8 +1,11 @@
 #!/bin/sh
 
-readonly CMD_PUSH='edit'
-readonly CMD_PULL='update'
-readonly DIR_FILE='files/'
+readonly CMD_PUSH='modify'
+readonly CMD_PULL='install'
+readonly DIR_HOME="$HOME"
+readonly DIR_FILE="$DIR_HOME/.dotfiles/files"
+
+count=0;
 
 usage() {
   echo -n Usage:' '
@@ -10,17 +13,28 @@ usage() {
   exit
 }
 
-if [ $# -eq 0 ]; then
-  usage
-elif [ $# -le 1 ]; then
-  count=0;
-  for f in "$DIR_FILE"/.*
+sync_dotfiles() {
+  echo "$3ing..." ## lel
+  count_sync=0
+  while [ "${args[$count_sync]}" ]
   do
-    f=`echo $f | grep -o '[^/]*$'`
-    if [ $f != "." ] && [ $f != ".." ]; then
-      args[$count]="$f"
-      count=$((count + 1))
+    if [ $? -eq 1 ]; then
+      cp -vr "$1/${args[$count_sync]}" "$2"
     fi
+    count_sync=$((count_sync + 1))
+  done
+  echo "Done."
+}
+
+if [ $# -eq 0 ]; then
+  usage;
+elif [ $# -le 1 ]; then
+  all_files="`find $DIR_FILE -name '.*'`"
+  for tmp in $all_files
+  do
+    tmp=`echo $tmp | grep -o '[^/]*$'`
+    args[$count]="$tmp"
+    count=$((count + 1))
   done
 else
   count=2
@@ -32,20 +46,9 @@ else
 fi
 
 if [ $1 == $CMD_PUSH ]; then
-  dir_from="~/"
-  dir_to="$DIR_FILE"
+  sync_dotfiles "$DIR_HOME" "$DIR_FILE" $1;
 elif [ $1 == $CMD_PULL ]; then
-  dir_from="$DIR_FILE/"
-  dir_to="~/"
+  sync_dotfiles "$DIR_FILE" "$DIR_HOME" $1;
 else
-  usage
+  usage;
 fi
-
-echo $1
-echo "$dir_from -> $dir_to"
-count=0
-while [ ${args[$count]} ]
-do
-  echo ${args[$count]}
-  count=$((count + 1))
-done
