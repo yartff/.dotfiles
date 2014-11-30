@@ -1,8 +1,8 @@
 #!/bin/sh
 
-readonly CMD_PUSH='modify'
-readonly CMD_PULL='install'
-readonly CMD_DIFF='diff'
+readonly CMD_PUSH='push'
+readonly CMD_PULL='pull'
+readonly CMD_DIFF='status'
 readonly DIR_HOME="$HOME"
 readonly DIR_FILE="$DIR_HOME/.dotfiles/files"
 
@@ -17,7 +17,7 @@ diff_dotfiles() {
   echo "Diff:"
   while [ "${args[$count_]}" ]
   do
-    diff "$1/${args[$count_]}" "$2/${args[$count_]}" -qr
+    diff "$1/${args[$count_]}" "$2/${args[$count_]}"
     count_=$((count_ + 1))
   done
 }
@@ -27,7 +27,7 @@ sync_dotfiles() {
   count_sync=0
   while [ "${args[$count_sync]}" ]
   do
-    diff "$1/${args[$count_sync]}" "$2/${args[$count_sync]}" -qr > /dev/null
+    diff "$1/${args[$count_sync]}" "$2/${args[$count_sync]}" -q > /dev/null
     if [ $? -eq 1 ]; then
       cp -vr "$1/${args[$count_sync]}" "$2"
     fi
@@ -39,16 +39,17 @@ sync_dotfiles() {
 if [ $# -eq 0 ]; then
   usage;
 elif [ $# -le 1 ]; then
-  all_files="$DIR_FILE/.*"
-  count=0;
-
+  all_files=`find $DIR_FILE`
+  count=-1;
+  nb_char=0;
   for tmp in $all_files
   do
-    tmp=`echo $tmp | grep -o '[^/]*$'`
-    if [ $tmp != "." ] && [ $tmp != ".." ]; then
-      args[$count]="$tmp"
-      count=$((count + 1))
+    if [ $count -eq -1 ]; then
+      nb_char=`echo $tmp/ | wc -c`
+    else
+      args[$count]="`echo $tmp | cut -c $nb_char-`"
     fi
+    count=$((count + 1))
   done
 else
   count=2
