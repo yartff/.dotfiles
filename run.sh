@@ -2,7 +2,7 @@
 
 readonly CMD_PUSH='push'
 readonly CMD_PULL='pull'
-readonly CMD_DIFF='status'
+readonly CMD_DIFF='diff'
 readonly DIR_HOME="$HOME"
 readonly DIR_FILE="$DIR_HOME/.dotfiles/files"
 
