@@ -17,7 +17,10 @@ diff_dotfiles() {
   echo "Diff:"
   while [ "${args[$count_]}" ]
   do
-    diff "$1/${args[$count_]}" "$2/${args[$count_]}"
+    res="`diff "$1/${args[$count_]}" "$2/${args[$count_]}" -q`"
+    if [ $? -eq 1 ]; then
+      echo ${args[$count_]}
+    fi
     count_=$((count_ + 1))
   done
 }
@@ -27,9 +30,21 @@ sync_dotfiles() {
   count_sync=0
   while [ "${args[$count_sync]}" ]
   do
-    diff "$1/${args[$count_sync]}" "$2/${args[$count_sync]}" -q > /dev/null
+    obj="${args[$count_sync]}"
+    ls $2/$obj > /dev/null 2>&1
     if [ $? -eq 1 ]; then
-      cp -vr "$1/${args[$count_sync]}" "$2"
+      cp -vr "$1/$obj" "$2" 2> /dev/null;
+    else
+      if [ -f "$1/$obj" -a ! -f "$2/$obj" -o \
+	-d "$1/$obj" -a ! -d "$2/$obj" ]; then
+        rm -rfv $2/$obj;
+	cp -vr $1/$obj $2 2> /dev/null;
+      else
+	diff "$1/$obj" "$2/$obj" -q > /dev/null
+	if [ $? -eq 1 ]; then
+	  cp -vr "$1/$obj" "$2" 2> /dev/null
+	fi
+      fi
     fi
     count_sync=$((count_sync + 1))
   done
