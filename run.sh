@@ -38,7 +38,8 @@ sync_dotfiles() {
       if [ -f "$1/$obj" -a ! -f "$2/$obj" -o -d "$1/$obj" -a ! -d "$2/$obj" ];
       then
 	rm -rfv $2/$obj;
-	cp -vr $1/$obj $2 2> /dev/null;
+	mkdir -vp "$2/`dirname $obj`"
+	cp -vr $1/$obj $2/$obj #2> /dev/null;
       else
 	diff "$1/$obj" "$2/$obj" -q > /dev/null
 	if [ $? -eq 1 ]; then
@@ -70,7 +71,7 @@ else
   count=2
   while [ $count -le $# ]
   do
-    args[$((count - 2))]=`echo "${!count}" | grep -o '[^/]*$'`
+    args[$((count - 2))]=`echo "${!count}"`
     count=$((count + 1))
   done
 fi
