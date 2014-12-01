@@ -46,3 +46,5 @@ hi Keyword      ctermfg=117  cterm=none
 hi PreProc      ctermfg=173     cterm=none
 hi Number       ctermfg=173   cterm=none
 hi Special      ctermfg=194  cterm=none
+
+hi ColorColumn	ctermbg=208

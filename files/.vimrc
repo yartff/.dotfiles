@@ -46,3 +46,8 @@ map <C-p> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans
 
 " Highlight 80th column
 let &colorcolumn=join(range(81,81),",")
+
+" No swap or backup files
+set nobackup
+set nowritebackup
+set noswapfile
