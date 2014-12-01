@@ -35,9 +35,9 @@ sync_dotfiles() {
     if [ $? -eq 1 ]; then
       cp -vr "$1/$obj" "$2" 2> /dev/null;
     else
-      if [ -f "$1/$obj" -a ! -f "$2/$obj" -o \
-	-d "$1/$obj" -a ! -d "$2/$obj" ]; then
-        rm -rfv $2/$obj;
+      if [ -f "$1/$obj" -a ! -f "$2/$obj" -o -d "$1/$obj" -a ! -d "$2/$obj" ];
+      then
+	rm -rfv $2/$obj;
 	cp -vr $1/$obj $2 2> /dev/null;
       else
 	diff "$1/$obj" "$2/$obj" -q > /dev/null
