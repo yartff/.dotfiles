@@ -44,3 +44,5 @@ map <M-left> <Esc>:vertical resize -1 <CR>
 map <M-right> <Esc>:vertical resize +1 <CR>
 map <C-p> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
+" Highlight 80th column
+let &colorcolumn=join(range(81,81),",")
