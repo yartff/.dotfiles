@@ -19,6 +19,7 @@ alias :q	'exit'
 alias vi	'vim -O2'
 alias ne	'emacs -nw'
 alias vcat	"${HOME}/.dotfiles/submodules/vimpager/vimcat"
+alias vpa	"${HOME}/.dotfiles/submodules/vimpager/vimpager"
 
 bindkey '^[[1;5D'	backward-word
 bindkey '^[[1;5C'	forward-word
