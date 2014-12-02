@@ -14,7 +14,7 @@ shopt -s dotglob
 
 usage() {
   echo -n Usage:' '
-  echo sh $0 "{$CMD_PUSH,$CMD_PULL,$CMD_DIFF,$CHECKOUT}" [FILE]...;
+  echo sh $0 "{$CMD_PUSH,$CMD_PULL,$CMD_DIFF,$CMD_CHECK}" [FILE]...;
   exit
 }
 
