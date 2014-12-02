@@ -6,7 +6,10 @@ readonly CMD_DIFF='diff'
 readonly CMD_CHECK='checkout'
 readonly DIR_HOME="$HOME"
 readonly DIR_FILE="$DIR_HOME/.dotfiles/files"
+
 readonly CP_COMM="cp -uvr "
+readonly RM_COMM="rm -rfv "
+readonly MK_COMM="mkdir -vp "
 shopt -s dotglob
 
 usage() {
@@ -17,7 +20,6 @@ usage() {
 
 diff_dotfiles() {
   count_=0
-  echo "Diff:"
   while [ "${args[$count_]}" ]
   do
     res="`diff "$1/${args[$count_]}" "$2/${args[$count_]}" -q`"
@@ -28,25 +30,24 @@ diff_dotfiles() {
   done
 }
 
-sync_dotfiles_push() {
-  echo "Pushing..."
+sync_dotfiles() {
   count_sync=0
   while [ "${args[$count_sync]}" ]
   do
     obj="${args[$count_sync]}"
-    if [ -d "$DIR_HOME/$obj" -a -f "$DIR_FILE/$obj" -o \
-      -f "$DIR_HOME/$obj" -a -d "$DIR_FILE/$obj" ]; then
-      rm -rfv "$DIR_FILE/$obj";
+    if [ -d "$1/$obj" -a -f "$2/$obj" -o \
+      -f "$1/$obj" -a -d "$2/$obj" ]; then
+      $RM_COMM "$2/$obj";
     fi
-    if [ ! -f "$DIR_HOME/$obj" -a ! -d "$DIR_HOME/$obj" ]; then
-      rm -rfv "$DIR_FILE/$obj"
+    if [ ! -f "$1/$obj" -a ! -d "$1/$obj" ]; then
+      $RM_COMM "$2/$obj"
       return
     fi
-    mkdir -vp "$DIR_FILE/`dirname $obj`"
-    if [ -d "$DIR_HOME/$obj" -a -d "$DIR_FILE/$obj" ]; then
-      $CP_COMM $DIR_HOME/$obj/* "$DIR_FILE/$obj"
+    $MK_COMM "$2/`dirname $obj`"
+    if [ -d "$1/$obj" -a -d "$2/$obj" ]; then
+      $CP_COMM $1/$obj/* "$2/$obj"
     else
-      $CP_COMM "$DIR_HOME/$obj" "$DIR_FILE/$obj"
+      $CP_COMM "$1/$obj" "$2/$obj"
     fi
     count_sync=$((count_sync + 1))
   done
@@ -82,13 +83,16 @@ else
 fi
 
 if [ $1 == $CMD_PUSH ]; then
-  sync_dotfiles_push "$DIR_HOME" "$DIR_FILE"
+  echo "Pushing..."
+  sync_dotfiles "$DIR_HOME" "$DIR_FILE"
 elif [ $1 == $CMD_PULL ]; then
-  echo Pull Not ok
-  ## sync_dotfiles "$DIR_FILE" "$DIR_HOME" $1;
+  echo "Pulling..."
+  sync_dotfiles "$DIR_FILE" "$DIR_HOME"
 elif [ $1 == $CMD_DIFF ]; then
+  echo "Diff:"
   diff_dotfiles "$DIR_HOME" "$DIR_FILE"
 elif [ $1 == $CMD_CHECK ]; then
+  echo "Re-Checking out files..."
   re_checkout
 else
   usage;
