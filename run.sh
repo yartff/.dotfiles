@@ -7,9 +7,8 @@ readonly CMD_CHECK='checkout'
 readonly DIR_HOME="$HOME"
 readonly DIR_FILE="$DIR_HOME/.dotfiles/files"
 
-readonly CP_COMM="cp -uvr "
-readonly RM_COMM="rm -rfv "
-readonly MK_COMM="mkdir -vp "
+readonly SYNC_CMD="rsync -va --delete"
+readonly RM_CMD="rm -rfv"
 shopt -s dotglob
 
 usage() {
@@ -22,7 +21,7 @@ diff_dotfiles() {
   count_=0
   while [ "${args[$count_]}" ]
   do
-    res="`diff "$1/${args[$count_]}" "$2/${args[$count_]}" -q`"
+    res="`diff -qr "$1/${args[$count_]}" "$2/${args[$count_]}"`"
     if [ $? -eq 1 ]; then
       echo ${args[$count_]}
     fi
@@ -35,19 +34,10 @@ sync_dotfiles() {
   while [ "${args[$count_sync]}" ]
   do
     obj="${args[$count_sync]}"
-    if [ -d "$1/$obj" -a -f "$2/$obj" -o \
-      -f "$1/$obj" -a -d "$2/$obj" ]; then
-      $RM_COMM "$2/$obj";
-    fi
-    if [ ! -f "$1/$obj" -a ! -d "$1/$obj" ]; then
-      $RM_COMM "$2/$obj"
-      return
-    fi
-    $MK_COMM "$2/`dirname $obj`"
-    if [ -d "$1/$obj" -a -d "$2/$obj" ]; then
-      $CP_COMM $1/$obj/* "$2/$obj"
+    if [ ! -e "$1/$obj" ]; then
+      $RM_CMD "$2/$obj"
     else
-      $CP_COMM "$1/$obj" "$2/$obj"
+      $SYNC_CMD "$1/$obj`[ -d "$1/$obj" ] && echo '/'`" "$2/$obj"
     fi
     count_sync=$((count_sync + 1))
   done
@@ -61,16 +51,16 @@ re_checkout() {
 if [ $# -eq 0 ]; then
   usage;
 elif [ $# -le 1 ]; then
-  all_files=`find $DIR_FILE`
-  count=-1;
+  all_files="$DIR_FILE/*"
+  count=0;
   nb_char=0;
   for tmp in $all_files
   do
-    if [ $count -eq -1 ]; then
-      nb_char=`echo $tmp/ | wc -c`
-    else
-      args[$count]="`echo $tmp | cut -c $nb_char-`"
+    if [ $count -eq 0 ]; then
+      dir=`dirname $tmp`
+      nb_char=`echo $dir/ | wc -c`
     fi
+    args[$count]="`echo $tmp | cut -c $nb_char-`"
     count=$((count + 1))
   done
 else
