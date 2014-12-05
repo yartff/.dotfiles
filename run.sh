@@ -7,7 +7,7 @@ readonly CMD_CHECK='checkout'
 readonly DIR_HOME="$HOME"
 readonly DIR_FILE="$DIR_HOME/.dotfiles/files"
 
-readonly SYNC_CMD="echo rsync -va --delete"
+readonly SYNC_CMD="rsync -va --delete"
 readonly RM_CMD="echo rm -rfv"
 shopt -s dotglob
 
@@ -52,13 +52,14 @@ if [ $# -eq 0 ]; then
   usage;
 elif [ $# -le 1 ]; then
   count=0;
-  # IFS=$(echo -en "\n\b")
-  for entry in $DIR_FILE/*
+  SAVE_IFS="$IFS"
+  IFS=$(echo -en "\n\b")
+  for entry in "$DIR_FILE"/*
   do
     args[$count]="${entry##*/}"
     count=$((count + 1))
   done
-  # IFS=" "
+  IFS="$SAVE_IFS"
 else
   count=2
   while [ $count -le $# ]
