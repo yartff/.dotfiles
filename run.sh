@@ -7,8 +7,8 @@ readonly CMD_CHECK='checkout'
 readonly DIR_HOME="$HOME"
 readonly DIR_FILE="$DIR_HOME/.dotfiles/files"
 
-readonly SYNC_CMD="rsync -va --delete"
-readonly RM_CMD="rm -rfv"
+readonly SYNC_CMD="echo rsync -va --delete"
+readonly RM_CMD="echo rm -rfv"
 shopt -s dotglob
 
 usage() {
@@ -51,18 +51,14 @@ re_checkout() {
 if [ $# -eq 0 ]; then
   usage;
 elif [ $# -le 1 ]; then
-  all_files="$DIR_FILE/*"
   count=0;
-  nb_char=0;
-  for tmp in $all_files
+  # IFS=$(echo -en "\n\b")
+  for entry in $DIR_FILE/*
   do
-    if [ $count -eq 0 ]; then
-      dir=`dirname $tmp`
-      nb_char=`echo $dir/ | wc -c`
-    fi
-    args[$count]="`echo $tmp | cut -c $nb_char-`"
+    args[$count]="${entry##*/}"
     count=$((count + 1))
   done
+  # IFS=" "
 else
   count=2
   while [ $count -le $# ]
