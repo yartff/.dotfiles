@@ -4,6 +4,7 @@ readonly CMD_PUSH='push'
 readonly CMD_PULL='pull'
 readonly CMD_DIFF='diff'
 readonly CMD_CHECK='checkout'
+readonly CMD_UNTR='rm'
 readonly DIR_HOME="$HOME"
 readonly DIR_FILE="$DIR_HOME/.dotfiles/files"
 
@@ -20,6 +21,7 @@ usage() {
   echo "  " "$CMD_PULL" ": Pulls tracked files from files/ to ~/."
   echo "  " "$CMD_DIFF" ": Outputs diff of tracked files"
   echo "  " "$CMD_CHECK" ": Reset changes of files/ from the repo"
+  echo "  " "$CMD_UNTR" ": Untrack files (no args untracks all files)"
   exit
 }
 
@@ -32,6 +34,16 @@ diff_dotfiles() {
       echo ${args[$count_]}
     fi
     count_=$((count_ + 1))
+  done
+}
+
+sync_untrack() {
+  count_unt=0
+  while [ "${args[$count_unt]}" ]
+  do
+    obj="${args[$count_unt]}"
+    $RM_CMD "$DIR_FILE/$obj"
+    count_unt=$((count_unt+ 1))
   done
 }
 
@@ -87,6 +99,9 @@ elif [ $1 == $CMD_DIFF ]; then
 elif [ $1 == $CMD_CHECK ]; then
   echo "Re-Checking out files..."
   re_checkout
+elif [ $1 == $CMD_UNTR ]; then
+  echo "Deleting files..."
+  sync_untrack
 else
   usage;
 fi
