@@ -31,8 +31,9 @@ bindkey '^[[1;5C'	forward-word
 alias 7up	'svn up'
 
 set FILE_SPEC="$HOME/.tcshrc_sp"
-if ( -f $FILE_SPEC ) then
-  source $FILE_SPEC
+
+if ( -f "$FILE_SPEC" ) then
+  source "$FILE_SPEC"
 endif
 
 # EOF
