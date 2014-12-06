@@ -13,7 +13,13 @@ shopt -s dotglob
 
 usage() {
   echo -n Usage:' '
-  echo sh $0 "{$CMD_PUSH,$CMD_PULL,$CMD_DIFF,$CMD_CHECK}" [FILE]...;
+  echo sh $0 "<command>" "[FILE]...";
+  echo
+  echo Commands:
+  echo "  " "$CMD_PUSH" ": Pushes tracked files from ~/ to files/."
+  echo "  " "$CMD_PULL" ": Pulls tracked files from files/ to ~/."
+  echo "  " "$CMD_DIFF" ": Outputs diff of tracked files"
+  echo "  " "$CMD_CHECK" ": Reset changes of files/ from the repo"
   exit
 }
 
