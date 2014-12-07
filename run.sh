@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 readonly CMD_PUSH='push'
 readonly CMD_PULL='pull'
