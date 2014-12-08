@@ -1,9 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 readonly CMD_PUSH='push'
 readonly CMD_PULL='pull'
 readonly CMD_DIFF='diff'
-readonly CMD_CHECK='checkout'
+readonly CMD_CHECK='reset'
+readonly CMD_UNTR='rm'
 readonly DIR_HOME="$HOME"
 readonly DIR_FILE="$DIR_HOME/.dotfiles/files"
 
@@ -13,7 +14,14 @@ shopt -s dotglob
 
 usage() {
   echo -n Usage:' '
-  echo sh $0 "{$CMD_PUSH,$CMD_PULL,$CMD_DIFF,$CMD_CHECK}" [FILE]...;
+  echo sh $0 "<command>" "[FILE]...";
+  echo
+  echo Commands:
+  echo "  " "$CMD_PUSH" ": Pushes tracked files from ~/ to files/."
+  echo "  " "$CMD_PULL" ": Pulls tracked files from files/ to ~/."
+  echo "  " "$CMD_DIFF" ": Outputs diff of tracked files"
+  echo "  " "$CMD_CHECK" ": Reset changes of files/ from the repo"
+  echo "  " "$CMD_UNTR" ": Untrack files (no args untracks all files)"
   exit
 }
 
@@ -28,6 +36,16 @@ diff_dotfiles() {
       echo ___
     fi
     count_=$((count_ + 1))
+  done
+}
+
+sync_untrack() {
+  count_unt=0
+  while [ "${args[$count_unt]}" ]
+  do
+    obj="${args[$count_unt]}"
+    $RM_CMD "$DIR_FILE/$obj"
+    count_unt=$((count_unt+ 1))
   done
 }
 
@@ -53,18 +71,15 @@ re_checkout() {
 if [ $# -eq 0 ]; then
   usage;
 elif [ $# -le 1 ]; then
-  all_files="$DIR_FILE/*"
   count=0;
-  nb_char=0;
-  for tmp in $all_files
+  SAVE_IFS="$IFS"
+  IFS=$(echo -en "\n\b")
+  for entry in "$DIR_FILE"/*
   do
-    if [ $count -eq 0 ]; then
-      dir=`dirname $tmp`
-      nb_char=`echo $dir/ | wc -c`
-    fi
-    args[$count]="`echo $tmp | cut -c $nb_char-`"
+    args[$count]="${entry##*/}"
     count=$((count + 1))
   done
+  IFS="$SAVE_IFS"
 else
   count=2
   while [ $count -le $# ]
@@ -86,7 +101,11 @@ elif [ $1 == $CMD_DIFF ]; then
 elif [ $1 == $CMD_CHECK ]; then
   echo "Re-Checking out files..."
   re_checkout
+elif [ $1 == $CMD_UNTR ]; then
+  echo "Deleting files..."
+  sync_untrack
 else
   usage;
 fi
 echo "Done."
+
