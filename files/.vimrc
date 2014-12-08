@@ -51,3 +51,6 @@ let &colorcolumn=join(range(81,81),",")
 set nobackup
 set nowritebackup
 set noswapfile
+
+" Get rid of netrwhist
+let g:netrw_home = expand('/tmp')
