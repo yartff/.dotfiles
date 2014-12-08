@@ -21,9 +21,11 @@ diff_dotfiles() {
   count_=0
   while [ "${args[$count_]}" ]
   do
-    res="`diff -qr "$1/${args[$count_]}" "$2/${args[$count_]}"`"
+    res="`diff -r "$1/${args[$count_]}" "$2/${args[$count_]}"`"
     if [ $? -eq 1 ]; then
       echo ${args[$count_]}
+      echo $res
+      echo ___
     fi
     count_=$((count_ + 1))
   done
