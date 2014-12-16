@@ -8,4 +8,5 @@ function! Plg_rmts_RemoveST()
     execute "0,$s/[ \t]*$//"
   endif
   execute pos
+  unlet pos
 endfunction
