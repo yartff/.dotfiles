@@ -1,9 +1,17 @@
-function! Plg_header_create()
+"""
+""  File: [header.vim]
+""  Author: yartFF.
+""  Contact: <carbonel.q@gmail.com> (github.com/yartFF)
+""  Created on 2014-12-18 19:19
+""  
+"" 
+
+function Plg_header_create()
   if &ft == ""
     return
   endif
 
-  let pos = line(".")
+  let s:pos = line(".")
   " Content Lines
   let s:l_file = "File: [" . expand("%:t") . "]"
   let s:l_user = "Author: " . $USER . "."
@@ -17,17 +25,25 @@ function! Plg_header_create()
 
   " Associative maps
   let ft_comment_map = {
-	\ "c": [0, 0], "cpp": [0, 0], "css": [0, 0], "java": [0, 0],
+	\ "c": [0, 0],
+	\ "cpp": [0, 0],
+	\ "css": [0, 0],
+	\ "java": [0, 0],
 	\ "php": [0, system("which php") . "<?php\n"],
-	\ "make": [1, 0], "text": [1, 0], "sh": [1, 1],
-	\ "ruby": [1, system("which ruby")], "perl": [1, system("which perl")],
+	\ "make": [1, 0],
+	\ "text": [1, 0],
+	\ "sh": [1, 1],
+	\ "ruby": [1, system("which ruby")],
+ 	\ "perl": [1, system("which perl")],
 	\ "ocaml": [2, system("which ocaml")],
-	\ "python": [1, system("which python")]
+	\ "python": [1, system("which python")],
+  	\ "vim": [3, 0],
 	\ }
   let csce_comment_map = [
 	\ ["/\*", "\*\*", "\*/"],
 	\ ["##", "\##", "\##"],
-	\ ["\(\*", "\*\*", "\*\)"]
+	\ ["\(\*", "\*\*", "\*\)"],
+	\ ["\"\"\"", "\"\" ", "\"\" "],
 	\ ]
 
   " Saving settings
@@ -53,10 +69,10 @@ function! Plg_header_create()
 	\ csce_comment_map[ft_comment_map[&ft][0]][1] . " " .
 	\ s:l_date . "\n" .
 	\ csce_comment_map[ft_comment_map[&ft][0]][1] . " " . "\n" .
-	\ csce_comment_map[ft_comment_map[&ft][0]][2]
+	\ csce_comment_map[ft_comment_map[&ft][0]][2] . "\n\n"
 
-  execute pos
-  unlet pos
+  execute s:pos + 8
+  unlet s:pos
   " Restituting settings
   let &fo=s_fmt
   unlet s_fmt
@@ -76,3 +92,4 @@ function! Plg_header_create()
   unlet ft_comment_map
   unlet csce_comment_map
 endfunction
+command Head call Plg_header_create()
