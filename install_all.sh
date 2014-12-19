@@ -2,12 +2,16 @@
 ## DON'T RUN THIS! IT'S UNTESTED!
 ## Just take the commands you need
 
+MANAGER_CMD="yum -y"
 sudo su
 
-yum groupinstall 'Development tools'
-yum install vim
-yum install tcsh
-yum install sharutils
+$MANAGER_CMD groupinstall 'Development tools'
+$MANAGER_CMD install vim
+$MANAGER_CMD install tcsh
+$MANAGER_CMD install sharutils
+$MANAGER_CMD install htop
+$MANAGER_CMD install p7zip
+$MANAGER_CMD install clang
 
 cat << EOF > /etc/yum.repos.d/google-chrome.repo
 [google-chrome]
@@ -17,7 +21,7 @@ enabled=1
 gpgcheck=1
 EOF
 
-yum install google-chrome
+$MANAGER_CMD install google-chrome
 gsettings set org.gnome.mutter overlay-key ''
 
 ## ssh
