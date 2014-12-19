@@ -32,7 +32,7 @@ function Plg_header_create()
 	\ "php": [0, system("which php") . "<?php\n"],
 	\ "make": [1, 0],
 	\ "text": [1, 0],
-	\ "sh": [1, 1],
+	\ "sh": [1, "/bin/bash\n"],
 	\ "ruby": [1, system("which ruby")],
  	\ "perl": [1, system("which perl")],
 	\ "ocaml": [2, system("which ocaml")],
@@ -69,9 +69,9 @@ function Plg_header_create()
 	\ csce_comment_map[ft_comment_map[&ft][0]][1] . " " .
 	\ s:l_date . "\n" .
 	\ csce_comment_map[ft_comment_map[&ft][0]][1] . " " . "\n" .
-	\ csce_comment_map[ft_comment_map[&ft][0]][2] . "\n\n"
+	\ csce_comment_map[ft_comment_map[&ft][0]][2] . "\n"
 
-  execute s:pos + 8
+  execute s:pos + 9
   unlet s:pos
   " Restituting settings
   let &fo=s_fmt
