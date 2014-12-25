@@ -6,7 +6,7 @@
 ""  
 "" 
 
-function Plg_header_create()
+function! Plg_header_create()
   if &ft == ""
     return
   endif
@@ -77,7 +77,7 @@ function Plg_header_create()
 	\ csce_comment_map[ft_comment_map[&ft][0]][1] . " " .
 	\ s:l_date . "\n" .
 	\ csce_comment_map[ft_comment_map[&ft][0]][1] . " " . "\n" .
-	\ csce_comment_map[ft_comment_map[&ft][0]][2] . "\n"
+	\ csce_comment_map[ft_comment_map[&ft][0]][2] . "\n\n"
 
   execute s:pos + 9
   unlet s:pos
@@ -100,4 +100,4 @@ function Plg_header_create()
   unlet ft_comment_map
   unlet csce_comment_map
 endfunction
-command Head call Plg_header_create()
+command! Head call Plg_header_create()
