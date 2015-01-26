@@ -79,7 +79,7 @@ function! Plg_header_create()
 	\ csce_comment_map[ft_comment_map[&ft][0]][1] . " " . "\n" .
 	\ csce_comment_map[ft_comment_map[&ft][0]][2] . "\n\n"
 
-  execute s:pos + 9
+  execute s:pos + 8
   unlet s:pos
   " Restituting settings
   let &fo=s_fmt
