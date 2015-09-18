@@ -12,6 +12,7 @@ set savehist=1000
 set watch=(1 any any)
 
 alias ll	'ls -l'
+alias ls	'ls --color=yes'
 alias la	'ls -a'
 alias l		'clear ; ll -a'
 alias j		'jobs'
