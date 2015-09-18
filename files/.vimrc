@@ -18,6 +18,7 @@ set nowrap
 set laststatus=2
 set showcmd
 set showmode
+set mouse=a
 
 syntax on
 set t_Co=256
