@@ -1,0 +1,45 @@
+#!/bin/bash
+
+DEFAULT_NOTES="notes.txt"
+
+if [ $# -gt 2 ]; then
+  echo $0 "[$DEFAULT_NOTES]"
+  exit 1
+fi
+
+if [ $# -eq 1 ]; then
+  NOTES=$1
+else
+  NOTES=$DEFAULT_NOTES
+fi
+
+test -f ".gitignore"
+GITIGNORE_MSG=$?
+if [ ! -f "$NOTES" ]; then
+  >&2 echo "$NOTES: No such file."
+  exit 1;
+fi
+
+if [ $GITIGNORE_MSG -eq 0 ]; then
+  grep -s "^$NOTES$" ".gitignore" > /dev/null
+  if [ $? -ne 0 ]; then
+    echo -e '\n'"$NOTES" >> .gitignore
+  fi
+else
+  echo $NOTES > .gitignore
+fi
+
+git add .
+echo ":wq" | git commit --allow-empty -F $NOTES
+git pull
+PULL_RET=$?
+if [ $PULL_RET -eq 1 ]; then
+  echo "= Merge" > $NOTES
+  git status
+fi
+if [ $PULL_RET -eq 0 ]; then
+  git push
+  echo -n > $NOTES
+fi
+
+## git add .

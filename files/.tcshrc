@@ -7,7 +7,7 @@ setenv LD_LIBRARY_PATH "/usr/local/lib"
 set autolist
 set complete
 set history=1000
-set path=(/usr/{local/,}{sbin,bin} /{sbin,bin})
+set path=(/usr/{local/,}{sbin,bin} /{sbin,bin} ${HOME}/.dotfiles/bin)
 set prompt='%%%n@%M %h:'
 set savehist=1000
 set watch=(1 any any)
