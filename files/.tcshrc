@@ -1,9 +1,9 @@
 limit coredumpsize 0
 
 setenv EDITOR	"emacs -nw"
-setenv PAGER	"'${HOME}'/.dotfiles/submodules/vimpager/vimpager"
+setenv PAGER	"${HOME}/.dotfiles/submodules/vimpager/vimpager"
 setenv LD_LIBRARY_PATH "/usr/local/lib"
-setenv GOPATH	"'${HOME}'/workstation/go"
+setenv GOPATH	"${HOME}/workstation/go"
 
 set autolist
 set complete
