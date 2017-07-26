@@ -1,8 +1,9 @@
 limit coredumpsize 0
 
 setenv EDITOR	"emacs -nw"
-setenv PAGER	"'${HOME}'/.dotfiles/submodules/vimpager/vimpager"
+setenv PAGER	"${HOME}/.dotfiles/submodules/vimpager/vimpager"
 setenv LD_LIBRARY_PATH "/usr/local/lib"
+setenv GOPATH	"${HOME}/workstation/go"
 
 set autolist
 set complete
@@ -10,7 +11,7 @@ set history=1000
 set path=(/usr/{local/,}{sbin,bin} /{sbin,bin} ${HOME}/.dotfiles/bin)
 set prompt='%%%n@%M %h:'
 set savehist=1000
-set watch=(1 any any)
+##set watch=(1 any any)
 
 alias ll	'ls -l'
 alias ls	'ls --color=yes'
