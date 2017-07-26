@@ -1,45 +1,117 @@
 #!/bin/bash
 
-DEFAULT_NOTES="notes.txt"
+NOTES="notes.txt"
+DEFAULT_NOTES_TMP="notes_branch.txt"
+
+merge_notes() {
+  date +"\n====[ %d/%m/%y (%T) ]====\n" >> $DEFAULT_NOTES_TMP
+  if [ 0 -lt `wc $NOTES -c` ]; then
+    cat $NOTES >> $DEFAULT_NOTES_TMP
+    rm -rf $NOTES
+  else
+    echo "== No notes so far." >> $DEFAULT_NOTES_TMP
+  fi
+}
+
+check_notes() {
+  if [ ! -f "$NOTES" ]; then
+    >&2 echo "$NOTES: No such file."
+    exit 1;
+  fi
+}
+
+check_empty_commit() {
+  empty_commit=`git status | head -n 2 | tail -n 1 | cut -d' ' -f1`
+  if [ "$empty_commit" = "nothing" ]; then
+    echo "Nothing to commit. Over."
+    exit 1
+  fi
+}
+
+check_gitignore() {
+  test -f ".gitignore"
+  GITIGNORE_MSG=$?
+  if [ $GITIGNORE_MSG -eq 0 ]; then
+    grep -s "^$NOTES$" ".gitignore" > /dev/null
+    if [ $? -ne 0 ]; then
+      echo -e '\n'"$NOTES" >> .gitignore
+    fi
+  else
+    echo $NOTES > .gitignore
+  fi
+}
+
+push_it() {
+  git add .
+  if [ $# -eq 1 ]; then
+    msg="--allow-empty"
+  else
+    msg=""
+  fi
+  echo ":wq" | git commit $msg -F $NOTES
+  if [ $? -eq 1 ]; then
+    exit 0;
+  fi
+  git pull
+  PULL_RET=$?
+  echo $PULL_RET
+  if [ $PULL_RET -eq 1 ]; then
+    echo "= Merge" > $NOTES
+    git status
+  fi
+  if [ $PULL_RET -eq 0 ]; then
+    git push
+    echo -n > $NOTES
+  fi
+}
+
+get_name_branch() {
+  git status | head -n 1 | cut -d ' ' -f4
+  return 0;
+  ## return 1 or 0 $1
+}
 
 if [ $# -gt 2 ]; then
-  echo $0 "[$DEFAULT_NOTES]"
+  echo $0 "{f | mast | sync | fire | drop}"
+  echo $0 "mast" "-- merges with master"
+  echo $0 "sync" "-- Syncs with current branch and push to a sync branch"
+  echo $0 "fire" "-- Push to a fire branch"
+  ## also need to merge fire into sync
+  echo $0 "drop" "-- Discards current branch. If not in a branch, do nothing"
   exit 1
 fi
 
-if [ $# -eq 1 ]; then
-  NOTES=$1
-else
-  NOTES=$DEFAULT_NOTES
+if [ $# -eq 0 ]; then
+  ## Default behaviour
+  check_empty_commit;
+  check_notes;
+  check_gitignore;
+  push_it
+  ## check_name_branch, if not master, checkout master && merge $BRANCH
+  exit
 fi
 
-test -f ".gitignore"
-GITIGNORE_MSG=$?
-if [ ! -f "$NOTES" ]; then
-  >&2 echo "$NOTES: No such file."
-  exit 1;
-fi
+if [ "$1" = "sync" ]; then
+  merge_notes;
+  branch=`get_name_branch`
+  if [ "$branch" = "master" ]; then
+    git checkout "sync"
+    if [ $? -eq 0 ]; then
+    else
+      git checkout -b "sync"
+      if [ $? -ne 0 ]; then
+	echo 'Bro, you f*'\''d up'
+	exit 1;
+      fi
+    fi
 
-if [ $GITIGNORE_MSG -eq 0 ]; then
-  grep -s "^$NOTES$" ".gitignore" > /dev/null
-  if [ $? -ne 0 ]; then
-    echo -e '\n'"$NOTES" >> .gitignore
   fi
-else
-  echo $NOTES > .gitignore
+  exit 0
 fi
 
-git add .
-echo ":wq" | git commit --allow-empty -F $NOTES
-git pull
-PULL_RET=$?
-if [ $PULL_RET -eq 1 ]; then
-  echo "= Merge" > $NOTES
-  git status
-fi
-if [ $PULL_RET -eq 0 ]; then
-  git push
-  echo -n > $NOTES
+if [ "$1" = "f" ]; then
+  check_empty_commit;
+  echo "== !! Forced commit" >> $NOTES
+  push_it 1
 fi
 
-## git add .
