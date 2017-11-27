@@ -4,6 +4,7 @@ filetype indent on
 
 " Syntax
 set shiftwidth=2
+set tabstop=2
 " _
 " Search
 set hlsearch
@@ -52,6 +53,11 @@ let &colorcolumn=join(range(81,81),",")
 set nobackup
 set nowritebackup
 set noswapfile
+
+" Go
+map <F12> <Esc>:GoDecls <CR>
+map <C-l> <Esc>:GoDef <CR>
+map <C-h> <Esc>:GoDefPop <CR>
 
 " Get rid of netrwhist
 let g:netrw_home = expand('/tmp')

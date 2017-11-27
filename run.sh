@@ -31,9 +31,8 @@ diff_dotfiles() {
   do
     res="`diff -r "$1/${args[$count_]}" "$2/${args[$count_]}"`"
     if [ $? -eq 1 ]; then
-      echo ${args[$count_]}
-      echo $res
-      echo ___
+      echo __ ${args[$count_]}
+      printf "%s\n" "$res"
     fi
     count_=$((count_ + 1))
   done
