@@ -7,3 +7,6 @@
 [submodule "submodules/vim-plug"]
 	path = submodules/vim-plug
 	url = git@github.com:junegunn/vim-plug.git
+[submodule "submodules/ctrlp.vim"]
+	path = submodules/ctrlp.vim
+	url = git@github.com:kien/ctrlp.vim.git

@@ -56,3 +56,5 @@ set noswapfile
 
 " Get rid of netrwhist
 let g:netrw_home = expand('/tmp')
+
+set runtimepath^=~/.vim/bundle/ctrlp.vim
