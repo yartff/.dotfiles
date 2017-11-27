@@ -3,4 +3,5 @@
 
 git submodule init
 git submodule update
-mkdir -p $GOPATH/{bin,src/github.com/$USER/}
+## Install GO
+mkdir -p ~/workstation/go

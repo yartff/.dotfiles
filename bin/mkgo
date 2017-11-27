@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]; then
+  echo "$0 <project_name>"
+  exit 1
+fi
+project_path="$GOPATH/src/$1"
+if [ -d $project_path ]; then
+  echo \'$1\' "already exists"
+  exit 1
+fi
+
+mkdir -p $project_path
+cat << EOF > "$project_path/$1.go"
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Printf("hello, world\n")
+}
+EOF
