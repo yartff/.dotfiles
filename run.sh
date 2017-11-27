@@ -63,7 +63,7 @@ sync_dotfiles() {
 }
 
 re_checkout() {
-  rm -rf "$DIR_FILE" 2> /dev/null
+  $RM_CMD "$DIR_FILE" 2> /dev/null
   git checkout "$DIR_FILE"
 }
 
@@ -83,7 +83,7 @@ else
   count=2
   while [ $count -le $# ]
   do
-    args[$((count - 2))]=`echo "${!count}"`
+    args[$((count - 2))]=`basename "${!count}"`
     count=$((count + 1))
   done
 fi
