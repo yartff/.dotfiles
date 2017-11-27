@@ -1,12 +1,13 @@
 #!/bin/bash
 
 if [ $# -ne 1 ]; then
-  echo "$0 <project_name>"
+  >&2 echo "$0 <project_name>"
   exit 1
 fi
 project_path="$GOPATH/src/$1"
 if [ -d $project_path ]; then
-  echo \'$1\' "already exists"
+  >&2 echo \'$1\' "already exists"
+	echo "$project_path"
   exit 1
 fi
 
@@ -20,3 +21,4 @@ func main() {
     fmt.Printf("hello, world\n")
 }
 EOF
+echo "$project_path"
