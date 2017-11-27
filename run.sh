@@ -107,3 +107,5 @@ else
   usage;
 fi
 echo "Done."
+## TODO: ignore symbolic links
+## find . ! -type l
