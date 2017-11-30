@@ -28,6 +28,7 @@ function! Plg_header_create()
 	\ "c": [0, 0],
 	\ "cpp": [0, 0],
 	\ "css": [0, 0],
+	\ "go": [0, 0],
 	\ "java": [0, 0],
 	\ "php": [0, system("which php") . "<?php\n"],
 	\ "make": [1, 0],

@@ -23,8 +23,8 @@ set mouse=a
 
 syntax on
 set t_Co=256
-if filereadable($HOME . "/.vim/colors/wombat256.vim")
-  colorscheme wombat256
+if filereadable($HOME . "/.vim/colors/railscasts.vim")
+  colorscheme railscasts
 endif
 " _
 " Misc
@@ -36,8 +36,13 @@ set wildmenu
 set wildmode=full
 set wildignore+=*.o,*.a,*.git
 set cpoptions=ces$  " make the 'cw' and like commands put a $ at the end
+set number
 
 " Personal keybinds
+map U <Esc>:redo <CR>
+map <C-n> <Esc>:bn <CR>
+map <C-m> <Esc>:bp <CR>
+
 map <C-j> <Esc>:tabn <CR>
 map <C-k> <Esc>:tabp <CR>
 map <M-down> <Esc>:resize +1 <CR>
@@ -45,12 +50,9 @@ map <M-up> <Esc>:resize -1 <CR>
 map <M-left> <Esc>:vertical resize -1 <CR>
 map <M-right> <Esc>:vertical resize +1 <CR>
 "" map <C-p> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-nnoremap <C-n> <Esc>:bn <CR>
-nnoremap <C-m> <Esc>:bp <CR>
-nnoremap j j
 
-" Highlight 80th column
-let &colorcolumn=join(range(81,81),",")
+" Highlight 100th column
+let &colorcolumn=join(range(101,101),",")
 
 " No swap or backup files
 set nobackup
