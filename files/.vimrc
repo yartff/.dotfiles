@@ -2,6 +2,8 @@ filetype on
 filetype plugin on
 filetype indent on
 
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+
 " Syntax
 set shiftwidth=2
 set tabstop=2
@@ -38,6 +40,9 @@ set wildignore+=*.o,*.a,*.git
 set cpoptions=ces$  " make the 'cw' and like commands put a $ at the end
 set number
 
+" Get rid of netrwhist
+let g:netrw_home = expand('/tmp')
+
 " Personal keybinds
 map U <Esc>:redo <CR>
 map <C-n> <Esc>:bn <CR>
@@ -59,7 +64,5 @@ set nobackup
 set nowritebackup
 set noswapfile
 
-" Get rid of netrwhist
-let g:netrw_home = expand('/tmp')
-
-set runtimepath^=~/.vim/bundle/ctrlp.vim
+""  TODO search visual
+""  vmap
