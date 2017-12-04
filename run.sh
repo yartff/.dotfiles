@@ -8,7 +8,7 @@ readonly CMD_UNTR='rm'
 readonly DIR_HOME="$HOME"
 readonly DIR_FILE="$DIR_HOME/.dotfiles/files"
 
-readonly SYNC_CMD="rsync -va --delete"
+readonly SYNC_CMD="rsync -va --no-links --delete"
 readonly RM_CMD="rm -rfv"
 shopt -s dotglob
 
@@ -25,11 +25,13 @@ usage() {
   exit
 }
 
+DIFF_FILE="/tmp/.diff_tmpFile.txt"
 diff_dotfiles() {
   count_=0
   while [ "${args[$count_]}" ]
   do
-    res="`diff -r "$1/${args[$count_]}" "$2/${args[$count_]}"`"
+    find "$1/${args[$count_]}" -type l > $DIFF_FILE
+    res="` diff --color -r -X $DIFF_FILE "$1/${args[$count_]}" "$2/${args[$count_]}" `"
     if [ $? -eq 1 ]; then
       echo __ ${args[$count_]}
       printf "%s\n" "$res"
@@ -56,7 +58,7 @@ sync_dotfiles() {
     if [ ! -e "$1/$obj" ]; then
       $RM_CMD "$2/$obj"
     else
-      $SYNC_CMD "$1/$obj`[ -d "$1/$obj" ] && echo '/'`" "$2/$obj"
+      $SYNC_CMD "$1/$obj`[ -d "$1/$obj" ] && echo -n '/'`" "$2/$obj"
     fi
     count_sync=$((count_sync + 1))
   done

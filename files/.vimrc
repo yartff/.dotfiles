@@ -6,7 +6,6 @@ set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 " Syntax
 set shiftwidth=2
-set tabstop=2
 " _
 " Search
 set hlsearch

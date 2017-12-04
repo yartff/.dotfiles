@@ -1,5 +1,7 @@
 setlocal omnifunc=go#complete#Complete
 
+set tabstop=2
+
 let g:go_highlight_space_tab_error = 0
 let g:go_highlight_array_whitespace_error = 0
 let g:go_highlight_trailing_whitespace_error = 0
@@ -10,7 +12,7 @@ map <silent> <C-l> <Esc>:GoDef <CR>
 map <silent> <C-h> <Esc>:GoDefPop <CR>
 
 map <silent> <C-r> <Esc>:GoInfo <CR>
-map <C-w><C-i> <Esc>:GoImport
+map <C-w><C-i> <Esc>:GoImport 
 map <silent> _ <Esc>:GoSameIds <CR>
 map <silent> - <Esc>:GoSameIdsClear <CR>
 map <silent> + <Esc>:GoDescribe <CR>
