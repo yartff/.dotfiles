@@ -30,12 +30,9 @@ diff_dotfiles() {
   count_=0
   while [ "${args[$count_]}" ]
   do
-    find "$1/${args[$count_]}" -type l > $DIFF_FILE
-    res="` diff --color -r -X $DIFF_FILE "$1/${args[$count_]}" "$2/${args[$count_]}" `"
-    if [ $? -eq 1 ]; then
-      echo __ ${args[$count_]}
-      printf "%s\n" "$res"
-    fi
+    ## Careful: if a link has the same name than a monitored directory, it will also ignore it
+    find "$1/${args[$count_]}" -type l -exec sh -c "echo {} | tr '/' '\n' | tail -n 1" \; > $DIFF_FILE
+    diff --color -X $DIFF_FILE -r "$1/${args[$count_]}" "$2/${args[$count_]}"
     count_=$((count_ + 1))
   done
 }
@@ -109,5 +106,3 @@ else
   usage;
 fi
 echo "Done."
-## TODO: ignore symbolic links
-## find . ! -type l
