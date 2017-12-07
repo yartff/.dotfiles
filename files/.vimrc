@@ -53,6 +53,12 @@ map <M-down> <Esc>:resize +1 <CR>
 map <M-up> <Esc>:resize -1 <CR>
 map <M-left> <Esc>:vertical resize -1 <CR>
 map <M-right> <Esc>:vertical resize +1 <CR>
+
+function! ExportWinToNewTab()
+  return "\<C-w>\T"
+endfunction
+nmap <C-w><C-t>	<ESC><C-w>T
+
 "" map <C-p> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 inoremap <C-d> <Del>

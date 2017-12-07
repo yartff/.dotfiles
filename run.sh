@@ -32,6 +32,7 @@ diff_dotfiles() {
   do
     ## Careful: if a link has the same name than a monitored directory, it will also ignore it
     find "$1/${args[$count_]}" -type l -exec sh -c "echo {} | tr '/' '\n' | tail -n 1" \; > $DIFF_FILE
+    ## TODO: empty directories because of links
     diff --color -X $DIFF_FILE -r "$1/${args[$count_]}" "$2/${args[$count_]}"
     count_=$((count_ + 1))
   done
@@ -93,6 +94,7 @@ if [ $1 == $CMD_PUSH ]; then
 elif [ $1 == $CMD_PULL ]; then
   echo "Pulling..."
   sync_dotfiles "$DIR_FILE" "$DIR_HOME"
+  ./init.sh
 elif [ $1 == $CMD_DIFF ]; then
   echo "Diff:"
   diff_dotfiles "$DIR_HOME" "$DIR_FILE"
