@@ -91,6 +91,7 @@ fi
 if [ $1 == $CMD_PUSH ]; then
   echo "Pushing..."
   sync_dotfiles "$DIR_HOME" "$DIR_FILE"
+  echo "sync" > ./notes.txt
 elif [ $1 == $CMD_PULL ]; then
   echo "Pulling..."
   sync_dotfiles "$DIR_FILE" "$DIR_HOME"

@@ -8,7 +8,7 @@ let g:go_highlight_trailing_whitespace_error = 0
 
 map <silent> <F9> <Esc>:GoDecls <CR>
 map <silent> <F12> <Esc>:GoDeclsDir <CR>
-map <silent> <C-a> <Esc>:GoDef <CR>
+map <silent> <C-l> <Esc>:GoDef <CR>
 map <silent> <C-h> <Esc>:GoDefPop <CR>
 
 map <silent> <C-r> <Esc>:GoInfo <CR>

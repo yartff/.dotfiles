@@ -38,6 +38,7 @@ set wildmode=full
 set wildignore+=*.o,*.a,*.git
 set cpoptions=ces$  " make the 'cw' and like commands put a $ at the end
 set number
+set wrap
 
 " Get rid of netrwhist
 let g:netrw_home = expand('/tmp')
@@ -53,6 +54,7 @@ map <M-down> <Esc>:resize +1 <CR>
 map <M-up> <Esc>:resize -1 <CR>
 map <M-left> <Esc>:vertical resize -1 <CR>
 map <M-right> <Esc>:vertical resize +1 <CR>
+map <C-a> <Esc>:redraw <CR>
 
 function! ExportWinToNewTab()
   return "\<C-w>\T"
@@ -61,6 +63,7 @@ nmap <C-w><C-t>	<ESC><C-w>T
 
 "" map <C-p> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
+inoremap <C-z> <C-o>:w <CR>
 inoremap <C-d> <Del>
 inoremap <C-a> <Esc>I
 inoremap <C-e> <End>
