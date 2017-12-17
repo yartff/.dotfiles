@@ -34,4 +34,6 @@ function! GoCompletionPrev()
 endfunction
 inoremap <expr> <C-p> pumvisible() ? GoCompletionPrev() : GoCompletionStd()
 
+set completeopt-=preview
+
 "" map <C-g>
