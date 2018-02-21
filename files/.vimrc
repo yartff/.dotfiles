@@ -61,6 +61,15 @@ function! ExportWinToNewTab()
 endfunction
 nmap <C-w><C-t>	<ESC><C-w>T
 
+function! ToggleWrap()
+  if (&wrap == 1)
+    set nowrap
+  else
+    set wrap
+  endif
+endfunction
+nmap <C-x> <ESC>:call ToggleWrap()<CR>
+
 "" map <C-p> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 inoremap <C-z> <C-o>:w <CR>
