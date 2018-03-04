@@ -44,22 +44,16 @@ set wrap
 let g:netrw_home = expand('/tmp')
 
 " Personal keybinds
-map U <Esc>:redo <CR>
-map <C-n> <Esc>:bn <CR>
-map <C-m> <Esc>:bp <CR>
 
-map <C-j> <Esc>:tabn <CR>
-map <C-k> <Esc>:tabp <CR>
-map <M-down> <Esc>:resize +1 <CR>
-map <M-up> <Esc>:resize -1 <CR>
-map <M-left> <Esc>:vertical resize -1 <CR>
-map <M-right> <Esc>:vertical resize +1 <CR>
-map <C-a> <Esc>:redraw <CR>
-
-function! ExportWinToNewTab()
-  return "\<C-w>\T"
+function! ToggleCopy()
+  if (&number == 1)
+    set nonumber
+    set mouse=
+  else
+    set number
+    set mouse=a
+  endif
 endfunction
-nmap <C-w><C-t>	<ESC><C-w>T
 
 function! ToggleWrap()
   if (&wrap == 1)
@@ -68,14 +62,38 @@ function! ToggleWrap()
     set wrap
   endif
 endfunction
-nmap <C-x> <ESC>:call ToggleWrap()<CR>
 
-"" map <C-p> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+nmap U		<Esc>:redo <CR>
+nmap Q		<ESC>:call ToggleCopy()<CR>
+nmap Z		<ESC>:call ToggleWrap()<CR>
+nmap h		<Backspace>
+nmap l		<Space>
+
+nmap <C-left>	<Esc>:bp <CR>
+nmap <C-right>	<Esc>:bn <CR>
+nmap <C-j>	<Esc>:tabn <CR>
+nmap <C-k>	<Esc>:tabp <CR>
+
+nmap <C-w><C-t>	<ESC><C-w>T
+nmap <C-w><C-v>	<ESC>:vs <CR>:bp <CR> <C-w>l
+nmap <C-w>s	<ESC>:sp <CR>:bp <CR> <C-w>j
+nmap <C-w><C-w>	<ESC><C-w>c
+
+"" nmap <C-w><C-s>	<ESC>:sp <CR>
+"" nmap <C-w><C-v>	<ESC>:vs <CR>
+
+map <M-down> <Esc>:resize +1 <CR>
+map <M-up> <Esc>:resize -1 <CR>
+map <M-left> <Esc>:vertical resize -1 <CR>
+map <M-right> <Esc>:vertical resize +1 <CR>
 
 inoremap <C-z> <C-o>:w <CR>
 inoremap <C-d> <Del>
 inoremap <C-a> <Esc>I
 inoremap <C-e> <End>
+
+"" map <C-p> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
 " Highlight 100th column
 let &colorcolumn=join(range(101,101),",")
 

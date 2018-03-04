@@ -1,6 +1,7 @@
 setlocal omnifunc=go#complete#Complete
 
 set tabstop=2
+set completeopt-=preview
 
 let g:go_highlight_space_tab_error = 0
 let g:go_highlight_array_whitespace_error = 0
@@ -8,7 +9,7 @@ let g:go_highlight_trailing_whitespace_error = 0
 
 map <silent> <F9> <Esc>:GoDecls <CR>
 map <silent> <F12> <Esc>:GoDeclsDir <CR>
-map <silent> <C-l> <Esc>:GoDef <CR>
+map <silent> <C-n> <Esc>:GoDef <CR>
 map <silent> <C-h> <Esc>:GoDefPop <CR>
 
 map <silent> <C-r> <Esc>:GoInfo <CR>
@@ -33,7 +34,3 @@ function! GoCompletionPrev()
 	return "\<C-p>"
 endfunction
 inoremap <expr> <C-p> pumvisible() ? GoCompletionPrev() : GoCompletionStd()
-
-set completeopt-=preview
-
-"" map <C-g>
