@@ -46,6 +46,8 @@ let g:netrw_home = expand('/tmp')
 " Personal keybinds
 
 function! ToggleCopy()
+  let currpos=winnr()
+  let currtab=tabpagenr()
   if (&number == 1)
     tabdo execute 'windo execute "set nonumber"'
     set mouse=
@@ -53,6 +55,8 @@ function! ToggleCopy()
     tabdo execute 'windo execute "set number"'
     set mouse=a
   endif
+  execute 'tabn ' . currtab
+  execute currpos . 'wincmd w'
 endfunction
 
 function! ToggleWrap()
