@@ -47,10 +47,10 @@ let g:netrw_home = expand('/tmp')
 
 function! ToggleCopy()
   if (&number == 1)
-    set nonumber
+    tabdo execute 'windo execute "set nonumber"'
     set mouse=
   else
-    set number
+    tabdo execute 'windo execute "set number"'
     set mouse=a
   endif
 endfunction
@@ -87,6 +87,7 @@ map <M-up> <Esc>:resize -1 <CR>
 map <M-left> <Esc>:vertical resize -1 <CR>
 map <M-right> <Esc>:vertical resize +1 <CR>
 
+inoremap <C-k> <C-o>C
 inoremap <C-z> <C-o>:w <CR>
 inoremap <C-d> <Del>
 inoremap <C-a> <Esc>I
