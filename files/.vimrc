@@ -72,6 +72,20 @@ nmap Q		<ESC>:call ToggleCopy()<CR>
 nmap Z		<ESC>:call ToggleWrap()<CR>
 nmap h		<Backspace>
 nmap l		<Space>
+vmap h		<Backspace>
+vmap l		<Space>
+noremap <buffer> <silent> k gk
+noremap <buffer> <silent> j gj
+
+"" folding
+map z[ <ESC>$zf%
+map z] <ESC>?{<CR>zf% :noh <CR>
+vmap zo :fo<CR>
+set foldopen-=block
+
+nmap <C-h>	<Nop>
+nmap <MiddleMouse> <LeftMouse><ESC>*
+imap <MiddleMouse> <LeftMouse><C-o>*
 
 nmap <C-left>	<Esc>:bp <CR>
 nmap <C-right>	<Esc>:bn <CR>
@@ -92,7 +106,7 @@ map <M-left> <Esc>:vertical resize -1 <CR>
 map <M-right> <Esc>:vertical resize +1 <CR>
 
 inoremap <C-k> <C-o>C
-inoremap <C-z> <C-o>:w <CR>
+inoremap <C-x> <C-o>:w <CR>
 inoremap <C-d> <Del>
 inoremap <C-a> <Esc>I
 inoremap <C-e> <End>
