@@ -104,6 +104,7 @@ map <M-down> <Esc>:resize +1 <CR>
 map <M-up> <Esc>:resize -1 <CR>
 map <M-left> <Esc>:vertical resize -1 <CR>
 map <M-right> <Esc>:vertical resize +1 <CR>
+set noea
 
 inoremap <C-k> <C-o>C
 inoremap <C-x> <C-o>:w <CR>

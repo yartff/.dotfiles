@@ -30,5 +30,5 @@ gsettings set org.gnome.mutter overlay-key ''
 ssh-keygen -t rsa -C "carbonel.q@gmail.com"
 
 ## YouCompleteMe
-sudo dnf install python automake gcc gcc-c++ kernel-devel cmake
-sudo dnf install python-devel python3-devel
+$MANAGER_CMD install python automake gcc gcc-c++ kernel-devel cmake
+$MANAGER_CMD install python-devel python3-devel
