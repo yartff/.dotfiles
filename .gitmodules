@@ -10,6 +10,3 @@
 [submodule "submodules/ctrlp.vim"]
 	path = submodules/ctrlp.vim
 	url = git@github.com:kien/ctrlp.vim.git
-[submodule "submodules/YouCompleteMe"]
-	path = submodules/YouCompleteMe
-	url = https://github.com/Valloric/YouCompleteMe.git
