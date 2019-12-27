@@ -26,7 +26,7 @@ alias vpa	"'${HOME}'/.dotfiles/submodules/vimpager/vimpager"
 
 bindkey '^[[1;5D'	backward-word
 bindkey '^[[1;5C'	forward-word
-##bindkey '^H'		backward-delete-word
+bindkey '^W'		backward-delete-word
 ##bindkey '^[[1;5A'	backward-word
 ##bindkey '^[[1;5B'	backward-word
 ##bindkey '5~'		delete-word

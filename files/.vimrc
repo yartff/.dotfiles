@@ -38,7 +38,6 @@ set wildmode=full
 set wildignore+=*.o,*.a,*.git
 set cpoptions=ces$  " make the 'cw' and like commands put a $ at the end
 set number
-set wrap
 
 " Get rid of netrwhist
 let g:netrw_home = expand('/tmp')
