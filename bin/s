@@ -1,0 +1,473 @@
+#!/bin/bash
+
+
+## insider-rdv.cloud.witbe.net:443 9[De1${5>@w4:Tn7_8=d
+## maestro demo cloud: wroot@172.27.226.129 wtbx2021exp
+
+## Wtb2024QualExp
+
+dest=0
+dest_user=""
+dest_ip=""
+dest_pass=""
+dest_port=""
+dest_port_cmd=""
+dest_maestro=""
+
+get_infos() {
+  tunnel=""
+  user=""
+  ip=""
+  pass=""
+  port=""
+  port_cmd=""
+  maestro=""
+  vpn=""
+
+  case "$1" in
+    "atlas")
+      user="wroot"
+      ip="atlas.lab.witbe.io"
+      pass="rms2917exp"
+      port=4444
+      ;;
+
+    "sandbox")
+      ip="smartgate-sandbox.lab.witbe.io"
+      user="wroot"
+      pass="rms2917exp"
+      port=4444
+      ;;
+
+    "x102")
+      user="wroot"
+      ip="172.27.226.102"
+      pass="Wtb2024QualExp"
+      ## pass="wtbx2021exp"
+      maestro="sandbox"
+      ;;
+
+    "x103")
+      user="wroot"
+      ip="172.27.226.103"
+      pass="Wt3ult*3pr3c"
+      ## pass="wtbx2021exp"
+      maestro="sandbox"
+      ;;
+
+    "nkt")
+      user="wroot"
+      pass="wtbx2021exp"
+      ip="172.27.226.102"
+      maestro="atlas"
+      ;;
+
+    "smartgate")
+      user="wroot"
+      pass="rms2917exp"
+      port=4444
+      ip="smartgate-sandbox.lab.witbe.io"
+      ;;
+
+    "jgo")
+      user="wroot"
+      pass="wtbx2021exp"
+      ip="192.168.222.31"
+      ;;
+
+    "hci2")
+      user="wroot"
+      pass="Wtb2024QualExp"
+      ip="172.27.226.104"
+      ;;
+
+    "hci")
+      user="wroot"
+      ## pass="Wt3ult*3pr3c"
+      pass="Wtb2024QualExp"
+      ip="172.27.226.105"
+      ;;
+
+    "tmp")
+      ip="172.27.229.199"
+      user="wroot"
+      pass="wtbx2021exp"
+      maestro="next"
+      ;;
+
+    "c8")
+      user="wroot"
+      ip="192.168.112.69"
+      pass="rms2917exp"
+      ;;
+
+    "djo")
+      user="wroot"
+      ip="172.27.229.121"
+      pass="wtbx2021exp"
+      maestro="prev"
+      ;;
+
+    "kpn102")
+      user="wroot"
+      ip="172.27.226.102"
+      pass="wtbx2021exp"
+      ;;
+
+    "opo")
+      user="wroot"
+      ip="192.168.122.90"
+      pass="rms2917exp"
+      ;;
+
+    "shrec")
+      user="wroot"
+      ip="192.168.122.169"
+      pass="rms2917exp"
+      port=4444
+      ;;
+
+    "prev")
+      user="wroot"
+      ip="192.168.125.13"
+      pass="rms2917exp"
+      port=4444
+      ;;
+
+    "verizonnext")
+      user="wroot"
+      ip="verizonnext.cloud.witbe.net"
+      pass="rms2917exp"
+      port=4444
+      ;;
+
+    "prev_url")
+      user="wroot"
+      ip="preview.hub.qard.witbe.io"
+      pass="rms2917exp"
+      port=4444
+      ;;
+
+    "next")
+      user="wroot"
+      ip="192.168.125.15"
+      pass="rms2917exp"
+      port=4444
+      ;;
+
+    "rfn")
+      user="wroot"
+      ip="172.27.229.130"
+      pass="wtbx2021exp"
+      maestro="next"
+      ;;
+
+    "rf")
+      user="wroot"
+      ip="10.177.193.51"
+      pass="wtbx2021exp"
+      ## maestro="next"
+      ;;
+
+    "qk")
+      user="wroot"
+      ip="172.27.229.122"
+      pass="wtbx2021exp"
+      maestro="prev_url"
+      ;;
+
+    "mist")
+      user="wroot"
+      ip="172.27.229.129"
+      pass="wtbx2021exp"
+      maestro="prev"
+      ;;
+
+    "agr")
+      user="wroot"
+      ip="172.27.229.124"
+      pass="wtbx2021exp"
+      maestro="prev"
+      ;;
+
+    "pi")
+      user="root"
+      ip="192.168.112.14"
+      pass="rms2917exp"
+      ;;
+
+    "insider")
+      user="wroot"
+      ip="insider.hub.qard.witbe.io"
+      pass="rms2917exp"
+      port=4444
+      ;;
+
+    "wb")
+      user="wroot"
+      ip="10.177.193.107"
+      pass="wtbx2021exp"
+      vpn="qard"
+      ;;
+
+    "wbi")
+      user="wroot"
+      ip="172.27.229.106"
+      pass="wtbx2021exp"
+      maestro="insider"
+      vpn="qard"
+      ;;
+
+    "rou")
+      user="wroot"
+      ip="10.177.193.42"
+      pass="wtbx2021exp"
+      vpn="staging"
+      ## maestro="staging"
+      ;;
+
+    "demo1")
+      user="wroot"
+      ip="172.27.226.119"
+      pass="wtbx2021exp"
+      vpn="staging"
+      ;;
+
+    "staging")
+      user="wroot"
+      ## ip="193.109.125.17"
+      ip="staging.cloud.witbe.net"
+      pass="rms2917exp"
+      port=4444
+      ;;
+
+    "corr")
+      user="wroot"
+      ip="172.27.226.122"
+      pass="wtbx2021exp"
+      maestro="staging"
+      ;;
+
+    "x101")
+      user="wroot"
+      ip="172.27.226.101"
+      pass="Wtb2024QualExp"
+      maestro="shrec"
+      ;;
+
+    "mga")
+      user="wroot"
+      ip="172.27.226.105"
+      pass="wtbx2021exp"
+      ;;
+
+    "x105")
+      user="wroot"
+      ip="172.27.226.105"
+      pass="Wt3ult*3pr3c"
+      maestro="shrec"
+      ;;
+
+    "nanterre")
+      user="wroot"
+      ip="192.168.122.193"
+      pass="wtbx2021exp"
+      ;;
+
+    "mae_SUNRISE")
+      tunnel="sshpass -p rms2917exp ssh -p 49121 wroot@octl0455.sunrise.ch -L 9910:10.77.77.201:22"
+      user="wroot"
+      pass="rmsSunr1exp"
+      ip="127.0.0.1"
+      port="9910"
+      ;;
+
+    "SUNRISE121")
+      user="wroot"
+      pass="wtbx2021exp"
+      ip="10.77.77.121"
+      maestro="mae_SUNRISE"
+      ;;
+
+    "SUNRISE126")
+      user="wroot"
+      pass="wtbx2021exp"
+      ip="10.77.77.126"
+      maestro="mae_SUNRISE"
+      ;;
+
+    "SUNRISE127")
+      user="wroot"
+      pass="wtbx2021exp"
+      ip="10.77.77.127"
+      maestro="mae_SUNRISE"
+      ;;
+
+    "SUNRISE128")
+      user="wroot"
+      pass="wtbx2021exp"
+      ip="10.77.77.128"
+      maestro="mae_SUNRISE"
+      ;;
+
+    "cloud")
+      user="wroot"
+      pass="rms2917exp"
+      ip="192.168.122.83"
+      port="4444"
+      ;;
+
+    "cloudx102")
+      ip="172.27.226.102"
+      user="wroot"
+      pass="wtbx2021exp"
+      maestro="cloud"
+      ;;
+
+    "next122")
+      ip="172.27.229.122"
+      user="wroot"
+      pass="wtbx2021exp"
+      maestro="next"
+      ;;
+
+    "x128")
+      ip="172.27.229.128"
+      user="wroot"
+      pass="wtbx2021exp"
+      maestro="next"
+      ;;
+
+    "shaw_134")
+      ip="10.77.77.82"
+      user="wroot"
+      pass="wtbx2021exp"
+      ;;
+
+    "shaw_99")
+      ip="10.77.77.99"
+      user="wroot"
+      pass="wtbx2021exp"
+      ;;
+
+    "shaw_135")
+      ip="10.77.77.99"
+      user="wroot"
+      pass="wtbx2021exp"
+      ;;
+
+    "shaw_qk")
+      ip="10.77.77.118"
+      user="wroot"
+      pass="wtbx2021exp"
+      ;;
+
+    "shaw_gla")
+      ip="10.77.77.119"
+      user="wroot"
+      pass="wtbx2021exp"
+      ;;
+
+    "shaw_cor")
+      ip="10.77.77.96"
+      user="wroot"
+      pass="wtbx2021exp"
+      ;;
+
+    ## "shaw")
+      ##   ip="10.77.77.220"
+      ##   user="wroot"
+      ##   pass="rms2917exp"
+      ##   port="4444"
+      ##   ;;
+
+    *)
+      echo -n "'$1' not found in ["
+      echo -n "c8" "opo" "prev" "next" "qk" "agr" "rou" "pi"
+      echo "]"
+      exit 1
+  esac
+
+  if [ "$port" != "" ]; then
+    port_cmd="-p $port"
+  fi
+  if [ "$maestro" != "" ]; then
+    dest_user="$user"
+    dest_ip="$ip"
+    dest_pass="$pass"
+    dest_port="$port"
+    dest_port_cmd="$port_cmd"
+    dest_maestro="$maestro"
+    get_infos "$maestro"
+    dest=1
+  fi
+}
+
+with_pass() {
+  get_infos $1
+  ## TODO: if no pass, no need for sshpass -p $pass
+  cmd="sshpass"
+  if [ "$2" == "FMT" ]; then
+    cmd="echo $cmd"
+  fi
+
+  if [ $dest -eq 1 ]; then
+    if [ "$tunnel" != "" ]; then
+      echo $tunnel
+    fi
+    $cmd -p "$pass" ssh -oStrictHostKeyChecking=no -t "$user@$ip" $port_cmd sshpass -p "$dest_pass" ssh -oStrictHostKeyChecking=no $dest_port_cmd "$dest_user@$dest_ip"
+  else
+    $cmd -p "$pass" ssh -oStrictHostKeyChecking=no $port_cmd "$user@$ip" ${@: 2}
+  fi
+}
+
+regular() {
+  cmd="ssh"
+  if [ "$2" == "FMT" ]; then
+    cmd="echo $cmd"
+  fi
+  if [ $dest -eq 1 ]; then
+    if [ "$tunnel" != "" ]; then
+      echo $tunnel
+    fi
+    $cmd -oStrictHostKeyChecking=no -t "$user@$ip" $port_cmd $cmd -oStrictHostKeyChecking=no $dest_port_cmd "$dest_user@$dest_ip"
+  else
+    $cmd -oStrictHostKeyChecking=no $port_cmd "$user@$ip" ${@: 2}
+  fi
+}
+
+register() {
+  cmd="ssh-copy-id -f"
+  if [ $dest -eq 1 ]; then
+    if [ "$tunnel" != "" ]; then
+      echo $tunnel
+    fi
+    ## $cmd "$user@$ip" $port_cmd ssh -oStrictHostKeyChecking=no $dest_port_cmd "$dest_user@$dest_ip"
+    sshpass -p "$pass" $cmd $port_cmd "$user@$ip"
+    sshpass -p "$pass" ssh -oStrictHostKeyChecking=no -t "$user@$ip" $port_cmd sshpass -p "$dest_pass" $cmd $dest_port_cmd "$dest_user@$dest_ip"
+  else
+    echo "$pass"
+    echo $cmd $port_cmd "$user@$ip"
+    sshpass -p "$pass" $cmd $port_cmd "$user@$ip"
+  fi
+}
+
+get_infos $1
+if [ "$2" == "GET" ]; then
+  if [ $dest -eq 1 ]; then
+    echo "$dest_user:$dest_ip:$dest_port:$dest_pass:$dest_maestro"
+  else
+    echo "$user:$ip:$port:$pass:$maestro"
+  fi
+  exit
+fi
+if [ "$2" == "REG" ]; then
+  register $1
+  exit
+fi
+if [ "$2" == "PSS" ]; then
+  with_pass $1
+  exit
+fi
+
+regular $*

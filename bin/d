@@ -1,0 +1,594 @@
+#!/bin/bash
+
+## TODO's
+## rsync -r -a --info=progress2,misc2,flist2
+
+
+################ env
+################
+
+## URL_IMAGE="artifactory.rd.witbe.net/docker-build-images/builder:centos-8-local"
+## D_NAME="builder-centos-8-local"
+URL_IMAGE="artifactory.rd.witbe.net/docker-build-images/builder:centos-8-jenkins-v2"
+# URL_IMAGE="artifactory.rd.witbe.net/docker-build-images/builder:centos-8-local"
+D_NAME="centos-8-jenkins-v2"
+
+REMOTE_USER="wroot"
+REMOTE_HOME="/home/$REMOTE_USER"
+REMOTE_BUILDSTATION="$REMOTE_HOME/quca"
+REMOTE_BUILDER="$REMOTE_HOME/builder"
+REMOTE_STORAGE="$REMOTE_HOME/storage"
+REMOTE_TOOL="$REMOTE_HOME/tool.sh"
+
+PATHD_STORAGE="${HOME}/storage"
+PATHD_WORKSTATION="${HOME}/workstation"
+PATHD_SHARE="$PATHD_STORAGE/docker_c8"
+PATHD_DCK_FETCH="/mnt/c/cygwin64${PATHD_SHARE}"
+PATHD_WITBE="$PATHD_WORKSTATION/witbe"
+
+PATH_RTOOL="$PATHD_WORKSTATION/utils/remote_tool_b.sh"
+
+
+################ docker
+################
+
+_d_pull() {
+  docker pull "$URL_IMAGE"
+}
+
+_d_remote_init() {
+  ## _d_exec dnf install -y rsync openssh-server
+  ## _d_exec mkdir -p "$REMOTE_BUILDSTATION" "$REMOTE_STORAGE" "$REMOTE_BUILDER"
+  ## cp remote_tool
+  ## cp .ssh
+  ## cp .gitconfig
+  ## ? dnf install sox-devel
+  ## ln -sf /usr/include/sox/sox.h /usr/include/sox.h
+  ## dnf install rsync -y
+
+
+  echo init
+  return
+  # .bashrc
+  # User specific aliases and functions
+
+  alias g="/storage/GoVersions/1.20.5/bin/go"
+  alias cdd="cd /home/wroot/quca ; ll"
+
+  alias ll='ls -l'
+  alias rm='rm -i'
+  alias cp='cp -i'
+  alias mv='mv -i'
+  # Source global definitions
+  if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+  fi
+  PS1="\[\e[00;37m\][\[\e[0m\]\[\e[00;36m\]\u\[\e[0m\]\[\e[00;37m\]@\[\e[0m\]\[\e[01;32m\]R-Squad-C8\[\e[0m\]\[\e[00;37m\] \w]\[\e[0m\]\[\e[01;37m\]\\$\[\e[0m\]\[\e[00;37m\] \[\e[0m\]"
+  export tar=bsdtar
+  export GRADLE_HOME=/opt/gradle/latest
+  export PATH=/opt/gradle/latest/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  export JAVA_HOME=/usr/
+  export PATH=/opt/arcanist/bin:/opt/gradle/latest/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  export GOPRIVATE="bitbucket.org/witbe-rd*"
+  export GOROOT="/home/wroot/go"
+}
+
+_WSL_d_run() {
+  docker run \
+    -v "$PATHD_DCK_FETCH/:$REMOTE_BUILDSTATION"	\
+    -dit --name "$D_NAME"			\
+    --entrypoint '/bin/bash'			\
+    "$URL_IMAGE"				
+
+  ##
+  _d_remote_init
+}
+
+_WSL_d_reset() {
+  _d_hard_remove
+  _d_pull
+  _WSL_d_run
+}
+
+_d_remove() {
+  stop
+  docker rm "$D_NAME"
+}
+
+_d_hard_remove() {
+  _d_remove
+  docker image prune -f -a
+  docker volume prune -f
+}
+
+_d_restart() {
+  stop
+  start
+}
+
+_d_exec() {
+  docker exec -it "$D_NAME" $*
+}
+
+_d_getId() {
+  docker ps -f name="$D_NAME" | tail -n 1 | cut -d' ' -f1
+}
+
+_d_backport_build() {
+  mkdir -p "$PATHD_SHARE/$projectID/build/artifacts" "$PATHD_SHARE/$projectID/build/out" || return 1
+  _d_exec_project rsync --progress -va --no-links --delete ./build/artifacts/ "$REMOTE_BUILDSTATION/$projectID/build/artifacts" ## TODO 2> /dev/null
+  _d_exec_project rsync --progress -va --no-links --delete ./build/out/ "$REMOTE_BUILDSTATION/$projectID/build/out" || return 1
+}
+
+####
+
+_get_project_ID() { ## TODO error if projectID not in cdw
+  [ $# -gt 0 ] || return 1
+  case "$1" in
+    "BT")
+      projectID="BTSERVER"
+      ;;
+    "HCI")
+      projectID="HCITOOL"
+      ;;
+    "RF")
+      projectID="RFCETOOL"
+      ;;
+    "NG")
+      projectID="HCITOOLNG"
+      ;;
+    *)
+      projectID="$1"
+      ;;
+  esac
+}
+
+################ public
+################
+
+ssh() {
+  _d_exec /bin/bash
+}
+
+stop() {
+  docker stop "$D_NAME"
+}
+
+start() {
+  docker start "$D_NAME"
+}
+
+_d_exec_project() {
+  docker exec -w "$REMOTE_BUILDER/$projectID" -it "$D_NAME" $*
+}
+
+gob() {
+  _d_exec mkdir -p "$REMOTE_BUILDER/$projectID/build/out" || return 1
+  _d_exec_project go build -o "build/out/" || return 1
+  _d_backport_build
+}
+
+up() {
+  _get_project_ID $1 || return 1
+  _d_exec mkdir -p "$REMOTE_BUILDER/$projectID" || return 1
+  _d_exec_project rsync --progress -va --no-links --delete --exclude=".git" --exclude="build" "$REMOTE_BUILDSTATION/$projectID/" . || return 1
+}
+
+i() {
+  _get_project_ID $1 || return 1
+  fast="-Pfast=1"
+  _d_exec_project gradle install $fast || return 1
+  ret=$?
+  _d_backport_build
+  return $ret
+}
+
+p() {
+  _get_project_ID $1 || return 1
+  fast="-Pfast=1"
+  ## fast="-PkeepDependencies=true"
+  ## fast="-PfastNfurious=true"
+  _d_exec_project gradle packages $fast || return 1
+  ret=$?
+  _d_backport_build
+  return $ret
+}
+
+pre() {
+  _get_project_ID $1 || return 1
+  _d_exec_project rm -rfv build/
+  _d_exec_project gradle dependencies --refresh-dependencies ## || return 1
+  _d_exec_project gradle packages || return 1
+  ret=$?
+  _d_backport_build
+  return $ret
+}
+
+depart() {
+  if [ $# -lt 2 ]; then
+    echo depart:PROJID:dest
+    return 1
+  fi
+  _get_project_ID $1 || return 1
+  _get_infos $2 || return 1
+  _get_home "$dest_user"
+
+  $_passcmd ssh $_portp $dest_user@$dest_ip mkdir -vp $art_path
+  $_passcmd rsync -e "ssh $_portp" --delete -a --progress "$PATHD_SHARE/$projectID/build/artifacts/" "$dest_user@$dest_ip:$art_path" || return 1
+  if [ "$dest_maestro" != "" ]; then
+    if [ "$dest_fw_port" == "" ] || [ $dest_fw_port -eq 22 ]; then
+      $_passcmd ssh $_portp $dest_user@$dest_ip $_fw_passcmd ssh $dest_fw_user@$dest_fw_ip mkdir -vp "$art_path" || return 1
+      $_passcmd ssh $_portp $dest_user@$dest_ip $_fw_passcmd rsync --delete -arz --progress "$art_path/" $dest_fw_user@$dest_fw_ip:$art_path || return 1
+    else
+      echo '/!!\ untested rsync over another port. here is the command though'
+      echo $_passcmd ssh $_portp -t $dest_user@$dest_ip $_fw_passcmd rsync --delete -arz --progress -e "'ssh -p $dest_fw_port'" "$art_path/" $dest_fw_user@$dest_fw_ip:$art_path
+    fi
+  fi
+}
+
+depall() {
+  if [ $# -lt 2 ]; then
+    echo depart:PROJID:dest
+    return 1
+  fi
+  _get_project_ID $1 || return 1
+  _get_infos $2 || return 1
+  _get_home "$dest_user"
+
+
+  proj_path="$home_path/quca.$projectID""_all"
+
+  $_passcmd ssh $_portp $dest_user@$dest_ip mkdir -vp $proj_path
+  $_passcmd rsync -e "ssh $_portp" --delete -a --progress "$PATHD_SHARE/$projectID/build/" "$dest_user@$dest_ip:$proj_path/" || return 1
+  if [ "$dest_maestro" != "" ]; then
+    if [ "$dest_fw_port" == "" ] || [ $dest_fw_port -eq 22 ]; then
+      $_passcmd ssh $_portp $dest_user@$dest_ip $_fw_passcmd ssh $dest_fw_user@$dest_fw_ip mkdir -vp "$proj_path" || return 1
+      $_passcmd ssh $_portp $dest_user@$dest_ip $_fw_passcmd rsync --delete -arz --progress "$proj_path/" $dest_fw_user@$dest_fw_ip:$proj_path || return 1
+    else
+      echo '/!!\ untested rsync over another port. here is the command though'
+      echo $_passcmd ssh $_portp -t $dest_user@$dest_ip $_fw_passcmd rsync --delete -arz --progress -e "'ssh -p $dest_fw_port'" "$proj_path/" $dest_fw_user@$dest_fw_ip:$proj_path
+    fi
+  fi
+}
+
+depb() {
+  if [ $# -lt 2 ]; then
+    echo depart:PROJID:dest
+    return 1
+  fi
+  _get_project_ID $1 || return 1
+  _get_infos $2 || return 1
+  _get_home "$dest_user"
+
+
+  proj_path="$home_path/quca.$projectID""_build"
+
+  $_passcmd ssh $_portp $dest_user@$dest_ip mkdir -vp $proj_path
+  $_passcmd rsync -e "ssh $_portp" --delete -a --progress "$PATHD_SHARE/$projectID/build/out/" "$dest_user@$dest_ip:$proj_path/out" || return 1
+  $_passcmd rsync -e "ssh $_portp" --delete -a --progress "$PATHD_SHARE/$projectID/build/artifacts/" "$dest_user@$dest_ip:$proj_path/artifacts" || return 1
+  if [ "$dest_maestro" != "" ]; then
+    if [ "$dest_fw_port" == "" ] || [ $dest_fw_port -eq 22 ]; then
+      $_passcmd ssh $_portp $dest_user@$dest_ip $_fw_passcmd ssh $dest_fw_user@$dest_fw_ip mkdir -vp "$proj_path" || return 1
+      $_passcmd ssh $_portp $dest_user@$dest_ip $_fw_passcmd rsync --delete -arz --progress "$proj_path/" $dest_fw_user@$dest_fw_ip:$proj_path || return 1
+    else
+      echo '/!!\ untested rsync over another port. here is the command though'
+      echo $_passcmd ssh $_portp -t $dest_user@$dest_ip $_fw_passcmd rsync --delete -arz --progress -e "'ssh -p $dest_fw_port'" "$proj_path/" $dest_fw_user@$dest_fw_ip:$proj_path
+    fi
+  fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+diff() {
+  _get_project_ID $1 || return 1
+  echo "causes segfault, so launch cmd yourself:"
+  echo diff -r "$PATHD_WITBE/$projectID/" "$PATHD_SHARE/$projectID/"
+}
+
+depscript() { ## TODO: maestro
+  _get_infos $1 || return 1
+  _get_home "$dest_user"
+  $_passcmd scp "$PATHD_STORAGE/install.sh" "$dest_user@$dest_ip:$home_path/" || return 1
+}
+
+## install() {
+##   _get_project_ID $1 || return 1
+##   fast="-Pfast=1"
+##   if [ ! -d "$PATHD_SHARE/$projectID/build" ]; then
+##     fast=""
+##   fi
+##   docker exec -w "$REMOTE_BUILDSTATION/$projectID" -it "$D_NAME" echo lol
+##   docker exec -w "$REMOTE_BUILDSTATION/$projectID" -it "$D_NAME" pwd
+##   docker exec -w "$REMOTE_BUILDSTATION/$projectID" -it "$D_NAME" gradle install $fast
+## }
+
+dephci() {
+  echo rewrite this
+  return 1
+  _get_project_ID "HCI" || return 1
+  src="$projectID"
+  _get_project_ID "BT" || return 1
+  dest="$projectID"
+  rsync -av "$PATHD_SHARE/$src/build/out/include/" "$PATHD_SHARE/$dest/build/tmp/dependencies/v1/include" || return 1
+  rsync -av "$PATHD_SHARE/$src/build/out/lib/" "$PATHD_SHARE/$dest/build/tmp/dependencies/v1/lib" || return 1
+}
+
+dephcing() {
+  echo rewrite this
+  return 1
+  _get_project_ID "NG" || return 1
+  src="$projectID"
+  _get_project_ID "BT" || return 1
+  dest="$projectID"
+
+  rsync -av "$PATHD_SHARE/$src/build/out/include/" "$PATHD_SHARE/$dest/build/tmp/dependencies/v2/include" || return 1
+  rsync -av "$PATHD_SHARE/$src/build/out/lib/" "$PATHD_SHARE/$dest/build/tmp/dependencies/v2/lib" || return 1
+}
+
+dephcirf() {
+  _get_project_ID "BT" || return 1
+  dest="$projectID"
+  _get_project_ID "RF" || return 1
+
+  _d_exec_project rsync --progress -va --no-links --delete ./build/out/include/ "$REMOTE_BUILDER/$dest/build/tmp/dependencies/rf/include" ## TODO 2> /dev/null
+  _d_exec_project rsync --progress -va --no-links --delete ./build/out/lib/ "$REMOTE_BUILDER/$dest/build/tmp/dependencies/rf/lib" ## TODO 2> /dev/null
+
+  ## rsync -av "$PATHD_SHARE/$src/build/out/include/" "$PATHD_SHARE/$dest/build/tmp/dependencies/rf/include" || return 1
+  ## rsync -av "$PATHD_SHARE/$src/build/out/lib/" "$PATHD_SHARE/$dest/build/tmp/dependencies/rf/lib" || return 1
+}
+
+depcore() {
+  ## _get_project_ID "witbe-core-framework" || return 1
+  _get_project_ID "COREFW" || return 1
+  src="$projectID"
+
+  _get_project_ID "witbe-events-correlator" || return 1
+  dest="$projectID"
+  rsync -av "$PATHD_SHARE/$src/build/out/" "$PATHD_SHARE/$dest/build/dependencies/witbe"
+
+  _get_project_ID "witbe-events-correlator-mos-plugin" || return 1
+  dest="$projectID"
+  rsync -av "$PATHD_SHARE/$src/build/out/" "$PATHD_SHARE/$dest/build/dependencies/witbe"
+
+  return 0
+  _get_project_ID "MY/CPP" || return 1
+  dest="$projectID"
+  rsync -av "$PATHD_SHARE/$src/build/out/" "$PATHD_SHARE/$dest/build/dependencies/witbe"
+
+  _get_project_ID "MY/FAKE" || return 1
+  dest="$projectID"
+  rsync -av "$PATHD_SHARE/$src/build/out/" "$PATHD_SHARE/$dest/build/dependencies/witbe"
+}
+
+from() {
+  _get_project_ID $1 || return 1
+  _get_infos $2
+  slhome="/home" ## TODO _deploy_init
+  if [ "$dest_user" == "root" ]; then
+    slhome=""
+  fi
+  proj_path="$slhome/$dest_user/quca.$projectID""_build"
+  $_passcmd rsync -e "ssh $_portp" --delete -a --progress "$PATHD_WITBE/$projectID/" "$dest_user@$dest_ip:$proj_path"
+}
+
+_get_home() {
+  slhome="/home" ## TODO
+  if [ "$1" == "root" ]; then
+    slhome=""
+  fi
+  home_path="$slhome/$1"
+  bin_name="quca.$projectID""_bin"
+  proj_path="$home_path/quca.$projectID""_build"
+  art_path="$home_path/quca.$projectID""_artifacts"
+  ## bin_path="$home_path/$bin_name"
+  bin_path="$home_path/quca.$projectID""_bin"
+
+}
+
+trrpms() {
+  _get_project_ID $1 || return 1
+  cp "$PATHD_SHARE/$projectID/build/artifacts/"*".rpm" "$PATHD_SHARE/TR/build/artifacts/rpms/" || return 1
+}
+
+m() {
+  _get_project_ID $1 || return 1
+  docker exec -w "$REMOTE_BUILDSTATION/$projectID/build/tmp" -i "$D_NAME" make || return 1
+}
+
+dep() {
+  if [ $# -lt 2 ]; then
+    echo dep:PROJID_SRC:PROJID_DEST
+    return 1
+  fi
+  _get_project_ID $1 || return 1
+  src="$projectID"
+  _get_project_ID $2 || return 1
+  dest="$projectID"
+  rsync -av "$PATHD_SHARE/$src/build/out/" "$PATHD_SHARE/$dest/build/dependencies/witbe/" || return 1
+}
+
+_get_infos() { ## TODO return error if no args
+  dest_infos=`s "$1" GET` || return 1
+  dest_maestro=`echo $dest_infos | cut -d':' -f5`
+
+  if [ "$dest_maestro" != "" ]; then
+    dest_mae_infos=`s "$dest_maestro" GET` || return 1
+    dest_user=`echo $dest_mae_infos | cut -d':' -f1`
+    dest_ip=`echo $dest_mae_infos | cut -d':' -f2`
+    dest_port=`echo $dest_mae_infos | cut -d':' -f3`
+    dest_pass=`echo $dest_mae_infos | cut -d':' -f4`
+
+    dest_fw_user=`echo $dest_infos | cut -d':' -f1`
+    dest_fw_ip=`echo $dest_infos | cut -d':' -f2`
+    dest_fw_port=`echo $dest_infos | cut -d':' -f3`
+    dest_fw_pass=`echo $dest_infos | cut -d':' -f4`
+  else
+    dest_user=`echo $dest_infos | cut -d':' -f1`
+    dest_ip=`echo $dest_infos | cut -d':' -f2`
+    dest_port=`echo $dest_infos | cut -d':' -f3`
+    dest_pass=`echo $dest_infos | cut -d':' -f4`
+
+    dest_fw_user=""
+    dest_fw_ip=""
+    dest_fw_port=""
+    dest_fw_pass=""
+  fi
+
+  _passcmd=""
+  _portp=""
+  _portP=""
+  _fw_portp=""
+  _fw_portP=""
+  _fw_passcmd=""
+
+  if [ "$dest_port" != "" ]; then
+    _portp="-p $dest_port"
+    _portP="-P $dest_port"
+  fi
+  if [ "$dest_pass" != "" ]; then
+    _passcmd="sshpass -p $dest_pass"
+  fi
+  if [ "$dest_fw_port" ]; then
+    _fw_portp="-p $dest_fw_port"
+    _fw_portP="-P $dest_fw_port"
+  fi
+  if [ "$dest_fw_pass" != "" ]; then
+    _fw_passcmd="sshpass -p $dest_fw_pass"
+  fi
+}
+
+## _deploy_init()
+depbin() {
+  if [ $# -lt 2 ]; then
+    echo depbin:PROJID:dest
+    return 1
+  fi
+  _get_project_ID $1 || return 1
+  _get_infos $2 || return 1
+  _get_home "$dest_user"
+
+  $_passcmd ssh $_portp $dest_user@$dest_ip mkdir -vp $bin_path
+  $_passcmd rsync -e "ssh $_portp" --delete -a --progress "$PATHD_SHARE/$projectID/build/out/bin/" "$dest_user@$dest_ip:$bin_path" || return 1
+  if [ "$dest_maestro" != "" ]; then
+    if [ "$dest_fw_port" == "" ] || [ $dest_fw_port -eq 22 ]; then
+      $_passcmd ssh $_portp $dest_user@$dest_ip $_fw_passcmd ssh $dest_fw_user@$dest_fw_ip mkdir -vp "$bin_path" || return 1
+      $_passcmd ssh $_portp $dest_user@$dest_ip $_fw_passcmd rsync --delete -arz --progress "$bin_path/" $dest_fw_user@$dest_fw_ip:$bin_path || return 1
+    else
+      echo '/!!\ untested rsync over another port. here is the command though'
+      echo $_passcmd ssh $_portp -t $dest_user@$dest_ip $_fw_passcmd rsync --delete -arz --progress -e "'ssh -p $dest_fw_port'" "$bin_path/" $dest_fw_user@$dest_fw_ip:$bin_path
+    fi
+  fi
+}
+
+deploy() {
+  if [ $# -lt 2 ]; then
+    echo deploy:PROJID:dest
+    return 1
+  fi
+  _get_project_ID $1 || return 1
+  _get_infos $2 || return 1
+  _get_home "$dest_user"
+
+  $_passcmd ssh $_portp $dest_user@$dest_ip mkdir -vp $proj_path
+  $_passcmd rsync -e "ssh $_portp" --delete -a --progress "$PATHD_SHARE/$projectID/build/" "$dest_user@$dest_ip:$proj_path" || return 1
+  if [ "$dest_maestro" != "" ]; then
+    if [ "$dest_fw_port" == "" ] || [ $dest_fw_port -eq 22 ]; then
+      $_passcmd ssh $_portp $dest_user@$dest_ip $_fw_passcmd ssh $dest_fw_user@$dest_fw_ip mkdir -vp "$proj_path" || return 1
+      $_passcmd ssh $_portp $dest_user@$dest_ip $_fw_passcmd rsync --delete -arz --progress "$proj_path/" $dest_fw_user@$dest_fw_ip:$proj_path || return 1
+    else
+      echo '/!!\ untested rsync over another port. here is the command though'
+      echo $_passcmd ssh $_portp -t $dest_user@$dest_ip $_fw_passcmd rsync --delete -arz --progress -e "'ssh -p $dest_fw_port'" "$proj_path/" $dest_fw_user@$dest_fw_ip:$proj_path
+    fi
+  fi
+}
+
+for clcmd in $@
+do
+  cmd=""
+  args=""
+  echo "---->   : $clcmd"
+  for obj in `echo "$clcmd" | tr ':' ' '`
+  do
+    if [ "$cmd" == "" ]; then
+      cmd="$obj"
+    else
+      args="$args $obj"
+    fi
+  done
+  ## TODO: { _get_project_ID $1; docker_exec_cmd = `pwd` }
+
+  for obj in `echo "$cmd" | tr ',' ' '`
+  do
+    echo "  -->   : $obj ($args)"
+    $obj $args
+    res=$?
+    if [ $res -ne 0 ]; then
+      echo "<--     : [ABORTING] $obj ($args)"
+      date
+      exit 1
+    fi
+    echo "<--     : [OK] $obj ($args)"
+  done
+done
+echo "<----   : [ALL DONE]"
+
+date
+
+
+#########
+
+exit 0
+
+go run generator.go -output file
+docker-compose exec cmdb-api sh
+go run migrations/*.go create xxxResName
+go run migrations/*.go migrate
+go run migrations/*.go rollback
+
+docker-compose logs -f --tail=100 cmdb-api
+
+COMPOSE_HTTP_TIMEOUT=600 docker-compose up
+
+docker-compose up -d cmdb-api ## -d = daemon
+docker-compose restart cmdb-api agensgraph
+docker-compose exec agensgraph agens -U agens
+
+
+## Up :
+docker-compose up -d proxy cmdb-api agensgraph storage-api
+
+
+## Stop :
+docker-compose stop [nom-du-service]
+## Pour se connecter sur un container :
+docker-compose exec cmdb-api sh
+## Migrations :
+docker-compose exec cmdb-api sh
+go run migrations/*.go create nomDeLaMigration
+
+docker-compose exec cmdb-api sh
+go run migrations/*.go migrate
+
+docker-compose exec cmdb-api sh
+go run migrations/*.go rollback
+## Pour générer les fichiers models/modelQueTuVeux.go :
+docker-compose exec cmdb-api sh
+go run generator.go -output file
+
+
+
+docker system prune -a --volumes
+systemctl stop docker
+rm -rf /var/lib/docker/*
+systemctl start docker
