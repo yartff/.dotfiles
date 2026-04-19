@@ -38,6 +38,9 @@ __cd_print_highlightndx() {
     tput cuu $_cd_size
   fi
 
+  local cols=$(tput cols)
+  local prefix_len=$(( _cd_size < 10 ? 3 : 4 ))
+  local max_path=$((cols - prefix_len))
   for ndx in "${!_cd_stack[@]}"; do
     if [ "$1" == "3" ] || [ "$1" == "4" ]; then
       tput el
@@ -48,7 +51,15 @@ __cd_print_highlightndx() {
     elif [ $ndx -eq $_cd_index ]; then
       tput setaf 5
     fi
-    printf "%2d : %s\n" "$ndx" "${_cd_stack[$ndx]}"
+    local path="${_cd_stack[$ndx]}"
+    if [ ${#path} -gt $max_path ]; then
+      path="...${path: -$((max_path - 3))}"
+    fi
+    if [ $_cd_size -lt 10 ]; then
+      printf "%d: %s\n" "$ndx" "$path"
+    else
+      printf "%2d: %s\n" "$ndx" "$path"
+    fi
     tput sgr0
   done
 }
