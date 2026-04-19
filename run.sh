@@ -3,7 +3,7 @@
 DOTFILES_DIR="${HOME}/.dotfiles/files"
 DESTINATION_DIR="${HOME}"
 CMD="diff"
-RSYNC_CMD="rsync -a --no-links --out-format=%n"
+RSYNC_CMD="rsync -a --checksum --no-links --out-format=%n"
 FILES_DIR="$DOTFILES_DIR/files"
 
 while [[ $# -gt 0 ]]; do
