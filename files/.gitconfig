@@ -1,0 +1,17 @@
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+[user]
+	name = yartFF
+	email = 2074648+yartff@users.noreply.github.com
+[core]
+	editor = vim
+[web]
+	browser = google-chrome
+[push]
+	default = simple
+[filter "media"]
+	clean = git media clean %f
+	smudge = git media smudge %f
+	required = true

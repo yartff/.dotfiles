@@ -1,0 +1,535 @@
+== NAV
+X | "\C-b": backward-char
+X | "\eOD": backward-char
+- | "\e[D": backward-char
+X | "\C-f": forward-char
+X | "\eOC": forward-char
+- | "\e[C": forward-char
+= | "\e\e[D": backward-word
+= | "\e[1;3D": backward-word
+= | "\e[1;5D": backward-word
+= | "\e[5D": backward-word
+X | "\eb": backward-word
+  | "\e\C-b": shell-backward-word
+= | "\e\e[C": forward-word
+= | "\e[1;3C": forward-word
+= | "\e[1;5C": forward-word
+= | "\e[5C": forward-word
+X | "\ef": forward-word
+X | "\e\C-f": shell-forward-word
+- | "\C-a": beginning-of-line
+X | "\eOH": beginning-of-line
+X | "\e[1~": beginning-of-line
+X | "\e[H": beginning-of-line
+- | "\C-e": end-of-line
+X | "\eOF": end-of-line
+X | "\e[4~": end-of-line
+X | "\e[F": end-of-line
+
+== NAV TO
+  | "\C-]": character-search
+  | "\e\C-]": character-search-backward
+X | "\C-x\C-x": exchange-point-and-mark
+X | "\C-@": set-mark
+X | "\e ": set-mark
+
+== HISTORY
+- | "\C-p": previous-history
+X | "\eOA": previous-history
+- | "\e[A": previous-history
+- | "\C-n": next-history
+X | "\eOB": next-history
+- | "\e[B": next-history
+X | "\e<": beginning-of-history
+X | "\e>": end-of-history
+- | "\C-r": reverse-search-history
+X | "\C-s": forward-search-history
+! | "\e[5~": history-search-backward
+! | "\e[6~": history-search-forward
+X | "\e\C-i": dynamic-complete-history
+X | "\e^": history-expand-line
+X | "\en": non-incremental-forward-search-history
+X | "\ep": non-incremental-reverse-search-history
+
+
+== COMPLETE
+- | "\C-i": complete
+X | "\e\e\000": complete
+  | "\e!": complete-command
+  | "\e/": complete-filename
+X | "\e@": complete-hostname
+- | "\e(": complete-into-braces
+X | "\e{": complete-into-braces
+X | "\e~": complete-username
+- | "\e$": complete-variable
+  | "\C-x!": possible-command-completions
+  | "\e=": possible-completions
+  | "\e?": possible-completions
+  | "\C-x/": possible-filename-completions
+  | "\C-x@": possible-hostname-completions
+  | "\C-x~": possible-username-completions
+  | "\C-x$": possible-variable-completions
+  | "\eg": glob-complete-word
+X | "\C-xs": spell-correct-word
+
+== EDIT
+- | "\eu": upcase-word
+- | "\el": downcase-word
+- | "\ec": capitalize-word
+
+== SWAP
+- | "\C-t": transpose-chars
+X | "\et": transpose-words
+X | "\e\C-t": shell-transpose-words
+
+== INSERT
+X | "\e#": insert-comment
+X | "\e.": insert-last-argument
+X | "\e_": insert-last-argument
+X | "\C-q": quoted-insert
+- | "\C-v": quoted-insert
+X | "\e[2~": quoted-insert
+- | "\e*": insert-completions
+X | "\e\C-e": shell-expand-line
+X | "\e&": tilde-expand
+
+== GLOB
+  | "\C-x*": glob-expand-word
+  | "\C-xg": glob-list-expansions
+
+== DELETE
+- | "\C-k": kill-line
+
+- | "\C-h": backward-delete-char
+X | "\C-?": backward-delete-char
+- | "\C-d": delete-char
+X | "\e[3~": delete-char
+
+X | "\e\C-h": backward-kill-word
+X | "\e\C-?": backward-kill-word
+  | X: shell-backward-kill-word
+- | "\C-w": unix-word-rubout
+X | "\e[3;5~": kill-word
+! | "\ed": kill-word
+  | "\e\C-d": shell-kill-word
+
+X | "\e\\": delete-horizontal-space
+
+X | "\C-x\C-?": backward-kill-line
+! | "\C-u": unix-line-discard ## Replace \C-c with this?
+
+== YANK
+- | "\C-y": yank
+X | "\e.": yank-last-arg
+X | "\e_": yank-last-arg
+X | "\e\C-y": yank-nth-arg
+X | "\ey": yank-pop
+
+== UNDO
+X | "\C-x\C-u": undo
+! | "\C-_": undo
+X | "\e\C-r": revert-line
+  | "\er": revert-line
+- | "\C-g": abort
+X | "\C-x\C-g": abort
+X | "\e\C-g": abort
+
+== DISPLAY
+! | "\e\C-l": clear-display
+- | "\C-l": clear-screen
+
+== EXEC
+- | "\C-j": accept-line
+X | "\C-m": accept-line
+! | "\C-x\C-e": edit-and-execute-command
+X | "\C-o": operate-and-get-next
+
+== REPEAT ACTIONS
+X | "\e-": digit-argument
+X | "\e0": digit-argument
+X | "\e1": digit-argument
+X | "\e2": digit-argument
+X | "\e3": digit-argument
+X | "\e4": digit-argument
+X | "\e5": digit-argument
+X | "\e6": digit-argument
+X | "\e7": digit-argument
+X | "\e8": digit-argument
+X | "\e9": digit-argument
+
+== MACRO
+X | "\C-xe": call-last-kbd-macro
+X | "\C-x)": end-kbd-macro
+X | "\C-x(": start-kbd-macro
+
+== MISC
+X | "\C-x\C-v": display-shell-version
+X | "\C-x\C-r": re-read-init-file
+
+X | "\e[200~": bracketed-paste-begin
+
+== REST
+  | " ": self-insert
+  | "!": self-insert
+  | "\"": self-insert
+  | "#": self-insert
+  | "$": self-insert
+  | "%": self-insert
+  | "&": self-insert
+  | "'": self-insert
+  | "(": self-insert
+  | ")": self-insert
+  | "*": self-insert
+  | "+": self-insert
+  | ",": self-insert
+  | "-": self-insert
+  | ".": self-insert
+  | "/": self-insert
+  | "0": self-insert
+  | "1": self-insert
+  | "2": self-insert
+  | "3": self-insert
+  | "4": self-insert
+  | "5": self-insert
+  | "6": self-insert
+  | "7": self-insert
+  | "8": self-insert
+  | "9": self-insert
+  | ":": self-insert
+  | ";": self-insert
+  | "<": self-insert
+  | "=": self-insert
+  | ">": self-insert
+  | "?": self-insert
+  | "@": self-insert
+  | "A": self-insert
+  | "B": self-insert
+  | "C": self-insert
+  | "D": self-insert
+  | "E": self-insert
+  | "F": self-insert
+  | "G": self-insert
+  | "H": self-insert
+  | "I": self-insert
+  | "J": self-insert
+  | "K": self-insert
+  | "L": self-insert
+  | "M": self-insert
+  | "N": self-insert
+  | "O": self-insert
+  | "P": self-insert
+  | "Q": self-insert
+  | "R": self-insert
+  | "S": self-insert
+  | "T": self-insert
+  | "U": self-insert
+  | "V": self-insert
+  | "W": self-insert
+  | "X": self-insert
+  | "Y": self-insert
+  | "Z": self-insert
+  | "[": self-insert
+  | "\\": self-insert
+  | "]": self-insert
+  | "^": self-insert
+  | "_": self-insert
+  | "`": self-insert
+  | "a": self-insert
+  | "b": self-insert
+  | "c": self-insert
+  | "d": self-insert
+  | "e": self-insert
+  | "f": self-insert
+  | "g": self-insert
+  | "h": self-insert
+  | "i": self-insert
+  | "j": self-insert
+  | "k": self-insert
+  | "l": self-insert
+  | "m": self-insert
+  | "n": self-insert
+  | "o": self-insert
+  | "p": self-insert
+  | "q": self-insert
+  | "r": self-insert
+  | "s": self-insert
+  | "t": self-insert
+  | "u": self-insert
+  | "v": self-insert
+  | "w": self-insert
+  | "x": self-insert
+  | "y": self-insert
+  | "z": self-insert
+  | "{": self-insert
+  | "|": self-insert
+  | "}": self-insert
+  | "~": self-insert
+  | "\200": self-insert
+  | "\201": self-insert
+  | "\202": self-insert
+  | "\203": self-insert
+  | "\204": self-insert
+  | "\205": self-insert
+  | "\206": self-insert
+  | "\207": self-insert
+  | "\210": self-insert
+  | "\211": self-insert
+  | "\212": self-insert
+  | "\213": self-insert
+  | "\214": self-insert
+  | "\215": self-insert
+  | "\216": self-insert
+  | "\217": self-insert
+  | "\220": self-insert
+  | "\221": self-insert
+  | "\222": self-insert
+  | "\223": self-insert
+  | "\224": self-insert
+  | "\225": self-insert
+  | "\226": self-insert
+  | "\227": self-insert
+  | "\230": self-insert
+  | "\231": self-insert
+  | "\232": self-insert
+  | "\233": self-insert
+  | "\234": self-insert
+  | "\235": self-insert
+  | "\236": self-insert
+  | "\237": self-insert
+  | "\240": self-insert
+  | "\241": self-insert
+  | "\242": self-insert
+  | "\243": self-insert
+  | "\244": self-insert
+  | "\245": self-insert
+  | "\246": self-insert
+  | "\247": self-insert
+  | "\250": self-insert
+  | "\251": self-insert
+  | "\252": self-insert
+  | "\253": self-insert
+  | "\254": self-insert
+  | "\255": self-insert
+  | "\256": self-insert
+  | "\257": self-insert
+  | "\260": self-insert
+  | "\261": self-insert
+  | "\262": self-insert
+  | "\263": self-insert
+  | "\264": self-insert
+  | "\265": self-insert
+  | "\266": self-insert
+  | "\267": self-insert
+  | "\270": self-insert
+  | "\271": self-insert
+  | "\272": self-insert
+  | "\273": self-insert
+  | "\274": self-insert
+  | "\275": self-insert
+  | "\276": self-insert
+  | "\277": self-insert
+  | "\300": self-insert
+  | "\301": self-insert
+  | "\302": self-insert
+  | "\303": self-insert
+  | "\304": self-insert
+  | "\305": self-insert
+  | "\306": self-insert
+  | "\307": self-insert
+  | "\310": self-insert
+  | "\311": self-insert
+  | "\312": self-insert
+  | "\313": self-insert
+  | "\314": self-insert
+  | "\315": self-insert
+  | "\316": self-insert
+  | "\317": self-insert
+  | "\320": self-insert
+  | "\321": self-insert
+  | "\322": self-insert
+  | "\323": self-insert
+  | "\324": self-insert
+  | "\325": self-insert
+  | "\326": self-insert
+  | "\327": self-insert
+  | "\330": self-insert
+  | "\331": self-insert
+  | "\332": self-insert
+  | "\333": self-insert
+  | "\334": self-insert
+  | "\335": self-insert
+  | "\336": self-insert
+  | "\337": self-insert
+  | "\340": self-insert
+  | "\341": self-insert
+  | "\342": self-insert
+  | "\343": self-insert
+  | "\344": self-insert
+  | "\345": self-insert
+  | "\346": self-insert
+  | "\347": self-insert
+  | "\350": self-insert
+  | "\351": self-insert
+  | "\352": self-insert
+  | "\353": self-insert
+  | "\354": self-insert
+  | "\355": self-insert
+  | "\356": self-insert
+  | "\357": self-insert
+  | "\360": self-insert
+  | "\361": self-insert
+  | "\362": self-insert
+  | "\363": self-insert
+  | "\364": self-insert
+  | "\365": self-insert
+  | "\366": self-insert
+  | "\367": self-insert
+  | "\370": self-insert
+  | "\371": self-insert
+  | "\372": self-insert
+  | "\373": self-insert
+  | "\374": self-insert
+  | "\375": self-insert
+  | "\376": self-insert
+  | "\377": self-insert
+
+  | "\C-xA": do-lowercase-version
+  | "\C-xB": do-lowercase-version
+  | "\C-xC": do-lowercase-version
+  | "\C-xD": do-lowercase-version
+  | "\C-xE": do-lowercase-version
+  | "\C-xF": do-lowercase-version
+  | "\C-xG": do-lowercase-version
+  | "\C-xH": do-lowercase-version
+  | "\C-xI": do-lowercase-version
+  | "\C-xJ": do-lowercase-version
+  | "\C-xK": do-lowercase-version
+  | "\C-xL": do-lowercase-version
+  | "\C-xM": do-lowercase-version
+  | "\C-xN": do-lowercase-version
+  | "\C-xO": do-lowercase-version
+  | "\C-xP": do-lowercase-version
+  | "\C-xQ": do-lowercase-version
+  | "\C-xR": do-lowercase-version
+  | "\C-xS": do-lowercase-version
+  | "\C-xT": do-lowercase-version
+  | "\C-xU": do-lowercase-version
+  | "\C-xV": do-lowercase-version
+  | "\C-xW": do-lowercase-version
+  | "\C-xX": do-lowercase-version
+  | "\C-xY": do-lowercase-version
+  | "\C-xZ": do-lowercase-version
+  | "\eA": do-lowercase-version
+  | "\eB": do-lowercase-version
+  | "\eC": do-lowercase-version
+  | "\eD": do-lowercase-version
+  | "\eE": do-lowercase-version
+  | "\eF": do-lowercase-version
+  | "\eG": do-lowercase-version
+  | "\eH": do-lowercase-version
+  | "\eI": do-lowercase-version
+  | "\eJ": do-lowercase-version
+  | "\eK": do-lowercase-version
+  | "\eL": do-lowercase-version
+  | "\eM": do-lowercase-version
+  | "\eN": do-lowercase-version
+  | "\eP": do-lowercase-version
+  | "\eQ": do-lowercase-version
+  | "\eR": do-lowercase-version
+  | "\eS": do-lowercase-version
+  | "\eT": do-lowercase-version
+  | "\eU": do-lowercase-version
+  | "\eV": do-lowercase-version
+  | "\eW": do-lowercase-version
+  | "\eX": do-lowercase-version
+  | "\eY": do-lowercase-version
+  | "\eZ": do-lowercase-version
+
+  | # alias-expand-line (not bound)
+  | # arrow-key-prefix (not bound)
+  | # backward-byte (not bound)
+  | # copy-backward-word (not bound)
+  | # copy-forward-word (not bound)
+  | # copy-region-as-kill (not bound)
+  | # dabbrev-expand (not bound)
+  | # delete-char-or-list (not bound)
+  | # dump-functions (not bound)
+  | # dump-macros (not bound)
+  | # dump-variables (not bound)
+  | # emacs-editing-mode (not bound)
+  | # fetch-history (not bound)
+  | # forward-backward-delete-char (not bound)
+  | # forward-byte (not bound)
+  | # history-and-alias-expand-line (not bound)
+  | # history-substring-search-backward (not bound)
+  | # history-substring-search-forward (not bound)
+  | # kill-region (not bound)
+  | # kill-whole-line (not bound)
+  | # magic-space (not bound)
+  | # menu-complete (not bound)
+  | # menu-complete-backward (not bound)
+  | # next-screen-line (not bound)
+  | # non-incremental-forward-search-history-again (not bound)
+  | # non-incremental-reverse-search-history-again (not bound)
+  | # old-menu-complete (not bound)
+  | # overwrite-mode (not bound)
+  | # previous-screen-line (not bound)
+  | # print-last-kbd-macro (not bound)
+  | # redraw-current-line (not bound)
+  | # skip-csi-sequence (not bound)
+  | # tab-insert (not bound)
+  | # tty-status (not bound)
+  | # universal-argument (not bound)
+  | # unix-filename-rubout (not bound)
+  | # vi-append-eol (not bound)
+  | # vi-append-mode (not bound)
+  | # vi-arg-digit (not bound)
+  | # vi-back-to-indent (not bound)
+  | # vi-backward-bigword (not bound)
+  | # vi-backward-word (not bound)
+  | # vi-bword (not bound)
+  | # vi-bWord (not bound)
+  | # vi-change-case (not bound)
+  | # vi-change-char (not bound)
+  | # vi-change-to (not bound)
+  | # vi-char-search (not bound)
+  | # vi-column (not bound)
+  | # vi-complete (not bound)
+  | # vi-delete (not bound)
+  | # vi-delete-to (not bound)
+  | # vi-edit-and-execute-command (not bound)
+  | # vi-editing-mode (not bound)
+  | # vi-end-bigword (not bound)
+  | # vi-end-word (not bound)
+  | # vi-eof-maybe (not bound)
+  | # vi-eword (not bound)
+  | # vi-eWord (not bound)
+  | # vi-fetch-history (not bound)
+  | # vi-first-print (not bound)
+  | # vi-forward-bigword (not bound)
+  | # vi-forward-word (not bound)
+  | # vi-fword (not bound)
+  | # vi-fWord (not bound)
+  | # vi-goto-mark (not bound)
+  | # vi-insert-beg (not bound)
+  | # vi-insertion-mode (not bound)
+  | # vi-match (not bound)
+  | # vi-movement-mode (not bound)
+  | # vi-next-word (not bound)
+  | # vi-overstrike (not bound)
+  | # vi-overstrike-delete (not bound)
+  | # vi-prev-word (not bound)
+  | # vi-put (not bound)
+  | # vi-redo (not bound)
+  | # vi-replace (not bound)
+  | # vi-rubout (not bound)
+  | # vi-search (not bound)
+  | # vi-search-again (not bound)
+  | # vi-set-mark (not bound)
+  | # vi-subst (not bound)
+  | # vi-tilde-expand (not bound)
+  | # vi-undo (not bound)
+  | # vi-unix-word-rubout (not bound)
+  | # vi-yank-arg (not bound)
+  | # vi-yank-pop (not bound)
+  | # vi-yank-to (not bound)

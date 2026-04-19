@@ -1,0 +1,38 @@
+MenuBar=Disabled
+
+[Desktop Entry]
+DefaultProfile=Main.profile
+
+[General]
+ConfigVersion=1
+
+[KonsoleWindow]
+RememberWindowSize=false
+
+[MainWindow]
+MenuBar=Disabled
+
+[MainWindow][Toolbar mainToolBar]
+IconSize=16
+ToolButtonStyle=TextOnly
+
+[MemorySettings]
+MemoryLimitValue=384
+
+[SearchSettings]
+SearchNoWrap=true
+
+[SplitView]
+SplitDragHandleSize=SplitDragHandleLarge
+SplitViewVisibility=AlwaysShowSplitHeader
+
+[TabBar]
+CloseTabButton=None
+SearchTabsButton=HideSearchTabsButton
+
+[Toolbar mainToolBar]
+IconSize=16
+ToolButtonStyle=IconOnly
+
+[UiSettings]
+ColorScheme=

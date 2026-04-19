@@ -1,0 +1,44 @@
+limit coredumpsize 0
+
+setenv EDITOR	"emacs -nw"
+setenv PAGER	"${HOME}/.dotfiles/submodules/vimpager/vimpager"
+setenv LD_LIBRARY_PATH "/usr/local/lib"
+setenv GOPATH	"${HOME}/workstation/go"
+
+set autolist
+set complete
+set history=1000
+set path=(/usr/{local/,}{sbin,bin} /usr/local/go/bin /{sbin,bin} ${HOME}/.dotfiles/bin $GOPATH/bin)
+set prompt='%%%n@%M %h:'
+set savehist=1000
+unset autologout
+##set watch=(1 any any)
+
+alias ll	'ls -l'
+alias ls	'ls --color=yes'
+alias la	'ls -a'
+alias l		'clear ; ll -a'
+alias j		'jobs'
+alias :q	'exit'
+alias vi	'vim -O2'
+alias ne	'emacs -nw'
+alias vcat	"'${HOME}'/.dotfiles/submodules/vimpager/vimcat"
+alias vpa	"'${HOME}'/.dotfiles/submodules/vimpager/vimpager"
+
+bindkey '^[[1;5D'	backward-word
+bindkey '^[[1;5C'	forward-word
+bindkey '^W'		backward-delete-word
+bindkey '^R'		i-search-back
+##bindkey '^[[1;5A'	backward-word
+##bindkey '^[[1;5B'	backward-word
+##bindkey '5~'		delete-word
+
+alias 7up	'svn up'
+
+set FILE_SPEC="${HOME}/.tcshrc_sp"
+
+if ( -f "$FILE_SPEC" ) then
+  source "$FILE_SPEC"
+endif
+
+# EOF
