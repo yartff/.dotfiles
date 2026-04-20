@@ -115,17 +115,7 @@ do_diff() {
 
 case "$CMD" in
   add)  do_add; exit ;;
-  diff)
-    CMD=do_diff
-    if [[ ${#DIFF_FILES[@]} -gt 0 ]]; then
-      for f in "${DIFF_FILES[@]}"; do
-	echo WIP
-	echo $DOTFILES_DIR
-	echo $f
-      done
-      exit
-    fi
-    ;;
+  diff) CMD=do_diff ;;
   push) CMD=do_push ;;
   pull) CMD=do_pull ;;
   *) echo "$CMD" not found; exit ;;
@@ -140,3 +130,13 @@ loop() {
 }
 
 loop
+
+## if [[ ${#DIFF_FILES[@]} -gt 0 ]]; then
+##   for f in "${DIFF_FILES[@]}"; do
+##     echo WIP
+##     echo $DOTFILES_DIR
+##     echo $f
+##   done
+##   exit
+## fi
+## ;;

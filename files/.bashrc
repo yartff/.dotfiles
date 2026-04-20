@@ -1,4 +1,4 @@
-_vim_sessions="${HOME}/vim_sessions"
+_vim_sessions="${HOME}/sessions"
 _workstation="${HOME}/workstation"
 _dotfiles="${HOME}/.dotfiles"
 _gobase="$_workstation/go"
@@ -33,7 +33,7 @@ alias vt="vi -S $_vim_sessions/setup.vim"
 alias vcat="$_dotfiles/submodules/vimpager/vimcat"
 alias vpa="$_dotfiles/submodules/vimpager/vimpager"
 
-for srcfile in "$_dotfiles/misc/bashsource/"*
+for srcfile in "$_dotfiles/misc/bash/source/"*
 do
   source "$srcfile"
 done
@@ -65,8 +65,6 @@ if [ -f ~/.bashrc_sp ]; then
   . ~/.bashrc_sp
 fi
 
-
-
 PS1='${debian_chroot:+($debian_chroot)}\[\033[0;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 ## PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
 
@@ -92,4 +90,3 @@ esac
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
-

@@ -26,4 +26,4 @@ make_link ~/.dotfiles/submodules/ctrlp.vim  ~/.vim/pack/plugins/start/ctrlp.vim
 # make_link
 # ./install.py --clang-completer
 mkdir -vp ${HOME}/workstation/{claude,download,github,go,projects}
-mkdir -vp ${HOME}/vim_sessions
+mkdir -vp ${HOME}/sessions

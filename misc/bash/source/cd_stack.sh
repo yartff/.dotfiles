@@ -8,11 +8,13 @@ if [ "$_cd_stack" == "" ]; then
   __cd_reset
 fi
 
-## TODO: cdr -> replace current value
 ## TODO: cdpwd -> prints current value to insert in commands
-## TODO: handle if args are not numbers
 ## TODO: on a tmp cpy stack
 ## TODO: all var local instead of unset
+
+__cd_is_num() {
+  [[ "$1" =~ ^[0-9]+$ ]]
+}
 
 __cd_print_error() {
   tput setaf 1
@@ -74,7 +76,11 @@ cdp() { ## TODO: maybe should be available in cds only
     return
   fi
   if [ $# -ge 1 ]; then
-    toqueue=$1 ## TODO: NB
+    if ! __cd_is_num "$1"; then
+      __cd_print_error "$1: not a number"
+      return
+    fi
+    toqueue=$1
   else
     toqueue=$_cd_index
   fi
@@ -134,7 +140,11 @@ cdd() {
       __cd_reset
       return
     fi
-    todrop=$1 ## TODO: NB
+    if ! __cd_is_num "$1"; then
+      __cd_print_error "$1: not a number"
+      return
+    fi
+    todrop=$1
   fi
   if [ $todrop -lt 0 ] || [ $todrop -ge $_cd_size ]; then
     __cd_print_error "$todrop: out of bound"
@@ -154,6 +164,11 @@ cdd() {
 __cd_index_go() {
   if [ $_cd_index -eq -1 ]; then
     echo "stack empty"
+    return
+  fi
+  if [[ ! -d ${_cd_stack[$_cd_index]} ]]; then
+    __cd_print_error "${_cd_stack[$_cd_index]}: no such directory"
+    __cd_print_highlightndx 0 $_cd_index 1
     return
   fi
   cd "${_cd_stack[$_cd_index]}"
@@ -210,6 +225,32 @@ cds() {
   unset localndx
 }
 
+cdr() {
+  if [ $_cd_size -eq 0 ]; then
+    __cd_print_error "no wd"
+    return
+  fi
+  if [ $# -ge 1 ]; then
+    local newpath
+    newpath=$(realpath "$1" 2>/dev/null)
+    if [ ! -d "$newpath" ]; then
+      __cd_print_error "no such directory"
+      return
+    fi
+  else
+    local newpath="$(pwd)"
+  fi
+  for ndx in "${!_cd_stack[@]}"; do
+    if [ $ndx -ne $_cd_index ] && [[ "${_cd_stack[$ndx]}" == "$newpath" ]]; then
+      __cd_print_error "wd already at $ndx"
+      __cd_print_highlightndx 0 $ndx 1
+      return
+    fi
+  done
+  _cd_stack[$_cd_index]="$newpath"
+  cdl
+}
+
 cdgo() {
   if [ $_cd_size -eq 0 ]; then
     __cd_print_error "no wd"
@@ -220,7 +261,10 @@ cdgo() {
     return
   fi
   if [ $# -eq 1 ]; then
-    ## TODO: NB $1
+    if ! __cd_is_num "$1"; then
+      __cd_print_error "$1: not a number"
+      return
+    fi
     if [ $1 -lt 0 ] || [ $1 -ge $_cd_size ]; then
       __cd_print_error "$1: out of bound"
       cdl
@@ -229,6 +273,49 @@ cdgo() {
     _cd_index=$1
   fi
   __cd_index_go
+}
+
+cdsave() {
+  if [ $# -eq 0 ]; then
+    __cd_print_error "usage: cdsave <name|path>"
+    return
+  fi
+  local target="$1"
+  if [[ "$target" != /* && "$target" != ~* && "$target" != ./* && "$target" != ../* ]]; then
+    target="$HOME/sessions/${target}.cd"
+  fi
+  mkdir -p "$(dirname "$target")"
+  printf "%s\n" "${_cd_stack[@]}" > "$target" || return 1
+  printf "%d\n" "$_cd_index" >> "$target" || return 1
+  echo "saved ${_cd_size} entries to $target"
+}
+
+cdload() {
+  if [ $# -eq 0 ]; then
+    __cd_print_error "usage: cdload <name|path>"
+    return
+  fi
+  local target="$1"
+  if [[ "$target" != /* && "$target" != ~* && "$target" != ./* && "$target" != ../* ]]; then
+    target="$HOME/sessions/${target}.cd"
+  fi
+  if [ ! -f "$target" ]; then
+    __cd_print_error "no such file: $target"
+    return
+  fi
+  local lines=()
+  while IFS= read -r line; do
+    lines+=("$line")
+  done < "$target"
+  local n=${#lines[@]}
+  __cd_reset
+  for (( i=0; i<n-1; i++ )); do
+    _cd_stack+=("${lines[$i]}")
+  done
+  _cd_size=$(( n - 1 ))
+  _cd_index="${lines[$((n-1))]}"
+  echo "loaded $_cd_size entries from $target"
+  cdl
 }
 
 cdj() {
