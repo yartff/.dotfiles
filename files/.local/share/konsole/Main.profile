@@ -4,7 +4,7 @@ BorderWhenActive=false
 ColorScheme=Breeze
 DimmValue=18
 FocusBorderColor=154,153,150
-Font=Liberation Mono,9,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+Font=Liberation Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 LineSpacing=0
 TabColor=20,22,24,0
 

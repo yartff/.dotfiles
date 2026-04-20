@@ -23,7 +23,6 @@ MemoryLimitValue=384
 SearchNoWrap=true
 
 [SplitView]
-SplitDragHandleSize=SplitDragHandleLarge
 SplitViewVisibility=AlwaysShowSplitHeader
 
 [TabBar]

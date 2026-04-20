@@ -5,6 +5,10 @@
 [user]
 	name = yartFF
 	email = 2074648+yartff@users.noreply.github.com
+
+[includeIf "hasconfig:remote.*.url:*gitlab*/**"]
+	path = ~/.config/git/pro
+
 [core]
 	editor = vim
 [web]
