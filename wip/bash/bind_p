@@ -1,26 +1,23 @@
 == NAV
-X | "\C-b": backward-char
-X | "\eOD": backward-char
-- | "\e[D": backward-char
-X | "\C-f": forward-char
-X | "\eOC": forward-char
-- | "\e[C": forward-char
-= | "\e\e[D": backward-word
-= | "\e[1;3D": backward-word
-= | "\e[1;5D": backward-word
-= | "\e[5D": backward-word
-X | "\eb": backward-word
-  | "\e\C-b": shell-backward-word
-= | "\e\e[C": forward-word
-= | "\e[1;3C": forward-word
-= | "\e[1;5C": forward-word
-= | "\e[5C": forward-word
-X | "\ef": forward-word
-X | "\e\C-f": shell-forward-word
-- | "\C-a": beginning-of-line
-X | "\eOH": beginning-of-line
-X | "\e[1~": beginning-of-line
-X | "\e[H": beginning-of-line
+- | "\eOD": backward-char		// Left (SS3)
+- | "\e[D": backward-char		// Left (CSI)
+- | "\eOC": forward-char		// Right (SS3)
+- | "\e[C": forward-char		// Right (CSI)
+= | "\e[1;3D": backward-word		// Alt  Left
+= | "\e[1;5D": backward-word		// Ctrl Left
+- | "\C-b": backward-char		// Ctrl b
+= | "\e[5D": backward-word		// Ctrl Left
+= | "\e\e[D": shell-backward-word	// Alt  Left
+= | "\e\e[C": forward-word		// Alt  Right
+= | "\e[1;3C": forward-word		// Alt  Right
+= | "\e[1;5C": forward-word		// Ctrl Right
+= | "\e[5C": forward-word		// Ctrl Right
+X | "\ef": forward-word			// Alt  Right
+- | "\C-f": shell-forward-char		// Ctrl f
+- | "\C-a": beginning-of-line		// Ctrl a
+X | "\eOH": beginning-of-line		// Home (SS3)
+X | "\e[1~": beginning-of-line		// Home (function key format)
+X | "\e[H": beginning-of-line		// Home (CSI)
 - | "\C-e": end-of-line
 X | "\eOF": end-of-line
 X | "\e[4~": end-of-line

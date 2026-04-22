@@ -1,57 +1,57 @@
-autocd         	off
-assoc_expand_once	off
-cdable_vars    	off
-cdspell        	off
-checkhash      	off
-checkjobs      	off
-checkwinsize   	on
-cmdhist        	on
-compat31       	off
-compat32       	off
-compat40       	off
-compat41       	off
-compat42       	off
-compat43       	off
-compat44       	off
-complete_fullquote	on
-direxpand      	off
-dirspell       	off
-dotglob        	off
-execfail       	off
-expand_aliases 	on
-extdebug       	off
-extglob        	off
-extquote       	on
-failglob       	off
-force_fignore  	on
-globasciiranges	on
-globskipdots   	on
-globstar       	off
-gnu_errfmt     	off
-histappend     	off
-histreedit     	off
-histverify     	off
-hostcomplete   	on
-huponexit      	off
-inherit_errexit	off
-interactive_comments	on
-lastpipe       	off
-lithist        	off
-localvar_inherit	off
-localvar_unset 	off
-login_shell    	on
-mailwarn       	off
-no_empty_cmd_completion	on
-nocaseglob     	off
-nocasematch    	off
-noexpand_translation	off
-nullglob       	off
-patsub_replacement	on
-progcomp       	on
-progcomp_alias 	off
-promptvars     	on
-restricted_shell	off
-shift_verbose  	off
-sourcepath     	on
-varredir_close 	off
-xpg_echo       	off
+autocd         	off	# cd into a directory by typing its name alone
+assoc_expand_once	off	# evaluate associative array subscripts only once during expansion
+cdable_vars    	off	# treat cd argument as variable name if not a directory
+cdspell        	off	# correct minor spelling errors in cd directory arguments
+checkhash      	off	# verify hashed commands exist before executing them
+checkjobs      	off	# warn about running/stopped jobs before exiting the shell
+checkwinsize   	on	# update LINES/COLUMNS after each command to match window size
+cmdhist        	on	# save multi-line commands as a single history entry
+compat31       	off	# enable bash 3.1 compatibility mode
+compat32       	off	# enable bash 3.2 compatibility mode
+compat40       	off	# enable bash 4.0 compatibility mode
+compat41       	off	# enable bash 4.1 compatibility mode
+compat42       	off	# enable bash 4.2 compatibility mode
+compat43       	off	# enable bash 4.3 compatibility mode
+compat44       	off	# enable bash 4.4 compatibility mode
+complete_fullquote	on	# quote all metacharacters in filenames during completion
+direxpand      	off	# expand directory names during filename completion
+dirspell       	off	# correct spelling of directory names during completion
+dotglob        	off	# include dotfiles in pathname expansion results
+execfail       	off	# prevent non-interactive shell exit if exec fails
+expand_aliases 	on	# enable alias expansion
+extdebug       	off	# enable extra behavior for debuggers
+extglob        	off	# enable extended pattern matching operators (?()|+(*){,}@)
+extquote       	on	# allow $'...' and $"..." quoting inside double-quoted ${} expansions
+failglob       	off	# error on pathname expansion patterns that match nothing
+force_fignore  	on	# ignore FIGNORE suffixes even when they are the only completions
+globasciiranges	on	# use C locale ordering for bracket expression ranges in glob
+globskipdots   	on	# exclude . and .. from ** and * pathname expansion
+globstar       	off	# let ** match files and any number of directories recursively
+gnu_errfmt     	off	# write shell error messages in GNU standard format
+histappend     	off	# append to HISTFILE on exit instead of overwriting it
+histreedit     	off	# allow re-editing a failed history substitution
+histverify     	off	# load history substitutions into readline buffer instead of executing
+hostcomplete   	on	# complete hostnames after @ during word completion
+huponexit      	off	# send SIGHUP to all jobs when an interactive login shell exits
+inherit_errexit	off	# command substitutions inherit the errexit option
+interactive_comments	on	# allow # to start comments in interactive shells
+lastpipe       	off	# run last pipeline command in current shell if job control is inactive
+lithist        	off	# store multi-line history entries with newlines instead of semicolons
+localvar_inherit	off	# local variables inherit value and attributes from outer scope
+localvar_unset 	off	# mark local variables unset when unset in enclosing function scope
+login_shell    	on	# set by the shell when started as a login shell (read-only)
+mailwarn       	off	# warn when a checked mailfile has been accessed since last check
+no_empty_cmd_completion	on	# skip PATH search when completing on an empty line
+nocaseglob     	off	# match filenames case-insensitively during pathname expansion
+nocasematch    	off	# match patterns case-insensitively in case and [[ commands
+noexpand_translation	off	# do not expand strings decoded by $"..."
+nullglob       	off	# expand non-matching glob patterns to empty string instead of literal
+patsub_replacement	on	# expand & in pattern substitution replacement to the matched string
+progcomp       	on	# enable programmable completion
+progcomp_alias 	off	# try alias expansion for commands with no completions defined
+promptvars     	on	# expand parameters, commands, and arithmetic in prompt strings
+restricted_shell	off	# set by the shell when started in restricted mode (read-only)
+shift_verbose  	off	# print error when shift count exceeds positional parameter count
+sourcepath     	on	# search PATH to find files given to the source builtin
+varredir_close 	off	# auto-close {var}-redirected file descriptors when command finishes
+xpg_echo       	off	# make echo expand backslash escape sequences by default

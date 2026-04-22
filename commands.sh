@@ -25,18 +25,18 @@ $MANAGER_CMD install mlocate ## && updatedb
 # install go in "${HOME}/workstation/go/root"
 
 ## google-chrome
-cat << EOF > /etc/yum.repos.d/google-chrome.repo
-[google-chrome]
-name=google-chrome
-baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
-enabled=1
-gpgcheck=1
-EOF
-$MANAGER_CMD install google-chrome
+# cat << EOF > /etc/yum.repos.d/google-chrome.repo
+# [google-chrome]
+# name=google-chrome
+# baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
+# enabled=1
+# gpgcheck=1
+# EOF
+# $MANAGER_CMD install google-chrome
 
 ## disable super key
-gsettings set org.gnome.mutter overlay-key ''
+# gsettings set org.gnome.mutter overlay-key ''
 
 ## YouCompleteMe
-$MANAGER_CMD install python automake gcc gcc-c++ kernel-devel cmake
-$MANAGER_CMD install python-devel python3-devel
+# $MANAGER_CMD install python automake gcc gcc-c++ kernel-devel cmake
+# $MANAGER_CMD install python-devel python3-devel
