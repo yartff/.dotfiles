@@ -47,7 +47,14 @@ unset _vim_sessions
 #########################
 ## Binds
 shopt -s no_empty_cmd_completion
-bind	'"\e(": complete-into-braces'
+
+if [[ $- = *i* ]]; then ## load bind source file instead
+  bind	'"\e(": complete-into-braces'
+  # bind -r '\e\e' ## double ESC
+  # "\e*"
+  # unbind "\e{"
+  # bind -p > file
+fi
 
 #########################
 ##                     ##
@@ -55,10 +62,6 @@ bind	'"\e(": complete-into-braces'
 ##                     ##
 #########################
 
-# bind -r '\e\e' ## double ESC
-# "\e*"
-# unbind "\e{"
-# bind -p > file
 #########################
 ## ws specific
 if [ -f ~/.bashrc_sp ]; then
@@ -83,8 +86,8 @@ HISTFILESIZE=2000
 
 # If not running interactively, don't do anything
 case $- in
-    *i*) ;;
-      *) return;;
+  *i*) ;;
+  *) return;;
 esac
 
 # don't put duplicate lines or lines starting with space in the history.

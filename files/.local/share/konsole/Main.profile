@@ -18,7 +18,10 @@ ShowTerminalSizeHint=false
 TerminalMargin=0
 
 [Interaction Options]
-AutoCopySelectedText=true
+AutoCopySelectedText=false
+CopyTextAsHTML=false
+MiddleClickPasteMode=1
+MouseWheelZoomEnabled=false
 
 [Scrolling]
 HighlightScrolledLines=false
