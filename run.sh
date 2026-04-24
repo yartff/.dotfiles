@@ -34,11 +34,11 @@ while [[ $# -gt 0 ]]; do
 done
 
 print_pulled() {
-  echo -e "\033[0;33m[~]\033[0m $src"
+  echo -e "\033[0;33m[~]\033[0m $dst"
 }
 
 print_pushed() {
-  echo -e "\033[0;33m[~]\033[0m $dst"
+  echo -e "\033[0;33m[~]\033[0m $src"
 }
 
 print_added_file() {
