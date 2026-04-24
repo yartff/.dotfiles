@@ -34,11 +34,12 @@ while [[ $# -gt 0 ]]; do
 done
 
 print_pulled() {
-  echo -e "\033[0;33m[~]\033[0m $dst"
+  echo -e "\033[0;33m[<]\033[0m ${dst#$DESTINATION_DIR/}"
 }
 
 print_pushed() {
-  echo -e "\033[0;33m[~]\033[0m $src"
+echo $DOTFILES_DIR
+  echo -e "\033[0;33m[>] .dotfiles/\033[0m${src#$DOTFILES_DIR/}"
 }
 
 print_added_file() {
