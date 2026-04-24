@@ -19,6 +19,7 @@ alias ll='ls -l'
 alias l='clear;ll -a'
 alias la='ls -a'
 alias grep='grep --color'
+alias diff='diff --color'
 
 ##
 
