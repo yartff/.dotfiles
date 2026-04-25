@@ -1,13 +1,14 @@
 #!/bin/bash
 
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/files"
+DOTFILES_DIRNAME="files"
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$DOTFILES_DIRNAME"
 DESTINATION_DIR="${HOME}"
-CMD="diff"
+CMD="do_diff"
 RSYNC_CMD="rsync -a --checksum --no-links --out-format=%n"
-FILES_DIR="$DOTFILES_DIR/files"
+FILES_DIR="$DOTFILES_DIR/$DOTFILES_DIRNAME"
 
 usage() {
-  echo "Pull and push dotfiles between your home and files/"
+  echo "Pull and push dotfiles between your home and $DOTFILES_DIRNAME/"
   echo "Usage: run.sh [--dot <dir>] [--out <dir>] <command> [args]"
   echo
   echo "Commands:"
@@ -17,19 +18,29 @@ usage() {
   echo "  add <file>... Copy files from home into dotfiles"
   echo
   echo "Options:"
-  echo "  --dot <dir>   Dotfiles source directory (default: <script-dir>/files)"
+  echo "  --dot <dir>   Dotfiles source directory (default: <script-dir>/$DOTFILES_DIRNAME)"
   echo "  --out <dir>   Destination directory (default: \$HOME)"
 }
+
+if [[ $# -gt 0 ]]; then
+  case "$1" in
+    -h|--help) usage; exit 0 ;;
+    ## diff) shift; [[ $# -gt 0 ]] && { DIFF_FILES=("$@"); break; } ;;
+    ## add) CMD="$1"; shift; [[ $# -gt 0 ]] || { echo "Usage: run.sh add <file>..." >&2; exit 1; }; ADD_FILES=("$@"); break ;;
+    diff|push|pull|add) CMD="do_$1"; shift ;;
+    *) echo "Unknown command: $1" >&2; usage >&2; exit 1 ;;
+  esac
+fi
+
+paths=()
+paths_size=0
+
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -h|--help) usage; exit 0 ;;
-    --dot) DOTFILES_DIR="$2"; shift 2 ;;
-    --out) DESTINATION_DIR="$2"; shift 2 ;;
-    diff) shift; [[ $# -gt 0 ]] && { DIFF_FILES=("$@"); break; } ;;
-    push|pull) CMD="$1"; shift ;;
-    add) CMD="$1"; shift; [[ $# -gt 0 ]] || { echo "Usage: run.sh add <file>..." >&2; exit 1; }; ADD_FILES=("$@"); break ;;
-    *) echo "Unknown option: $1" >&2; usage >&2; exit 1 ;;
+    ## --
+    *) ((paths_size++)); paths+=("$1"); shift;;
   esac
 done
 
@@ -38,7 +49,7 @@ print_pulled() {
 }
 
 print_pushed() {
-echo $DOTFILES_DIR
+  echo $DOTFILES_DIR
   echo -e "\033[0;33m[>] .dotfiles/\033[0m${src#$DOTFILES_DIR/}"
 }
 
@@ -59,6 +70,10 @@ print_nosuchfile() {
 
 print_created() {
   echo -e "\033[0;32m[+]\033[0m $dst"
+}
+
+print_error() {
+  echo -e "\033[0;31m[X] \033[4;31mNo such file or directory\033[0m: $1"
 }
 
 do_push() {
@@ -114,30 +129,57 @@ do_diff() {
   fi
 }
 
-case "$CMD" in
-  add)  do_add; exit ;;
-  diff) CMD=do_diff ;;
-  push) CMD=do_push ;;
-  pull) CMD=do_pull ;;
-  *) echo "$CMD" not found; exit ;;
-esac
-
 loop() {
   while IFS= read -r -d '' src; do
     rel="${src#"$DOTFILES_DIR/"}"
     dst="$DESTINATION_DIR/$rel"
     $CMD
-  done < <(find "$DOTFILES_DIR" -type f -print0)
+  done < <(find "$dirloop" -type f -print0)
 }
 
-loop
-
-## if [[ ${#DIFF_FILES[@]} -gt 0 ]]; then
-##   for f in "${DIFF_FILES[@]}"; do
-##     echo WIP
-##     echo $DOTFILES_DIR
-##     echo $f
-##   done
-##   exit
-## fi
-## ;;
+if [[ $paths_size -eq 0 ]]; then
+  dirloop="$DOTFILES_DIR"
+  loop
+else
+  for ndx in "${!paths[@]}"; do
+    if [[ -d ${paths[$ndx]} ]]; then
+      fpath=`realpath ${paths[$ndx]}`
+      case "$fpath" in
+	"$DOTFILES_DIR")   dirloop=$DOTFILES_DIR;;
+	"$DOTFILES_DIR/"*) dirloop="$fpath";;
+	"$HOME/"*)         dirloop="${DOTFILES_DIR}${fpath#$HOME}";;
+	## *)
+      esac
+      loop
+    elif [[ -f ${paths[$ndx]} ]]; then
+      fpath=`realpath ${paths[$ndx]}`
+      case "$fpath" in
+	"$DOTFILES_DIR/"*)
+	  rel="${fpath#$DOTFILES_DIR/}"
+	  src=$fpath
+	  dst="${HOME}/$rel"
+	  ;;
+	"$HOME/"*)
+	  rel="${fpath#$HOME/}"
+	  src="${DOTFILES_DIR}/${rel}"
+	  dst="${fpath}"
+	  ;;
+	## *)
+      esac
+      $CMD
+    else
+      file="$DOTFILES_DIR/${paths[$ndx]}"
+      if [[ -f $file ]]; then
+	rel="${paths[$ndx]}"
+	dst="${HOME}/$rel"
+	src="$file"
+	$CMD
+      elif [[ -d $file ]]; then
+	dirloop="$file"
+	loop
+      else
+	print_error $file
+      fi
+    fi
+  done
+fi
