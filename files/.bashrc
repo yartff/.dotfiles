@@ -10,6 +10,7 @@ export PAGER="$_dotfiles/submodules/vimpager/vimpager"
 export PATH=$PATH:"$_dotfiles/bin"
 export PATH=$PATH:"$_gobase/root/bin":"$GOPATH/bin"
 export PATH=$PATH:"${HOME}/.local/bin"
+export PATH=$PATH:"/opt/nvim-linux-x86_64/bin"
 
 #########################
 #
@@ -26,8 +27,9 @@ alias diff='diff --color'
 alias r="tput reset"
 alias cdw="cd $_workstation;l"
 alias cdg="cd $GOPATH/src/github.com/yartff;l"
-alias vi='vim'
+alias vi='nvim'
 alias vt="vi -S $_vim_sessions/setup.vim"
+alias conf="$_dotfiles/run.sh"
 
 ##
 

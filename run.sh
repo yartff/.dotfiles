@@ -22,28 +22,6 @@ usage() {
   echo "  --out <dir>   Destination directory (default: \$HOME)"
 }
 
-if [[ $# -gt 0 ]]; then
-  case "$1" in
-    -h|--help) usage; exit 0 ;;
-    ## diff) shift; [[ $# -gt 0 ]] && { DIFF_FILES=("$@"); break; } ;;
-    ## add) CMD="$1"; shift; [[ $# -gt 0 ]] || { echo "Usage: run.sh add <file>..." >&2; exit 1; }; ADD_FILES=("$@"); break ;;
-    diff|push|pull|add) CMD="do_$1"; shift ;;
-    *) echo "Unknown command: $1" >&2; usage >&2; exit 1 ;;
-  esac
-fi
-
-paths=()
-paths_size=0
-
-
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    -h|--help) usage; exit 0 ;;
-    ## --
-    *) ((paths_size++)); paths+=("$1"); shift;;
-  esac
-done
-
 print_pulled() {
   echo -e "\033[0;33m[<]\033[0m ${dst#$DESTINATION_DIR/}"
 }
@@ -133,6 +111,27 @@ loop() {
     $CMD
   done < <(find "$dirloop" -type f -print0)
 }
+
+if [[ $# -gt 0 ]]; then
+  case "$1" in
+    -h|--help) usage; exit 0 ;;
+    ## diff) shift; [[ $# -gt 0 ]] && { DIFF_FILES=("$@"); break; } ;;
+    add) shift; [[ $# -gt 0 ]] || { echo "Usage: run.sh add <file>..." >&2; exit 1; }; ADD_FILES=("$@"); do_add; exit ;;
+    diff|push|pull) CMD="do_$1"; shift ;;
+    *) echo "Unknown command: $1" >&2; usage >&2; exit 1 ;;
+  esac
+fi
+
+paths=()
+paths_size=0
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help) usage; exit 0 ;;
+    ## --
+    *) ((paths_size++)); paths+=("$1"); shift;;
+  esac
+done
 
 if [[ $paths_size -eq 0 ]]; then
   dirloop="$DOTFILES_DIR"
