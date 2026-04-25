@@ -69,8 +69,8 @@ if [ -f ~/.bashrc_sp ]; then
   . ~/.bashrc_sp
 fi
 
-PS1='${debian_chroot:+($debian_chroot)}\[\033[0;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-## PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+PROMPT_COMMAND='ps_cd_size=$((_cd_size))'
+PS1='\[\033[0;32m\]@\h\[\033[00m\][$ps_cd_size]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 ## if ! shopt -oq posix; then
 ##   if [ -f /usr/share/bash-completion/bash_completion ]; then

@@ -49,7 +49,6 @@ print_pulled() {
 }
 
 print_pushed() {
-  echo $DOTFILES_DIR
   echo -e "\033[0;33m[>] .dotfiles/\033[0m${src#$DOTFILES_DIR/}"
 }
 
@@ -121,9 +120,7 @@ do_diff() {
     print_missingfile
     return
   fi
-  if diff -q "$dst" "$src" > /dev/null 2>&1; then
-    :
-  else
+  if ! diff -q "$dst" "$src" > /dev/null 2>&1; then
     echo "==> $rel"
     diff --color "$dst" "$src"
   fi
@@ -168,17 +165,17 @@ else
       esac
       $CMD
     else
-      file="$DOTFILES_DIR/${paths[$ndx]}"
-      if [[ -f $file ]]; then
+      path="$DOTFILES_DIR/${paths[$ndx]}"
+      if [[ -f $path ]]; then
 	rel="${paths[$ndx]}"
 	dst="${HOME}/$rel"
-	src="$file"
+	src="$path"
 	$CMD
-      elif [[ -d $file ]]; then
-	dirloop="$file"
+      elif [[ -d $path ]]; then
+	dirloop="$path"
 	loop
       else
-	print_error $file
+	print_error $path
       fi
     fi
   done
