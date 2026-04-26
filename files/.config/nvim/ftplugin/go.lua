@@ -10,29 +10,29 @@ vim.g.go_doc_max_height                      = 20
 
 local function Go_DefinitionWindow(mode)
   if mode == 'split' then
-    vim.cmd('split')
+    vim.cmd.split()
   elseif mode == 'vsplit' then
-    vim.cmd('vsplit')
+    vim.cmd.vsplit()
   end
-  vim.cmd('wincmd w')
-  vim.cmd('GoDef')
+  vim.cmd.wincmd('w')
+  vim.cmd.GoDef()
 end
 
 local buf = { buffer = true, silent = true }
 
-vim.keymap.set('n', '<C-n>',      ':GoDef<CR>',                                        buf)
-vim.keymap.set('n', '<C-w><C-n>', function() Go_DefinitionWindow('vsplit') end,         buf)
-vim.keymap.set('n', '<C-w>n',     function() Go_DefinitionWindow('split') end,          buf)
-vim.keymap.set('n', '<C-w>N',     function() vim.fn['go#def#Jump']('tab', 0) end,       buf)
-vim.keymap.set('n', 'g<C-d>',     function() vim.fn['go#def#Jump']('split', 1) end,     buf)
-vim.keymap.set('n', 'gd',         ':GoInfo<CR>',        buf)
-vim.keymap.set('n', '<C-m>',      ':GoCallers<CR>',     buf)
-vim.keymap.set('n', 'g<C-m>',     ':GoReferrers<CR>',   buf)
-vim.keymap.set('n', '<C-g>',      ':GoImplements<CR>',  buf)
-vim.keymap.set('n', '-',          ':GoDecls<CR>',       buf)
-vim.keymap.set('n', '_',          ':GoDeclsDir<CR>',    buf)
-vim.keymap.set('n', '&',          ':GoSameIds<CR>',     buf)
-vim.keymap.set('n', 'g&',         ':GoSameIdsClear<CR>',buf)
+vim.keymap.set('n', '<C-n>',      '<Cmd>GoDef<CR>',                                     buf)
+vim.keymap.set('n', '<C-w><C-n>', function() Go_DefinitionWindow('vsplit') end,          buf)
+vim.keymap.set('n', '<C-w>n',     function() Go_DefinitionWindow('split') end,           buf)
+vim.keymap.set('n', '<C-w>N',     function() vim.fn['go#def#Jump']('tab', 0) end,        buf)
+vim.keymap.set('n', 'g<C-d>',     function() vim.fn['go#def#Jump']('split', 1) end,      buf)
+vim.keymap.set('n', 'gd',         '<Cmd>GoInfo<CR>',       buf)
+vim.keymap.set('n', '<C-m>',      '<Cmd>GoCallers<CR>',    buf)
+vim.keymap.set('n', 'g<C-m>',     '<Cmd>GoReferrers<CR>',  buf)
+vim.keymap.set('n', '<C-g>',      '<Cmd>GoImplements<CR>', buf)
+vim.keymap.set('n', '-',          '<Cmd>GoDecls<CR>',      buf)
+vim.keymap.set('n', '_',          '<Cmd>GoDeclsDir<CR>',   buf)
+vim.keymap.set('n', '&',          '<Cmd>GoSameIds<CR>',    buf)
+vim.keymap.set('n', 'g&',         '<Cmd>GoSameIdsClear<CR>', buf)
 
 -- <C-n>: trigger omnifunc if popup not visible, advance selection if it is
 vim.keymap.set('i', '<C-n>', function()

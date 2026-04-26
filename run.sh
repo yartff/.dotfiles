@@ -1,11 +1,10 @@
 #!/bin/bash
-cd "$(dirname "${BASH_SOURCE[0]}")" || echo "FATAL ERROR" ; exit 1
+
 DOTFILES_DIRNAME="files"
-DOTFILES_DIR="$(pwd)/$DOTFILES_DIRNAME"
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$DOTFILES_DIRNAME"
 DESTINATION_DIR="${HOME}"
 CMD="do_diff"
 RSYNC_CMD="rsync -a --checksum --no-links --out-format=%n"
-FILES_DIR="$DOTFILES_DIR/$DOTFILES_DIRNAME"
 
 usage() {
   echo "Pull and push dotfiles between your home and $DOTFILES_DIRNAME/"
@@ -111,6 +110,7 @@ do_git() {
 }
 
 do_gitrm() {
+  cd $DOTFILES_DIR
   [ ! -e "$dst" ] && git rm "$rel"
 }
 
