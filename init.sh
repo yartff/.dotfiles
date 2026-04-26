@@ -9,8 +9,6 @@ make_link() {
   fi
 }
 
-## if uname -o != "Cygwin" ## TODO
-
 ## vim links
 
 ### vim-go
@@ -18,8 +16,8 @@ make_link() {
 mkdir -p ~/.vim/pack/plugins/start/
 ## mkdir -p ~/.vim/autoload
 
-make_link ~/.dotfiles/submodules/vim-go ~/.vim/pack/plugins/start/vim-go
-make_link ~/.dotfiles/submodules/ctrlp.vim  ~/.vim/pack/plugins/start/ctrlp.vim
+make_link ~/.dotfiles/submodules/vim-go ~/.config/nvim/pack/plugins/start/vim-go
+make_link ~/.dotfiles/submodules/ctrlp.vim  ~/.config/nvim/pack/plugins/start/ctrlp.vim
 ## make_link ~/.dotfiles/submodules/vim-plug/plug.vim  ~/.vim/autoload/plug.vim
 
 ### YCM (TODO)
