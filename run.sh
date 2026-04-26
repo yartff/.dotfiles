@@ -1,7 +1,7 @@
 #!/bin/bash
-
+cd "$(dirname "${BASH_SOURCE[0]}")" || echo "FATAL ERROR" ; exit 1
 DOTFILES_DIRNAME="files"
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$DOTFILES_DIRNAME"
+DOTFILES_DIR="$(pwd)/$DOTFILES_DIRNAME"
 DESTINATION_DIR="${HOME}"
 CMD="do_diff"
 RSYNC_CMD="rsync -a --checksum --no-links --out-format=%n"
@@ -16,6 +16,7 @@ usage() {
   echo "  push          Push files from home into dotfiles"
   echo "  pull          Pull dotfiles to home"
   echo "  add <file>... Copy files from home into dotfiles"
+  echo "  gitrm         git rm files missing from \$HOME"
   echo
   echo "Options:"
   echo "  --dot <dir>   Dotfiles source directory (default: <script-dir>/$DOTFILES_DIRNAME)"
@@ -33,6 +34,7 @@ print_pushed() {
 print_added_file() {
   echo -e "\033[0;32m[+]\033[0m $src"
 }
+
 print_added_directory() {
   echo -e "\033[0;32m[+]\033[0m \033[1;34m$src/\033[0m"
 }
@@ -55,7 +57,7 @@ print_error() {
 
 do_push() {
   if [ ! -e "$dst" ]; then
-    print_nosuchfile
+    ## TODO count and print at the end
     return
   fi
   out=$($RSYNC_CMD "$dst" "$src")
@@ -95,13 +97,21 @@ do_add() {
 
 do_diff() {
   if [ ! -e "$dst" ]; then
-    print_missingfile
+    print_nosuchfile
     return
   fi
   if ! diff -q "$dst" "$src" > /dev/null 2>&1; then
     echo "==> $rel"
     diff --color "$dst" "$src"
   fi
+}
+
+do_git() {
+  [ ! -e "$dst" ] && print_missingfile
+}
+
+do_gitrm() {
+  [ ! -e "$dst" ] && git rm "$rel"
 }
 
 loop() {
@@ -117,6 +127,7 @@ if [[ $# -gt 0 ]]; then
     -h|--help) usage; exit 0 ;;
     ## diff) shift; [[ $# -gt 0 ]] && { DIFF_FILES=("$@"); break; } ;;
     add) shift; [[ $# -gt 0 ]] || { echo "Usage: run.sh add <file>..." >&2; exit 1; }; ADD_FILES=("$@"); do_add; exit ;;
+    git|gitrm) [[ $# -eq 1 ]] || { echo "Usage: run.sh git|gitrm" >&2; exit 1; }; CMD="do_$1"; dirloop="$DOTFILES_DIR"; loop; exit ;;
     diff|push|pull) CMD="do_$1"; shift ;;
     *) echo "Unknown command: $1" >&2; usage >&2; exit 1 ;;
   esac
