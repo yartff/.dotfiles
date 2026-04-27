@@ -24,4 +24,4 @@ local function fold_root_block()
   end
 end
 
-vim.keymap.set('n', 'zp', zfap, { silent = true })
+vim.keymap.set('n', 'zp', fold_root_block, { silent = true })
