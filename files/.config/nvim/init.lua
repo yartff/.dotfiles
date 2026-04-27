@@ -5,10 +5,10 @@ vim.opt.runtimepath:prepend(vim.fn.expand('~/.vim/bundle/ctrlp.vim'))
 
 
 --[[
-:help CTRL-]  
-:help i_CTRL-X
-:help v_CTRL-]
-:help c_CTRL-R -- Command line
+:h CTRL-]  
+:h i_CTRL-X
+:h v_CTRL-]
+:h c_CTRL-R -- Command line
 
 print customs:
 :verbose map <C-w><BS>
@@ -18,6 +18,7 @@ print customs:
 --]]
 
 --[[
+--  yap/vap
 --  z (fold)
 --  Q (Ex mode)
 --  q (register)

@@ -1,7 +1,7 @@
 vim.o.shiftwidth = 2
 
 vim.o.breakindent = true
-vim.o.scrolloff  = 4
+vim.o.scrolloff  = 6
 vim.o.wrap       = false
 vim.o.laststatus = 2
 vim.o.showcmd    = true

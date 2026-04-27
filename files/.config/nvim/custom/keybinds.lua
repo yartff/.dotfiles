@@ -5,7 +5,14 @@ local function ClearTags()
 end
 
 local function ToggleWrap()
+  local saved_row = vim.fn.winline()
   vim.wo.wrap = not vim.wo.wrap
+  local diff = vim.fn.winline() - saved_row
+  if diff ~= 0 then
+    local key  = diff > 0 and '<C-e>' or '<C-y>'
+    local keys = vim.api.nvim_replace_termcodes(math.abs(diff) .. key, true, false, true)
+    vim.api.nvim_feedkeys(keys, 'n', false)
+  end
 end
 
 local function ToggleLoc()
@@ -65,6 +72,10 @@ vim.keymap.set('i', '<C-a>', '<Esc>I')      -- default: re-insert previously ins
 vim.keymap.set('i', '<C-e>', '<End>')        -- default: insert char below cursor
 vim.keymap.set('i', '<C-x>', '<Cmd>w<CR>') -- default: CTRL-X completion sub-mode
 
+-- Horizontal scroll
+vim.keymap.set('n', '<leader>h', 'zH', { silent = true })
+vim.keymap.set('n', '<leader>l', 'zL', { silent = true })
+
 -- Windows / Tabs
 vim.keymap.set('n', '<C-left>',   '<Cmd>bp<CR>',                { silent = true }) -- default: word backward (b)
 vim.keymap.set('n', '<C-right>',  '<Cmd>bn<CR>',                { silent = true }) -- default: word forward (w)
@@ -78,12 +89,19 @@ vim.keymap.set('n', '<M-left>',   '<Cmd>vertical resize -1<CR>',{ silent = true 
 vim.keymap.set('n', '<M-right>',  '<Cmd>vertical resize +1<CR>',{ silent = true })
 vim.keymap.set('n', '<C-r>',      ToggleLoc,                    { silent = true }) -- default: redo
 
+-- Search
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('v', '*', function()
   vim.cmd('normal! "*y')
   SearchSelection()
 end)
+
+-- Selection
 vim.keymap.set('n', 'vi/', 'T/vt/', { silent = true })
 vim.keymap.set('n', 'va/', 'F/vf/', { silent = true })
+
+--
+-- vim.keymap.set('c', '<C-a>', '', { silent = true })
 
 -- Unbinds
 vim.keymap.set('n', '<C-w>n', '<Nop>') -- default: open new empty window

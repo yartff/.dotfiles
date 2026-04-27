@@ -77,6 +77,7 @@ do_pull() {
 do_add() {
   for ADD_FILE in "${ADD_FILES[@]}"; do
     src="$(realpath "$ADD_FILE")"
+    [[ $? -eq 0 ]] || exit
     rel="${src#"$DESTINATION_DIR/"}"
     dst="$DOTFILES_DIR/$rel"
     if [ -d "$src" ]; then
@@ -111,7 +112,7 @@ do_git() {
 
 do_gitrm() {
   cd $DOTFILES_DIR
-  [ ! -e "$dst" ] && git rm "$rel"
+  [ ! -e "$dst" ] && git rm -f "$rel"
 }
 
 loop() {
@@ -125,7 +126,6 @@ loop() {
 if [[ $# -gt 0 ]]; then
   case "$1" in
     -h|--help) usage; exit 0 ;;
-    ## diff) shift; [[ $# -gt 0 ]] && { DIFF_FILES=("$@"); break; } ;;
     add) shift; [[ $# -gt 0 ]] || { echo "Usage: run.sh add <file>..." >&2; exit 1; }; ADD_FILES=("$@"); do_add; exit ;;
     git|gitrm) [[ $# -eq 1 ]] || { echo "Usage: run.sh git|gitrm" >&2; exit 1; }; CMD="do_$1"; dirloop="$DOTFILES_DIR"; loop; exit ;;
     diff|push|pull) CMD="do_$1"; shift ;;
@@ -147,46 +147,47 @@ done
 if [[ $paths_size -eq 0 ]]; then
   dirloop="$DOTFILES_DIR"
   loop
-else
-  for ndx in "${!paths[@]}"; do
-    if [[ -d ${paths[$ndx]} ]]; then
-      fpath=`realpath ${paths[$ndx]}`
-      case "$fpath" in
-	"$DOTFILES_DIR")   dirloop=$DOTFILES_DIR;;
-	"$DOTFILES_DIR/"*) dirloop="$fpath";;
-	"$HOME/"*)         dirloop="${DOTFILES_DIR}${fpath#$HOME}";;
-	## *)
-      esac
-      loop
-    elif [[ -f ${paths[$ndx]} ]]; then
-      fpath=`realpath ${paths[$ndx]}`
-      case "$fpath" in
-	"$DOTFILES_DIR/"*)
-	  rel="${fpath#$DOTFILES_DIR/}"
-	  src=$fpath
-	  dst="${HOME}/$rel"
-	  ;;
-	"$HOME/"*)
-	  rel="${fpath#$HOME/}"
-	  src="${DOTFILES_DIR}/${rel}"
-	  dst="${fpath}"
-	  ;;
-	## *)
-      esac
-      $CMD
-    else
-      path="$DOTFILES_DIR/${paths[$ndx]}"
-      if [[ -f $path ]]; then
-	rel="${paths[$ndx]}"
-	dst="${HOME}/$rel"
-	src="$path"
-	$CMD
-      elif [[ -d $path ]]; then
-	dirloop="$path"
-	loop
-      else
-	print_error $path
-      fi
-    fi
-  done
+  exit
 fi
+
+for ndx in "${!paths[@]}"; do
+  if [[ -d ${paths[$ndx]} ]]; then
+    fpath=`realpath ${paths[$ndx]}`
+    [[ $? -eq 0 ]] || exit
+    case "$fpath" in
+      "$DOTFILES_DIR")   dirloop=$DOTFILES_DIR;;
+      "$DOTFILES_DIR/"*) dirloop="$fpath";;
+      "$HOME/"*)         dirloop="${DOTFILES_DIR}${fpath#$HOME}";;
+    esac
+    loop
+  elif [[ -f ${paths[$ndx]} ]]; then
+    fpath=`realpath ${paths[$ndx]}`
+    [[ $? -eq 0 ]] || exit
+    case "$fpath" in
+      "$DOTFILES_DIR/"*)
+	rel="${fpath#$DOTFILES_DIR/}"
+	src=$fpath
+	dst="${HOME}/$rel"
+	;;
+      "$HOME/"*)
+	rel="${fpath#$HOME/}"
+	src="${DOTFILES_DIR}/${rel}"
+	dst="${fpath}"
+	;;
+    esac
+    $CMD
+  else
+    path="$DOTFILES_DIR/${paths[$ndx]}"
+    if [[ -f $path ]]; then
+      rel="${paths[$ndx]}"
+      dst="${HOME}/$rel"
+      src="$path"
+      $CMD
+    elif [[ -d $path ]]; then
+      dirloop="$path"
+      loop
+    else
+      print_error $path
+    fi
+  fi
+done
