@@ -9,19 +9,15 @@ make_link() {
   fi
 }
 
-## vim links
-
-### vim-go
+### vim
 # :GoInstallBinaries in vim
 mkdir -p ~/.vim/pack/plugins/start/
-## mkdir -p ~/.vim/autoload
-
 make_link ~/.dotfiles/submodules/vim-go ~/.config/nvim/pack/plugins/start/vim-go
 make_link ~/.dotfiles/submodules/ctrlp.vim  ~/.config/nvim/pack/plugins/start/ctrlp.vim
-## make_link ~/.dotfiles/submodules/vim-plug/plug.vim  ~/.vim/autoload/plug.vim
 
 ### YCM (TODO)
 # make_link
 # ./install.py --clang-completer
+
 mkdir -vp ${HOME}/workstation/{claude,download,github,go,projects}
 mkdir -vp ${HOME}/sessions
