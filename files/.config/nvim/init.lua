@@ -22,6 +22,7 @@ print customs:
 --  z (fold)
 --  Q (Ex mode)
 --  q (register)
+--  ZZ/ZQ prefix (save+quit, quit)
 --]]
 --
 --[[

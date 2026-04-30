@@ -60,9 +60,9 @@ vim.keymap.set('n', '<C-left>',   '<Cmd>bp<CR>',                { silent = true 
 vim.keymap.set('n', '<C-right>',  '<Cmd>bn<CR>',                { silent = true }) -- default: word forward (w)
 
 -- Binds
-vim.keymap.set('n', 'U', '<Cmd>redo<CR>')  -- default: undo all changes on current line
-vim.keymap.set('n', '<leader>w', ToggleWrap)       -- default: ZZ/ZQ prefix (save+quit, quit)
-vim.keymap.set('',  'Y', '"+y')            -- default: yank to end of line (y$)
+vim.keymap.set('n', 'U', '<Cmd>redo<CR>')
+vim.keymap.set('n', '<leader>w', ToggleWrap)
+vim.keymap.set('',  'Y', '"+y')
 
 -- Insert-mode
 vim.keymap.set('i', '<C-k>', '<C-o>C')      -- default: insert digraph
@@ -97,6 +97,7 @@ vim.keymap.set('n', '#', function()
   vim.fn.setreg('/', '\\<' .. vim.fn.expand('<cword>') .. '\\>')
   vim.v.searchforward = 1
 end, { silent = true })
+-- TODO: $^ error, '.' regex
 vim.keymap.set('v', '*', function()
   vim.cmd('normal! "*y')
   SearchSelection()
