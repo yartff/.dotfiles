@@ -8,18 +8,15 @@ RSYNC_CMD="rsync -a --checksum --no-links --out-format=%n"
 
 usage() {
   echo "Pull and push dotfiles between your home and $DOTFILES_DIRNAME/"
-  echo "Usage: run.sh [--dot <dir>] [--out <dir>] <command> [args]"
+  echo "Usage: run.sh <command> [args]"
   echo
   echo "Commands:"
   echo "  diff [file... ] Show diff (all files if none specified)"
+  echo "  diffl [file...]  List files that differ (no diff output)"
   echo "  push          Push files from home into dotfiles"
   echo "  pull          Pull dotfiles to home"
   echo "  add <file>... Copy files from home into dotfiles"
   echo "  gitrm         git rm files missing from \$HOME"
-  echo
-  echo "Options:"
-  echo "  --dot <dir>   Dotfiles source directory (default: <script-dir>/$DOTFILES_DIRNAME)"
-  echo "  --out <dir>   Destination directory (default: \$HOME)"
 }
 
 print_pulled() {
@@ -106,6 +103,14 @@ do_diff() {
   fi
 }
 
+do_diffl() {
+  if [ ! -e "$dst" ]; then
+    print_nosuchfile
+    return
+  fi
+  diff -q "$dst" "$src" > /dev/null 2>&1 || echo "$rel"
+}
+
 do_git() {
   [ ! -e "$dst" ] && print_missingfile
 }
@@ -128,7 +133,7 @@ if [[ $# -gt 0 ]]; then
     -h|--help) usage; exit 0 ;;
     add) shift; [[ $# -gt 0 ]] || { echo "Usage: run.sh add <file>..." >&2; exit 1; }; ADD_FILES=("$@"); do_add; exit ;;
     git|gitrm) [[ $# -eq 1 ]] || { echo "Usage: run.sh git|gitrm" >&2; exit 1; }; CMD="do_$1"; dirloop="$DOTFILES_DIR"; loop; exit ;;
-    diff|push|pull) CMD="do_$1"; shift ;;
+    diff|diffl|push|pull) CMD="do_$1"; shift ;;
     *) echo "Unknown command: $1" >&2; usage >&2; exit 1 ;;
   esac
 fi
