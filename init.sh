@@ -11,9 +11,12 @@ make_link() {
 
 ### vim
 # :GoInstallBinaries in vim
-mkdir -p ~/.vim/pack/plugins/start/
-make_link ~/.dotfiles/submodules/vim-go ~/.config/nvim/pack/plugins/start/vim-go
-make_link ~/.dotfiles/submodules/ctrlp.vim  ~/.config/nvim/pack/plugins/start/ctrlp.vim
+mkdir -vp ~/.config/nvim/pack/plugins/start/
+# make_link ~/.dotfiles/submodules/vim-go			~/.config/nvim/pack/plugins/start/vim-go
+make_link ~/.dotfiles/submodules/ctrlp.vim		~/.config/nvim/pack/plugins/start/ctrlp.vim
+
+mkdir -vp ~/.config/nvim/pack/nvim/start
+make_link ~/.dotfiles/submodules/nvim-lspconfig		~/.config/nvim/pack/nvim/start/nvim-lspconfig
 
 ### YCM (TODO)
 # make_link

@@ -6,7 +6,7 @@ _gobase="$_workstation/go"
 #########################
 #
 export GOPATH="$_gobase/gopath"
-export PAGER="$_dotfiles/submodules/vimpager/vimpager"
+export PAGER="$_dotfiles/submodules/nvimpager/nvimpager"
 export PATH=$PATH:"$_dotfiles/bin"
 export PATH=$PATH:"$_gobase/root/bin":"$GOPATH/bin"
 export PATH=$PATH:"${HOME}/.local/bin"
@@ -33,8 +33,7 @@ alias conf="$_dotfiles/run.sh"
 
 ##
 
-alias vcat="$_dotfiles/submodules/vimpager/vimcat"
-alias vpa="$_dotfiles/submodules/vimpager/vimpager"
+alias vpa="$PAGER"
 
 for srcfile in "$_dotfiles/misc/bash/source/"*
 do
