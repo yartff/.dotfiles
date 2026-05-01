@@ -8,6 +8,13 @@ if [ "$_cd_stack" == "" ]; then
   __cd_reset
 fi
 
+_cd_c_red="$(tput setaf 1)"
+_cd_c_magenta="$(tput setaf 5)"
+_cd_c_reset="$(tput sgr0)"
+_cd_cwd="$(pwd)"
+
+cd() { builtin cd "$@"; _cd_cwd="$(pwd)"; }
+
 ## TODO: cdpwd -> prints current value to insert in commands
 ## TODO: on a tmp cpy stack
 ## TODO: all var local instead of unset
@@ -41,15 +48,10 @@ __cd_print_highlightndx() {
   fi
 
   local cols=$(tput cols)       # terminal width in columns
-  local prefix_len=$(( _cd_size < 10 ? 3 : 4 ))
-  local max_path=$((cols - prefix_len))
+  local max_path=$((cols - 6)) # prefix is always "%2d :  " = 6 chars
 
-  local c_red="$(tput setaf 1)"
-  local c_magenta="$(tput setaf 5)"
   local c_hl="$(tput setaf $hl_color)"
-  local c_reset="$(tput sgr0)"
   local c_el=""; [ "$mode" != "Normal" ] && c_el="$(tput el)"
-  local cwd="$(pwd)"
 
   local buf=""
   for ndx in "${!_cd_stack[@]}"; do
@@ -61,19 +63,19 @@ __cd_print_highlightndx() {
     line+="$ndx_str"
 
     if [ $ndx -eq $hl_ndx ]; then
-      line+="${c_magenta}>> ${c_reset}"              # magenta >> for highlighted entry
+      line+="${c_hl}>> ${_cd_c_reset}"              # hl_color >> for highlighted entry
     else
       line+=":  "
     fi
 
     if [ ! -d "${_cd_stack[$ndx]}" ]; then
-      line+="$c_red"                                 # red: directory does not exist
-    elif [ "$cwd" == "${_cd_stack[$ndx]}" ]; then
-      line+="$c_magenta"                             # magenta: current working directory
+      line+="$_cd_c_red"                             # red: directory does not exist
+    elif [ "$_cd_cwd" == "${_cd_stack[$ndx]}" ]; then
+      line+="$_cd_c_magenta"                         # magenta: current working directory
     elif [ $ndx -eq $hl_ndx ]; then
       line+="$c_hl"                                  # hl_color for path
     fi
-    line+="${path}${c_reset}"                        # path + reset
+    line+="${path}${_cd_c_reset}"                    # path + reset
 
     buf+="${line}"$'\n'
   done

@@ -1,5 +1,5 @@
 {
   "nvim-lspconfig": ".config/nvim/pack/nvim/start/nvim-lspconfig",
-  "ctrlp.vim": ".config/nvim/pack/plugins/start/ctrlp.vim",
-  "goto-preview": ".config/nvim/pack/plugins/start/nvim-lspconfig"
+  "goto-preview": ".config/nvim/pack/plugins/start/goto-preview",
+  "ctrlp.vim": ".config/nvim/pack/plugins/start/ctrlp.vim"
 }

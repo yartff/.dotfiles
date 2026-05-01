@@ -1,5 +1,5 @@
 local dir = vim.fn.stdpath('config') .. '/custom/'
-for _, name in ipairs({ 'system', 'display', 'keybinds', 'filetype', 'fold', 'functions' }) do
+for _, name in ipairs({ 'system', 'lsp', 'display', 'keybinds', 'filetype', 'fold', 'functions' }) do
   dofile(dir .. name .. '.lua')
 end
 for _, path in ipairs(vim.fn.glob(dir .. 'plugins/*.lua', false, true)) do
@@ -40,3 +40,4 @@ print customs:
 -- gd	Go to global decl
 -- ga	print 
 --]]
+--
