@@ -2,6 +2,9 @@ local dir = vim.fn.stdpath('config') .. '/custom/'
 for _, name in ipairs({ 'system', 'display', 'keybinds', 'filetype', 'fold', 'functions' }) do
   dofile(dir .. name .. '.lua')
 end
+for _, path in ipairs(vim.fn.glob(dir .. 'plugins/*.lua', false, true)) do
+  dofile(path)
+end
 
 -- Runtime path
 vim.opt.runtimepath:prepend(vim.fn.expand('~/.vim/bundle/ctrlp.vim'))

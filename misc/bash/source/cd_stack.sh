@@ -43,33 +43,41 @@ __cd_print_highlightndx() {
   local cols=$(tput cols)       # terminal width in columns
   local prefix_len=$(( _cd_size < 10 ? 3 : 4 ))
   local max_path=$((cols - prefix_len))
+
+  local c_red="$(tput setaf 1)"
+  local c_magenta="$(tput setaf 5)"
+  local c_hl="$(tput setaf $hl_color)"
+  local c_reset="$(tput sgr0)"
+  local c_el=""; [ "$mode" != "Normal" ] && c_el="$(tput el)"
+  local cwd="$(pwd)"
+
+  local buf=""
   for ndx in "${!_cd_stack[@]}"; do
-    if [ "$mode" != "Normal" ]; then
-      tput el                   # erase line before redrawing
-    fi
     local path="${_cd_stack[$ndx]}"
-    if [ ${#path} -gt $max_path ]; then
-      path="...${path: -$((max_path - 3))}"
-    fi
-    printf "%2d " "$ndx"
+    [ ${#path} -gt $max_path ] && path="...${path: -$((max_path - 3))}"
+
+    local line="$c_el"
+    local ndx_str; printf -v ndx_str "%2d " "$ndx"
+    line+="$ndx_str"
+
     if [ $ndx -eq $hl_ndx ]; then
-      tput setaf 5            # magenta arrow for current index
-      printf ">> "
-      tput sgr0
+      line+="${c_magenta}>> ${c_reset}"              # magenta >> for highlighted entry
     else
-      printf ":  "
+      line+=":  "
     fi
 
     if [ ! -d "${_cd_stack[$ndx]}" ]; then
-      tput setaf 1
-    elif [ "$(pwd)" == "${_cd_stack[$ndx]}" ]; then
-      tput setaf 5            # magenta for current index
+      line+="$c_red"                                 # red: directory does not exist
+    elif [ "$cwd" == "${_cd_stack[$ndx]}" ]; then
+      line+="$c_magenta"                             # magenta: current working directory
     elif [ $ndx -eq $hl_ndx ]; then
-      tput setaf $hl_color    # hl_color for path
+      line+="$c_hl"                                  # hl_color for path
     fi
-    printf "%s\n" "$path"
-    tput sgr0                   # reset color/attributes after each line
+    line+="${path}${c_reset}"                        # path + reset
+
+    buf+="${line}"$'\n'
   done
+  printf "%s" "$buf"
 }
 
 cdl() {

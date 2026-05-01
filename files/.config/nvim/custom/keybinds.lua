@@ -65,6 +65,7 @@ vim.keymap.set('n', '<leader>w', ToggleWrap)
 vim.keymap.set('',  'Y', '"+y')
 
 -- Insert-mode
+vim.keymap.set('i', '<M-p>', '<C-r>"')      -- paste unnamed register
 vim.keymap.set('i', '<C-k>', '<C-o>C')      -- default: insert digraph
 vim.keymap.set('i', '<C-d>', '<Del>')        -- default: delete one indent level
 vim.keymap.set('i', '<C-a>', '<Esc>I')      -- default: re-insert previously inserted text
