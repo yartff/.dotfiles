@@ -17,9 +17,9 @@ __cd_is_num() {
 }
 
 __cd_print_error() {
-  tput setaf 1
+  tput setaf 1  # foreground red
   echo "[ERR] $1"
-  tput sgr0
+  tput sgr0     # reset attributes
 }
 
 deb() {
@@ -28,41 +28,47 @@ deb() {
 }
 
 __cd_print_highlightndx() {
-  selecthl=-1
-  if [ "$2" != "" ]; then
-    selecthl=$2
-  fi
-  if [ "$1" == "2" ] || [ "$1" == "4" ]; then ## erase above first line
-    tput cuu $((_cd_size+1))
-    tput el
-    tput cud1
-  elif [ "$1" == "1" ] || [ "$1" == "3" ]; then
-    tput cuu $_cd_size
+  local mode="${1:-Normal}"
+  local hl_ndx="${2:--1}"
+  local hl_color="${3:-6}"
+
+  if [ "$mode" == "Clear" ]; then
+    tput cuu $_cd_size          # move cursor up to first list entry
+  elif [ "$mode" == "ClearPlus" ]; then
+    tput cuu $((_cd_size+1))    # move cursor up past list and header line
+    tput el                     # erase header line
+    tput cud1                   # move cursor back down one line
   fi
 
-  local cols=$(tput cols)
+  local cols=$(tput cols)       # terminal width in columns
   local prefix_len=$(( _cd_size < 10 ? 3 : 4 ))
   local max_path=$((cols - prefix_len))
   for ndx in "${!_cd_stack[@]}"; do
-    if [ "$1" == "3" ] || [ "$1" == "4" ]; then
-      tput el
-    fi
-    ## TODO: if not currentwd, print another color
-    if [ $ndx -eq $selecthl ]; then
-      tput setaf $3
-    elif [ $ndx -eq $_cd_index ]; then
-      tput setaf 5
+    if [ "$mode" != "Normal" ]; then
+      tput el                   # erase line before redrawing
     fi
     local path="${_cd_stack[$ndx]}"
     if [ ${#path} -gt $max_path ]; then
       path="...${path: -$((max_path - 3))}"
     fi
-    if [ $_cd_size -lt 10 ]; then
-      printf "%d: %s\n" "$ndx" "$path"
+    printf "%2d " "$ndx"
+    if [ $ndx -eq $hl_ndx ]; then
+      tput setaf 5            # magenta arrow for current index
+      printf ">> "
+      tput sgr0
     else
-      printf "%2d: %s\n" "$ndx" "$path"
+      printf ":  "
     fi
-    tput sgr0
+
+    if [ ! -d "${_cd_stack[$ndx]}" ]; then
+      tput setaf 1
+    elif [ "$(pwd)" == "${_cd_stack[$ndx]}" ]; then
+      tput setaf 5            # magenta for current index
+    elif [ $ndx -eq $hl_ndx ]; then
+      tput setaf $hl_color    # hl_color for path
+    fi
+    printf "%s\n" "$path"
+    tput sgr0                   # reset color/attributes after each line
   done
 }
 
@@ -117,7 +123,7 @@ cda() {
   for ndx in "${!_cd_stack[@]}"; do
     if [[ "${_cd_stack[$ndx]}" == "$toadd" ]]; then
       __cd_print_error "wd already at $ndx"
-      __cd_print_highlightndx 0 $ndx 1
+      __cd_print_highlightndx Normal $ndx 1
       return
     fi
   done
@@ -168,7 +174,7 @@ __cd_index_go() {
   fi
   if [[ ! -d ${_cd_stack[$_cd_index]} ]]; then
     __cd_print_error "${_cd_stack[$_cd_index]}: no such directory"
-    __cd_print_highlightndx 0 $_cd_index 1
+    __cd_print_highlightndx Normal $_cd_index 1
     return
   fi
   cd "${_cd_stack[$_cd_index]}"
@@ -181,7 +187,7 @@ cds() {
     return
   fi
   localndx=$_cd_index
-  __cd_print_highlightndx 0 $localndx 6
+  __cd_print_highlightndx Normal $localndx 6
   while true; do
     read -n 1 -s key
     case "$key" in
@@ -193,7 +199,7 @@ cds() {
 	if [ $localndx -eq $_cd_size ]; then
 	  ((localndx--))
 	fi
-	__cd_print_highlightndx 4 $localndx 6
+	__cd_print_highlightndx ClearPlus $localndx 6
 	if [ $_cd_size -eq 0 ]; then
 	  break
 	fi
@@ -201,23 +207,23 @@ cds() {
       "j")
 	if ! [ $localndx -eq $((_cd_size - 1)) ]; then
 	  ((localndx++))
-	  __cd_print_highlightndx 1 $localndx 6
+	  __cd_print_highlightndx Clear $localndx 6
 	fi
 	;;
       "k")
 	if ! [ $localndx -le 0 ]; then
 	  ((localndx--))
-	  __cd_print_highlightndx 1 $localndx 6
+	  __cd_print_highlightndx Clear $localndx 6
 	fi
 	;;
       "p")
 	cdp $localndx "0"
-	__cd_print_highlightndx 3 $localndx 6
+	__cd_print_highlightndx Clear $localndx 6
 	;;
       "")
 	_cd_index=$localndx
 	cd "${_cd_stack[$_cd_index]}"
-	__cd_print_highlightndx 1
+	__cd_print_highlightndx Clear
 	break
 	;;
     esac
@@ -243,7 +249,7 @@ cdr() {
   for ndx in "${!_cd_stack[@]}"; do
     if [ $ndx -ne $_cd_index ] && [[ "${_cd_stack[$ndx]}" == "$newpath" ]]; then
       __cd_print_error "wd already at $ndx"
-      __cd_print_highlightndx 0 $ndx 1
+      __cd_print_highlightndx Normal $ndx 1
       return
     fi
   done
