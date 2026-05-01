@@ -7,3 +7,6 @@
 [submodule "submodules/nvim-lspconfig"]
 	path = submodules/nvim-lspconfig
 	url = git@github.com:neovim/nvim-lspconfig.git
+[submodule "submodules/goto-preview"]
+	path = submodules/goto-preview
+	url = git@github.com:rmagatti/goto-preview.git

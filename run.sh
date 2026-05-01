@@ -56,6 +56,7 @@ do_push() {
     ## TODO count and print at the end
     return
   fi
+  mkdir -p "$(dirname "$src")"
   out=$($RSYNC_CMD "$dst" "$src")
   [ -n "$out" ] && print_pushed
 }
@@ -78,12 +79,9 @@ do_add() {
     rel="${src#"$DESTINATION_DIR/"}"
     dst="$DOTFILES_DIR/$rel"
     if [ -d "$src" ]; then
-      out=$($RSYNC_CMD "$src/" "$dst")
-      if [ $? -ne 0 ]; then
-	echo rsync failure
-	return 1
-      fi
-      [ -n "$out" ] && print_added_directory
+      CMD="do_push"
+      dirloop="$src"
+      loop_home
     else
       mkdir -p "$(dirname "$dst")"
       cp "$src" "$dst" || return 1
@@ -124,6 +122,14 @@ loop() {
   while IFS= read -r -d '' src; do
     rel="${src#"$DOTFILES_DIR/"}"
     dst="$DESTINATION_DIR/$rel"
+    $CMD
+  done < <(find "$dirloop" -type f -print0)
+}
+
+loop_home() {
+  while IFS= read -r -d '' dst; do
+    rel="${dst#"$DESTINATION_DIR/"}"
+    src="$DOTFILES_DIR/$rel"
     $CMD
   done < <(find "$dirloop" -type f -print0)
 }
