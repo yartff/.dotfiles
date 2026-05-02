@@ -23,11 +23,11 @@ done
 
 ## nvim parsers
 
-rm -rf /tmp/ts-go
-
-git clone https://github.com/tree-sitter/tree-sitter-go /tmp/ts-go
-cd /tmp/ts-go
-gcc -shared -o go.so -fPIC -O2 src/parser.c
-mkdir -p ~/.config/nvim/parser
-cp go.so ~/.config/nvim/parser/
+## rm -rf /tmp/ts-go
+## 
+## git clone https://github.com/tree-sitter/tree-sitter-go /tmp/ts-go
+## cd /tmp/ts-go
+## gcc -shared -o go.so -fPIC -O2 src/parser.c
+## mkdir -p ~/.config/nvim/parser
+## cp go.so ~/.config/nvim/parser/
 

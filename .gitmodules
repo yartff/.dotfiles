@@ -10,3 +10,6 @@
 [submodule "submodules/goto-preview"]
 	path = submodules/goto-preview
 	url = git@github.com:rmagatti/goto-preview.git
+[submodule "submodules/snacks.nvim"]
+	path = submodules/snacks.nvim
+	url = git@github.com:folke/snacks.nvim.git
