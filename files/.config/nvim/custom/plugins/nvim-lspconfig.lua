@@ -13,12 +13,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'K',          vim.lsp.buf.hover,             opts)
 
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename,            opts)
-    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action,       opts)
 
     vim.keymap.set('n', 'gy',         vim.lsp.buf.declaration,   opts)
     -- vim.keymap.set('i', '<C-k>',      vim.lsp.buf.signature_help,    opts) -- TODO: doesn't work
 
-    -- vim.keymap.set('i', '<C-n>', vim.lsp.completion.trigger, opts)
+    vim.keymap.set('i', '<C-n>', vim.lsp.completion._omnifunc, opts)
 
     --[[ Format ]]
     vim.keymap.set('n', '<leader>f',  function()
@@ -38,6 +37,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', ']d',         vim.diagnostic.goto_next,     opts)
     vim.keymap.set('n', '[d',         vim.diagnostic.goto_prev,     opts)
     vim.keymap.set('n', '<leader>q',  vim.diagnostic.setloclist,    opts)
+    --[[ buf ]]
+    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action,       opts)
     vim.keymap.set('n', '<leader>ds', vim.lsp.buf.document_symbol,  opts)
     -- vim.keymap.set('n', '<leader>ws', vim.lsp.buf.workspace_symbol, opts)
 
@@ -55,4 +56,20 @@ vim.api.nvim_create_autocmd('LspAttach', {
       print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, opts)
   end,
+
+  -- diagnostic display
+  --[[
+  vim.diagnostic.config({
+    virtual_text    = true,
+    update_in_insert = false,
+    severity_sort   = true,
+    signs           = true,
+    underline       = true,
+    float = {
+      border = 'rounded',
+      source = true,
+    },
+  })
+  --]]
+
 })

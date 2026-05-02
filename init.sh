@@ -21,13 +21,5 @@ for submodule_path in "$SUBMODULES_DIR"/*/; do
   ln -vfs "$SUBMODULES_DIR/$name" "$link_dest"
 done
 
-## nvim parsers
-
-## rm -rf /tmp/ts-go
-## 
-## git clone https://github.com/tree-sitter/tree-sitter-go /tmp/ts-go
-## cd /tmp/ts-go
-## gcc -shared -o go.so -fPIC -O2 src/parser.c
-## mkdir -p ~/.config/nvim/parser
-## cp go.so ~/.config/nvim/parser/
-
+## TODO: -c "q" quits before loading
+echo nvim --headless -c "TSInstall go" ## -c "q"

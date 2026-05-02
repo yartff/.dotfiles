@@ -19,7 +19,10 @@ $MANAGER_CMD install universal-ctags
 $MANAGER_CMD install mlocate ## && updatedb
 
 ## $MANAGER_CMD install sharutils
+
+## curl https://sh.rustup.rs -sSf | sh
 ## $MANAGER_CMD install clang
+## cargo install --locked tree-sitter-cli
 
 ###############################
 # install go in "${HOME}/workstation/go/root"

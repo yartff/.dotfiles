@@ -13,3 +13,15 @@
 [submodule "submodules/snacks.nvim"]
 	path = submodules/snacks.nvim
 	url = git@github.com:folke/snacks.nvim.git
+[submodule "submodules/nvim-treesitter"]
+	path = submodules/nvim-treesitter
+	url = git@github.com:neovim-treesitter/nvim-treesitter.git
+[submodule "submodules/treesitter-parser-registry"]
+	path = submodules/treesitter-parser-registry
+	url = git@github.com:neovim-treesitter/treesitter-parser-registry.git
+[submodule "submodules/go.nvim"]
+	path = submodules/go.nvim
+	url = git@github.com:ray-x/go.nvim.git
+[submodule "submodules/guihua.lua"]
+	path = submodules/guihua.lua
+	url = git@github.com:ray-x/guihua.lua

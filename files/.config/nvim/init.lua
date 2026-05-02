@@ -10,6 +10,12 @@ for _, path in ipairs(vim.fn.glob(dir .. 'plugins/*.lua', false, true)) do
   end
 end
 
+
+
+-- require('go').setup {
+--   lsp_cfg = false,
+-- }
+
 --[[
 :h CTRL-]  
 :h i_CTRL-X

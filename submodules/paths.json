@@ -1,6 +1,10 @@
 {
-  "nvim-lspconfig": ".config/nvim/pack/nvim/start/nvim-lspconfig",
-  "goto-preview": ".config/nvim/pack/plugins/start/goto-preview",
-  "snacks.nvim": ".config/nvim/pack/plugins/start/snacks.nvim",
-  "ctrlp.vim": ".config/nvim/pack/plugins/start/ctrlp.vim"
+  "nvim-lspconfig":		".config/nvim/pack/nvim/start/nvim-lspconfig",
+  "nvim-treesitter":		".config/nvim/pack/plugins/start/nvim-treesitter",
+  "treesitter-parser-registry":	".config/nvim/pack/plugins/start/treesitter-parser-registry",
+  "go.nvim":			".config/nvim/pack/plugins/start/go.nvim",
+  "guihua.lua":			".config/nvim/pack/plugins/start/guihua.lua",
+  "goto-preview":		".config/nvim/pack/plugins/start/goto-preview",
+  "snacks.nvim":		".config/nvim/pack/plugins/start/snacks.nvim",
+  "ctrlp.vim":			".config/nvim/pack/plugins/start/ctrlp.vim"
 }
