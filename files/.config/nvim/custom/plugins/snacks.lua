@@ -1,6 +1,6 @@
+--[[
 require('snacks').setup {
   scope        = { enabled = true },  -- treesitter/indent scope detection
---[[
   animate      = { enabled = true },  -- animation primitives (used by others)
   bigfile      = { enabled = true },  -- disable features for large files
   dashboard    = { enabled = true },  -- start screen
@@ -25,5 +25,5 @@ require('snacks').setup {
   win          = { enabled = true },  -- window/float management primitives
   words        = { enabled = true },  -- highlight LSP references under cursor
   zen          = { enabled = true },  -- zen/distraction-free mode
---]]
 }
+--]]

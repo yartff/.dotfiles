@@ -72,4 +72,29 @@ vim.api.nvim_create_autocmd('LspAttach', {
   })
   --]]
 
+  --[[
+  {
+    -- to add:
+    incoming_calls = <function 13>,
+    outgoing_calls = <function 15>,
+
+    -- already here but figure out
+    signature_help = <function 20>,
+    code_action = <function 3>,
+    document_symbol = <function 8>,
+    add_workspace_folder = <function 1>,
+    list_workspace_folders = <function 14>,
+    remove_workspace_folder = <function 17>,
+    workspace_symbol = <function 24>
+
+    -- absent
+    clear_references = <function 2>,
+    document_highlight = <function 7>,
+    execute_command = <function 9>,
+    selection_range = <function 19>,
+    typehierarchy = <function 22>,
+    workspace_diagnostics = <function 23>,
+  }
+  --]]
+
 })
