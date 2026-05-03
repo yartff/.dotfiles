@@ -54,4 +54,20 @@ print customs:
 -- gd	Go to global decl
 -- ga	print 
 --]]
---
+
+--[[
+### Tag / Definition Jumping
+| Key | Action |
+|-----|--------|
+| `Ctrl-w ]` | Open tag in horizontal split |
+| `Ctrl-w }` | Preview tag in preview window |
+| `:tnext` / `:tprev` | Next/prev tag match |
+| `:tselect` | List all tag matches |
+
+### LSP (Neovim native, `vim.lsp`)
+| Key | Action |
+|-----|--------|
+| `Ctrl-k` | `vim.lsp.buf.signature_help()` |
+| `gq` (on range) | Format via LSP |
+For Go/C/C++ specifically, **ctags** (`Ctrl-]`) covers most cases without LSP, but pairing with `clangd` or `gopls` via the native LSP client gives you the full `gd`/`gr`/`gi` suite with no plugins required.
+--]]

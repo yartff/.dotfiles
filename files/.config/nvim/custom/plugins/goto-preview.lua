@@ -25,10 +25,3 @@ require('goto-preview').setup {
   vim_ui_input = true, -- Whether to override vim.ui.input with a goto-preview floating window
 }
 
-local gp = require('goto-preview')
-vim.keymap.set('n', 'gpd', gp.goto_preview_definition)
-vim.keymap.set('n', 'gpt', gp.goto_preview_type_definition)
-vim.keymap.set('n', 'gpi', gp.goto_preview_implementation)
-vim.keymap.set('n', 'gpD', gp.goto_preview_declaration)
-vim.keymap.set('n', '<leader>g',  gp.close_all_win)
-vim.keymap.set('n', 'gpr', gp.goto_preview_references)
