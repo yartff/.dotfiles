@@ -17,13 +17,6 @@ for _, name in ipairs({
   dofile(dir .. name .. '.lua')
 end
 
-
-
-
--- require('go').setup {
---   lsp_cfg = false,
--- }
-
 --[[
 :h CTRL-]  
 :h i_CTRL-X
