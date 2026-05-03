@@ -15,11 +15,13 @@ local function find_root_block()
       end
       local col = line:find('[{%[]')
       if col then
+        local open    = line:sub(col, col)
+        local close   = open == '{' and '}' or ']'
+        local pat_open = open == '[' and '\\[' or open  -- [ is magic in Vim patterns
         vim.api.nvim_win_set_cursor(0, { i, col - 1 })
-        local ok = pcall(vim.cmd, 'normal! %')
-        local end_row = vim.api.nvim_win_get_cursor(0)[1]
+        local end_pos = vim.fn.searchpairpos(pat_open, '', close, 'nW')
         vim.api.nvim_win_set_cursor(0, saved)
-        if ok then return i, end_row end
+        if end_pos[1] > 0 then return i, end_pos[1] end
         return
       end
     end
@@ -33,15 +35,13 @@ vim.keymap.set('n', 'zp', function()
   vim.api.nvim_win_set_cursor(0, { start, 0 })
 end, { silent = true })
 
-vim.keymap.set('o', 'aP', function()
+vim.keymap.set('o', 'ap', function()
   local start, end_r = find_root_block()
   if not start then return end
-  vim.api.nvim_win_set_cursor(0, { start, 0 })
-  vim.cmd('normal! V')
-  vim.api.nvim_win_set_cursor(0, { end_r, 0 })
+  vim.cmd('normal! ' .. start .. 'GV' .. end_r .. 'G')
 end, { silent = true })
 
-vim.keymap.set('x', 'aP', function()
+vim.keymap.set('x', 'ap', function()
   local start, end_r = find_root_block()
   if not start then return end
   vim.api.nvim_feedkeys(
