@@ -33,9 +33,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end
       end)
     end
-    vim.keymap.set('n', '<C-w><C-n>',     function() goto_definition('vsplit')  end, opts)
+    vim.keymap.set('n', '<C-w><C-n>', function() goto_definition('vsplit')  end, opts)
     vim.keymap.set('n', '<C-w>n',     function() goto_definition('split')  end, opts)
-    vim.keymap.set('n', '<C-w>N', function() goto_definition('tabedit') end, opts)
+    vim.keymap.set('n', '<C-w>N',     function() goto_definition('tabedit') end, opts)
 
     --[[ Preview ]]
     local gp = require('goto-preview')
@@ -44,7 +44,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>gi', gp.goto_preview_implementation)
     vim.keymap.set('n', '<leader>gD', gp.goto_preview_declaration)
     vim.keymap.set('n', '<leader>gr', gp.goto_preview_references)
-    vim.keymap.set('n', '<leader>gc',  gp.close_all_win) -- Esc ? + nohl
+    vim.keymap.set('n', 'qq',         gp.close_all_win)
 
     --[[ Format ]]
     vim.keymap.set('n', '<leader>f',  function()
