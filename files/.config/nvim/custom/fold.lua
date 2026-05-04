@@ -49,3 +49,5 @@ vim.keymap.set('x', 'ap', function()
     'x', false
   )
 end, { silent = true })
+
+vim.keymap.set('n', 'zt', 'za', { silent = true })

@@ -6,6 +6,14 @@ for _, path in ipairs(vim.fn.glob(dir .. 'plugins/*.lua', false, true)) do
   end
 end
 
+for _, path in ipairs(vim.fn.glob(dir .. '*.lua', false, true)) do
+  local ok, err = pcall(dofile, path)
+  if not ok then
+    vim.notify('Error loading ' .. path .. ': ' .. err, vim.log.levels.ERROR)
+  end
+end
+
+--[[
 for _, name in ipairs({
   'system',
   'display',
@@ -16,6 +24,7 @@ for _, name in ipairs({
 }) do
   dofile(dir .. name .. '.lua')
 end
+--]]
 
 --[[
 :h CTRL-]  
