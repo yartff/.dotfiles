@@ -18,11 +18,15 @@ $MANAGER_CMD install sshpass
 $MANAGER_CMD install universal-ctags
 $MANAGER_CMD install mlocate ## && updatedb
 
-## $MANAGER_CMD install sharutils
+echo 'curl https://sh.rustup.rs -sSf | sh'
+echo $MANAGER_CMD install clang
+echo cargo install --locked tree-sitter-cli
 
-## curl https://sh.rustup.rs -sSf | sh
-## $MANAGER_CMD install clang
-## cargo install --locked tree-sitter-cli
+## TODO: -c "q" quits before loading
+echo nvim --headless -c "GoInstallBinaries" ## -c "q"
+echo nvim --headless -c "TSInstall go" ## -c "q"
+
+## $MANAGER_CMD install sharutils
 
 ###############################
 # install go in "${HOME}/workstation/go/root"
