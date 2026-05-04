@@ -25,3 +25,6 @@
 [submodule "submodules/guihua.lua"]
 	path = submodules/guihua.lua
 	url = git@github.com:ray-x/guihua.lua
+[submodule "submodules/nvim-treesitter-textobjects"]
+	path = submodules/nvim-treesitter-textobjects
+	url = git@github.com:nvim-treesitter/nvim-treesitter-textobjects.git
