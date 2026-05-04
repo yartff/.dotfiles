@@ -69,11 +69,6 @@ vim.keymap.set({ 'n', 'v' }, 'k', 'gk', { silent = true })
 vim.keymap.set({ 'n', 'v' }, 'j', 'gj', { silent = true })
 --]]
 
-vim.keymap.set({'i', 'c'}, '<M-h>', '<Left>')
-vim.keymap.set({'i', 'c'}, '<M-l>', '<Right>')
-vim.keymap.set('i', '<M-j>', '<Down>')
-vim.keymap.set('i', '<M-k>', '<Up>')
-
 -- Code navigation
 vim.keymap.set('n', '<C-n>', '<C-]>',        { silent = true })
 vim.keymap.set('n', '<C-h>', '<Cmd>pop<CR>', { silent = true })
@@ -90,11 +85,19 @@ vim.keymap.set('n', '<leader>w', toggle_wrap)
 vim.keymap.set('',  'Y', '"+y')
 
 -- Insert-mode
-vim.keymap.set('i', '<M-p>', '<C-r>"')     -- paste unnamed register
-vim.keymap.set('i', '<C-k>', '<C-o>C')     -- default: insert digraph
-vim.keymap.set('i', '<C-d>', '<Del>')      -- default: delete one indent level
+vim.keymap.set({'i', 'c'}, '<M-h>', '<C-o><Backspace>')
+vim.keymap.set({'i', 'c'}, '<M-l>', '<C-o><Space>')
+vim.keymap.set('i', '<M-j>', '<Down>')
+vim.keymap.set('i', '<M-k>', '<Up>')
+vim.keymap.set('i', '<C-M-l>', '<C-o>w')
+vim.keymap.set('i', '<C-M-h>', '<C-o>b')
+
 vim.keymap.set('i', '<C-a>', '<Esc>I')     -- default: re-insert previously inserted text
 vim.keymap.set('i', '<C-e>', '<End>')      -- default: insert char below cursor
+
+vim.keymap.set('i', '<M-p>', '<C-r>"')     -- paste unnamed register
+vim.keymap.set('i', '<C-d>', '<Del>')      -- default: delete one indent level
+vim.keymap.set('i', '<C-k>', '<C-o>C')     -- default: insert digraph
 vim.keymap.set('i', '<C-x>', '<Cmd>w<CR>') -- default: CTRL-X completion sub-mode
 
 -- Horizontal scroll

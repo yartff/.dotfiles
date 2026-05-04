@@ -26,7 +26,7 @@ alias diff='diff --color'
 
 alias r="tput reset"
 alias cdw="cd $_workstation;l"
-alias cdg="cd $GOPATH/src/github.com/yartff;l"
+## alias cdg="cd $GOPATH/src/github.com/yartff;l" TODO: cdg -> cdgo in cd_stack
 alias vi='nvim'
 alias vt="vi -S $_vim_sessions/setup.vim"
 alias conf="$_dotfiles/run.sh"
@@ -96,6 +96,10 @@ esac
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
 
+## TP: node version manager
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+## TP: rust
+. "$HOME/.cargo/env"
