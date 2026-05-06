@@ -33,6 +33,20 @@ alias conf="$_dotfiles/run.sh"
 
 ##
 
+## TODO: bash/source
+alias gst="git status"
+alias gpl="git pull"
+alias gps="git push"
+alias gci="git commit"
+gsh() {
+  case $# in
+    0) git stash list ;;
+    1) git stash show -p "stash@{$1}" ;;
+  esac
+}
+
+##
+
 alias vpa="$PAGER"
 
 for srcfile in "$_dotfiles/misc/bash/source/"*

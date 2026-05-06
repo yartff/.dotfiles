@@ -1,3 +1,6 @@
+-- TODO: Uniform <M-x> and <A-x> (both alt keys)
+-- TODO: registers copy/paste
+--
 -- Functions
 local function clear_tags()
   vim.fn.settagstack(vim.fn.winnr(), { items = {} })
@@ -57,8 +60,6 @@ local function jump_to_other_file(forward)
   vim.notify(forward and 'Already on last file' or 'Already on first file', vim.log.levels.WARN)
 end
 
-vim.keymap.set('n', '<leader>o', function() jump_to_other_file(false) end)
-vim.keymap.set('n', '<leader>i', function() jump_to_other_file(true) end)
 -- Basic navigation
 vim.keymap.set('n', 'h', '<Backspace>')
 vim.keymap.set('n', 'l', '<Space>')
@@ -74,6 +75,7 @@ vim.keymap.set('n', '<C-n>', '<C-]>',        { silent = true })
 vim.keymap.set('n', '<C-h>', '<Cmd>pop<CR>', { silent = true })
 vim.keymap.set('n', '<C-t>', clear_tags) -- default: pop tag stack (jump back)
 
+-- File navigation
 vim.keymap.set('n', '<C-left>',   '<Cmd>bp<CR>',                { silent = true }) -- default: word backward (b)
 vim.keymap.set('n', '<C-right>',  '<Cmd>bn<CR>',                { silent = true }) -- default: word forward (w)
 vim.keymap.set('n', '<leader>o', function() jump_to_other_file(false) end)
@@ -111,8 +113,9 @@ vim.keymap.set('n', '<A-j>',      '<C-w><C-j>',                 { desc = 'Move f
 vim.keymap.set('n', '<A-k>',      '<C-w><C-k>',                 { desc = 'Move focus to the upper window' })
 vim.keymap.set('n', '<C-j>',      '<Cmd>tabn<CR>',              { silent = true }) -- default: line down (j)
 vim.keymap.set('n', '<C-k>',      '<Cmd>tabp<CR>',              { silent = true })
-vim.keymap.set('n', '<C-w><C-t>', '<C-w>T')                                         -- default: go to top-left window
-vim.keymap.set({ 'n', 'v' }, '<C-w><C-w>', '<Cmd>lclose<CR><C-w>c',      { silent = true }) -- default: move to next window
+vim.keymap.set('n', '<C-w><C-t>', '<C-w>T')                                        -- default: go to top-left window
+vim.keymap.set({ 'n', 'v' }, '<C-w><C-w>', '<C-w>c',            { silent = true })
+vim.keymap.set({ 'n', 'v' }, '<C-w>w',     '<C-w>c',            { silent = true })
 
 vim.keymap.set('n', '<M-down>',   '<Cmd>resize +1<CR>',         { silent = true })
 vim.keymap.set('n', '<M-up>',     '<Cmd>resize -1<CR>',         { silent = true })

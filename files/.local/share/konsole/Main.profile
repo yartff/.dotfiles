@@ -22,6 +22,7 @@ AutoCopySelectedText=false
 CopyTextAsHTML=false
 MiddleClickPasteMode=1
 MouseWheelZoomEnabled=false
+WordCharacters=@-./_~?&=%+#
 
 [Scrolling]
 HighlightScrolledLines=false

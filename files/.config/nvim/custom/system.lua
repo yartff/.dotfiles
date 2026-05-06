@@ -7,11 +7,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.hl.on_yank() end,
 })
 
--- Leader
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
-vim.o.timeoutlen = 400
-
 -- System
 vim.o.shell       = 'bash'
 vim.o.mouse       = 'a'

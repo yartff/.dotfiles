@@ -18,8 +18,8 @@ $MANAGER_CMD install sshpass
 $MANAGER_CMD install universal-ctags
 $MANAGER_CMD install mlocate ## && updatedb
 
-echo 'curl https://sh.rustup.rs -sSf | sh'
 echo $MANAGER_CMD install clang
+echo 'curl https://sh.rustup.rs -sSf | sh'
 echo cargo install --locked tree-sitter-cli
 
 ## TODO: -c "q" quits before loading

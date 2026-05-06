@@ -1,3 +1,9 @@
+-- Leader
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+vim.o.timeoutlen = 400
+
+-- Load ./custom and ./custom/plugins
 local dir = vim.fn.stdpath('config') .. '/custom/'
 for _, path in ipairs(vim.fn.glob(dir .. 'plugins/*.lua', false, true)) do
   local ok, err = pcall(dofile, path)
