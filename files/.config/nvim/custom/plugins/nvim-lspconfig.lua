@@ -1,3 +1,11 @@
+vim.lsp.config('gopls', {
+  settings = {
+    gopls = {
+      buildFlags = { "-tags=testing" },
+    },
+  },
+})
+
 vim.lsp.enable('gopls')
 
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -5,20 +13,18 @@ vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(ev)
     local opts = { buffer = ev.buf }
 
+    --[[ Go-To ]]
     vim.keymap.set('n', 'gd',         vim.lsp.buf.definition,       opts)
     vim.keymap.set('n', '<C-n>',      vim.lsp.buf.definition,       opts)
     vim.keymap.set('n', 'gD',         vim.lsp.buf.type_definition,       opts)
     vim.keymap.set('n', 'gi',         vim.lsp.buf.implementation,    opts)
     vim.keymap.set('n', 'gr',         vim.lsp.buf.references,        opts)
     vim.keymap.set('n', 'K',          vim.lsp.buf.hover,             opts)
+    -- gt available
 
-    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename,            opts)
-
-    vim.keymap.set('n', 'gy',         vim.lsp.buf.declaration,   opts)
+    -- vim.keymap.set('n', 'gy',         vim.lsp.buf.declaration,   opts) -- TODO: doesn't work
     -- vim.keymap.set('i', '<C-k>',      vim.lsp.buf.signature_help,    opts) -- TODO: doesn't work
-
     vim.keymap.set('i', '<C-n>', vim.lsp.completion._omnifunc, opts)
-
 
     local function goto_definition(split)
       local params = vim.lsp.util.make_position_params(0, 'utf-16')
@@ -33,24 +39,24 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end
       end)
     end
+
     vim.keymap.set('n', '<C-w><C-n>', function() goto_definition('vsplit')  end, opts)
     vim.keymap.set('n', '<C-w>n',     function() goto_definition('split')  end, opts)
     vim.keymap.set('n', '<C-w>N',     function() goto_definition('tabedit') end, opts)
+    vim.keymap.set('n', '<leader>gn', function() vim.lsp.buf.definition({ reuse_win = true }) end, opts)
+    vim.keymap.set('n', '<leader>gN', function() vim.lsp.buf.type_definition({ reuse_win = true }) end, opts)
 
     --[[ Preview ]]
     local gp = require('goto-preview')
     vim.keymap.set('n', '<leader>gd', gp.goto_preview_definition)
-    vim.keymap.set('n', '<leader>gt', gp.goto_preview_type_definition)
-    vim.keymap.set('n', '<leader>gi', gp.goto_preview_implementation)
-    vim.keymap.set('n', '<leader>gD', gp.goto_preview_declaration)
-    vim.keymap.set('n', '<leader>gr', gp.goto_preview_references)
+    vim.keymap.set('n', '<leader>gD', gp.goto_preview_type_definition)
+    -- vim.keymap.set('n', '<leader>gi', gp.goto_preview_implementation) -- TODO: make preview in quickfix list
+    -- vim.keymap.set('n', '<leader>gr', gp.goto_preview_references)     -- TODO: make preview in quickfix list
+    -- vim.keymap.set('n', '<leader>gy', gp.goto_preview_declaration)    -- TODO: with regular gy
     vim.keymap.set('n', 'qq',         gp.close_all_win)
 
     --[[ Format ]]
-    vim.keymap.set('n', '<leader>f',  function()
-      vim.lsp.buf.format({ async = true })
-    end, opts)
-
+    vim.keymap.set('n', '<leader>f',  function() vim.lsp.buf.format({ async = true }) end, opts)
     vim.api.nvim_create_autocmd('BufWritePre', {
       group = vim.api.nvim_create_augroup('LspFormat.' .. ev.buf, { clear = true }),
       buffer = ev.buf,
@@ -59,34 +65,25 @@ vim.api.nvim_create_autocmd('LspAttach', {
       end,
     })
 
+    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+
     --[[ Diagnostic ]]
     vim.diagnostic.enable(false)
-    vim.keymap.set('n', '<leader>d', function()
-      vim.diagnostic.enable(not vim.diagnostic.is_enabled())
-    end)
+    vim.keymap.set('n', '<leader>d', function() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end)
     vim.keymap.set('n', '<leader>e',  vim.diagnostic.open_float,    opts)
     vim.keymap.set('n', ']d',         vim.diagnostic.goto_next,     opts)
     vim.keymap.set('n', '[d',         vim.diagnostic.goto_prev,     opts)
     vim.keymap.set('n', '<leader>q',  vim.diagnostic.setloclist,    opts)
 
     --[[ buf ]]
-    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action,       opts)
+    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action,      opts)
     vim.keymap.set('n', '<leader>ds', vim.lsp.buf.document_symbol,  opts)
-    -- vim.keymap.set('n', '<leader>ws', vim.lsp.buf.workspace_symbol, opts)
 
-    -- Untested on other LSPs
-    -- list all symbols in current document (functions, types, vars)
-    vim.keymap.set('n', '<leader>ds', vim.lsp.buf.document_symbol, opts)
-
-    -- search symbols across the entire workspace
+    -- [[ Workspace ]]
     vim.keymap.set('n', '<leader>ws', vim.lsp.buf.workspace_symbol, opts)
-
-    -- add workspace folder (for multi-module repos)
     vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
     vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
-    vim.keymap.set('n', '<leader>wl', function()
-      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, opts)
+    vim.keymap.set('n', '<leader>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, opts)
   end,
 
   -- diagnostic display

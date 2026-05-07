@@ -1,5 +1,7 @@
--- TODO: Uniform <M-x> and <A-x> (both alt keys)
--- TODO: registers copy/paste
+-- TODOs:
+-- Uniform <M-x> and <A-x> (both alt keys)
+-- registers copy/paste
+-- highlight TODO keyword
 --
 -- Functions
 local function clear_tags()
@@ -128,7 +130,9 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', '#', function()
   vim.fn.setreg('/', '\\<' .. vim.fn.expand('<cword>') .. '\\>')
   vim.v.searchforward = 1
+  vim.opt.hlsearch = true
 end, { silent = true })
+
 -- TODO: $^ error, '.' regex
 vim.keymap.set('v', '*', function()
   vim.cmd('normal! "*y')
