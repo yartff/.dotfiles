@@ -67,6 +67,8 @@ vim.keymap.set('n', 'h', '<Backspace>')
 vim.keymap.set('n', 'l', '<Space>')
 vim.keymap.set('v', 'h', '<Backspace>')
 vim.keymap.set('v', 'l', '<Space>')
+vim.keymap.set({ 'n', 'v', 'o' }, '0', '^')
+vim.keymap.set({ 'n', 'v', 'o' }, '^', '0')
 --[[
 vim.keymap.set({ 'n', 'v' }, 'k', 'gk', { silent = true })
 vim.keymap.set({ 'n', 'v' }, 'j', 'gj', { silent = true })
@@ -74,7 +76,7 @@ vim.keymap.set({ 'n', 'v' }, 'j', 'gj', { silent = true })
 
 -- Code navigation
 vim.keymap.set('n', '<C-n>', '<C-]>',        { silent = true })
-vim.keymap.set('n', '<C-h>', '<Cmd>pop<CR>', { silent = true })
+vim.keymap.set('n', '<C-h>', _G.with_flash(function() vim.cmd.pop() end), { silent = true })
 vim.keymap.set('n', '<C-t>', clear_tags) -- default: pop tag stack (jump back)
 
 -- File navigation
@@ -123,7 +125,7 @@ vim.keymap.set('n', '<M-down>',   '<Cmd>resize +1<CR>',         { silent = true 
 vim.keymap.set('n', '<M-up>',     '<Cmd>resize -1<CR>',         { silent = true })
 vim.keymap.set('n', '<M-left>',   '<Cmd>vertical resize -1<CR>',{ silent = true })
 vim.keymap.set('n', '<M-right>',  '<Cmd>vertical resize +1<CR>',{ silent = true })
-vim.keymap.set('n', '<C-r>',      toggle_loc,                   { silent = true }) -- default: redo
+-- vim.keymap.set('n', '<C-r>',      toggle_loc,                   { silent = true })
 
 -- Search
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -133,9 +135,16 @@ vim.keymap.set('n', '#', function()
   vim.opt.hlsearch = true
 end, { silent = true })
 
+vim.keymap.set('n', '*', function()
+  vim.fn.setreg('*', vim.fn.expand('<cword>'))
+  vim.cmd('normal! *')
+end, { silent = true })
+
 -- TODO: $^ error, '.' regex
 vim.keymap.set('v', '*', function()
+  local saved, saved_type = vim.fn.getreg('"'), vim.fn.getregtype('"')
   vim.cmd('normal! "*y')
+  vim.fn.setreg('"', saved, saved_type)
   search_selection()
 end)
 

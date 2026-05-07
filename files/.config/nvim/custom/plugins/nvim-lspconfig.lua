@@ -14,10 +14,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local opts = { buffer = ev.buf }
 
     --[[ Go-To ]]
-    vim.keymap.set('n', 'gd',         vim.lsp.buf.definition,       opts)
-    vim.keymap.set('n', '<C-n>',      vim.lsp.buf.definition,       opts)
-    vim.keymap.set('n', 'gD',         vim.lsp.buf.type_definition,       opts)
-    vim.keymap.set('n', 'gi',         vim.lsp.buf.implementation,    opts)
+    vim.keymap.set('n', 'gd',         _G.with_flash(vim.lsp.buf.definition),      opts)
+    vim.keymap.set('n', '<C-n>',      _G.with_flash(vim.lsp.buf.definition),      opts)
+    vim.keymap.set('n', 'gD',         _G.with_flash(vim.lsp.buf.type_definition), opts)
+    vim.keymap.set('n', 'gi',         _G.with_flash(vim.lsp.buf.implementation),  opts)
     vim.keymap.set('n', 'gr',         vim.lsp.buf.references,        opts)
     vim.keymap.set('n', 'K',          vim.lsp.buf.hover,             opts)
     -- gt available
@@ -27,6 +27,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('i', '<C-n>', vim.lsp.completion._omnifunc, opts)
 
     local function goto_definition(split)
+      local from = { vim.fn.bufnr('%'), vim.fn.line('.'), vim.fn.col('.'), 0 }
+      local tagname = vim.fn.expand('<cword>')
       local params = vim.lsp.util.make_position_params(0, 'utf-16')
       vim.lsp.buf_request(0, 'textDocument/definition', params, function(err, result)
         if err or not result or vim.tbl_isempty(result) then return end
@@ -37,14 +39,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
         if range then
           vim.api.nvim_win_set_cursor(0, { range.start.line + 1, range.start.character })
         end
+        vim.fn.settagstack(vim.fn.win_getid(), { items = { { tagname = tagname, from = from } } }, 't')
       end)
     end
 
     vim.keymap.set('n', '<C-w><C-n>', function() goto_definition('vsplit')  end, opts)
     vim.keymap.set('n', '<C-w>n',     function() goto_definition('split')  end, opts)
     vim.keymap.set('n', '<C-w>N',     function() goto_definition('tabedit') end, opts)
-    vim.keymap.set('n', '<leader>gn', function() vim.lsp.buf.definition({      reuse_win = true }) end, opts)
-    vim.keymap.set('n', '<leader>gN', function() vim.lsp.buf.type_definition({ reuse_win = true }) end, opts)
+    vim.keymap.set('n', '<leader>gn', _G.with_flash(function() vim.lsp.buf.definition({      reuse_win = true }) end), opts)
+    vim.keymap.set('n', '<leader>gN', _G.with_flash(function() vim.lsp.buf.type_definition({ reuse_win = true }) end), opts)
 
     --[[ Preview ]]
     local gp = require('goto-preview')

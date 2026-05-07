@@ -13,8 +13,38 @@ vim.o.matchtime  = 3
 vim.o.splitright = true
 vim.o.splitbelow = true
 
--- vim.o.signcolumn = 'yes'
+-- Status Bar
+function _G.flash_statusline()
+  local saved = vim.api.nvim_get_hl(0, { name = 'StatusLine' })
+  vim.api.nvim_set_hl(0, 'StatusLine', { bg = '#ff8800', fg = '#000000', bold = true })
+  vim.defer_fn(function() vim.api.nvim_set_hl(0, 'StatusLine', saved) end, 250)
+end
 
+function _G.with_flash(fn)
+  return function()
+    local prev_buf = vim.api.nvim_get_current_buf()
+    local au = vim.api.nvim_create_autocmd('BufEnter', {
+      once = true,
+      callback = function()
+        if vim.api.nvim_get_current_buf() ~= prev_buf then _G.flash_statusline() end
+      end,
+    })
+    vim.defer_fn(function() pcall(vim.api.nvim_del_autocmd, au) end, 500)
+    fn()
+  end
+end
+
+function _G.StatuslineClick(_, _, button, _)
+  if button == 'r' then
+    local path = vim.fn.expand('%:p')
+    vim.fn.setreg('+', path)
+    print('copied: ' .. path)
+  end
+end
+
+vim.o.statusline = [[%@v:lua.StatuslineClick@%<%f%X %h%m%r%=T%{gettagstack().curidx-1}  %-16.(%l,%c /%L%) %P]]
+
+-- vim.o.signcolumn = 'yes'
 -- Colorcolumn: highlight columns 90-101
 local cols = {}
 for i = 90, 101 do cols[#cols + 1] = tostring(i) end
