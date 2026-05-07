@@ -43,7 +43,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<C-w><C-n>', function() goto_definition('vsplit')  end, opts)
     vim.keymap.set('n', '<C-w>n',     function() goto_definition('split')  end, opts)
     vim.keymap.set('n', '<C-w>N',     function() goto_definition('tabedit') end, opts)
-    vim.keymap.set('n', '<leader>gn', function() vim.lsp.buf.definition({ reuse_win = true }) end, opts)
+    vim.keymap.set('n', '<leader>gn', function() vim.lsp.buf.definition({      reuse_win = true }) end, opts)
     vim.keymap.set('n', '<leader>gN', function() vim.lsp.buf.type_definition({ reuse_win = true }) end, opts)
 
     --[[ Preview ]]

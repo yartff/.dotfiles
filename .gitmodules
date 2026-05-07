@@ -28,3 +28,6 @@
 [submodule "submodules/nvim-treesitter-textobjects"]
 	path = submodules/nvim-treesitter-textobjects
 	url = git@github.com:nvim-treesitter/nvim-treesitter-textobjects.git
+[submodule "submodules/nvim-treesitter-context"]
+	path = submodules/nvim-treesitter-context
+	url = git@github.com:nvim-treesitter/nvim-treesitter-context.git

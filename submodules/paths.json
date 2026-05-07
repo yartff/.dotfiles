@@ -7,5 +7,6 @@
   "snacks.nvim"			: ".config/nvim/pack/plugins/start/snacks.nvim",
   "nvim-treesitter"		: ".config/nvim/pack/treesitter/start/nvim-treesitter",
   "nvim-treesitter-textobjects"	: ".config/nvim/pack/treesitter/start/nvim-treesitter-textobjects",
+  "nvim-treesitter-context"	: ".config/nvim/pack/treesitter/start/nvim-treesitter-context",
   "treesitter-parser-registry"	: ".config/nvim/pack/treesitter/start/treesitter-parser-registry"
 }
