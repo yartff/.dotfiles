@@ -156,4 +156,5 @@ vim.keymap.set('n', 'va/', 'F/vf/', { silent = true })
 vim.keymap.set('c', '<C-a>', '<Home>', { silent = true })
 
 -- Unbinds
+vim.keymap.set('n', '<C-LeftMouse>', '<Nop>') -- default: jump to tag
 vim.keymap.set('n', '<C-w>n', '<Nop>') -- default: open new empty window

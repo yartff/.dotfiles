@@ -25,25 +25,3 @@ echo cargo install --locked tree-sitter-cli
 ## TODO: -c "q" quits before loading
 echo nvim --headless -c "GoInstallBinaries" ## -c "q"
 echo nvim --headless -c "TSInstall go" ## -c "q"
-
-## $MANAGER_CMD install sharutils
-
-###############################
-# install go in "${HOME}/workstation/go/root"
-
-## google-chrome
-# cat << EOF > /etc/yum.repos.d/google-chrome.repo
-# [google-chrome]
-# name=google-chrome
-# baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
-# enabled=1
-# gpgcheck=1
-# EOF
-# $MANAGER_CMD install google-chrome
-
-## disable super key
-# gsettings set org.gnome.mutter overlay-key ''
-
-## YouCompleteMe
-# $MANAGER_CMD install python automake gcc gcc-c++ kernel-devel cmake
-# $MANAGER_CMD install python-devel python3-devel
