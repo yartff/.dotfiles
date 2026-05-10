@@ -7,6 +7,7 @@ vim.o.laststatus = 2
 vim.o.showcmd    = true
 vim.o.showmode   = true
 vim.o.number     = true
+vim.o.cursorline = true
 vim.o.showmatch  = true
 vim.o.matchtime  = 3
 
@@ -47,11 +48,13 @@ vim.o.statusline = [[%@v:lua.StatuslineClick@%<%f%X %h%m%r%=T%{gettagstack().cur
 -- vim.o.signcolumn = 'yes'
 -- Colorcolumn: highlight columns 90-101
 local cols = {}
-for i = 90, 101 do cols[#cols + 1] = tostring(i) end
+for i = 90, 92 do cols[#cols + 1] = tostring(i) end
 vim.opt.colorcolumn = table.concat(cols, ',')
 
 -- Colorscheme
 pcall(vim.cmd.colorscheme, 'railscasts')
+vim.keymap.set('n', '<leader>k', function() pcall(vim.cmd.colorscheme, 'railscasts') end)
+vim.keymap.set('n', '<leader>j', function() pcall(vim.cmd.colorscheme, 'claude') end)
 
 -- Misc
 vim.g.have_nerd_font = false

@@ -4,7 +4,7 @@
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-  callback = function() vim.hl.on_yank() end,
+  callback = function() vim.hl.on_yank({ higroup = 'YankHighlight' }) end,
 })
 
 -- System
@@ -29,8 +29,9 @@ vim.o.ignorecase = true
 vim.o.smartcase  = true
 
 -- Behaviour
-vim.o.inccommand = 'split'
-vim.o.confirm    = true
+vim.o.startofline = true
+vim.o.inccommand  = 'split'
+vim.o.confirm     = true
 
 --[[
 -- Misc
