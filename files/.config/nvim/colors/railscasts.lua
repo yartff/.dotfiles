@@ -62,8 +62,9 @@ local c = {
 
   -- colors
   white = "#ffffff",
-  red = "#ff0000",
+  red   = "#ff0000",
   black = "#000000",
+  ember = "#f0773a",
 
   none     = "NONE",
 }
@@ -107,6 +108,7 @@ hi("PmenuSbar",     { bg = c.bg_pmenu_bar })
 hi("PmenuThumb",    { fg = c.fg_pmenu_thumb, bg = c.bg_pmenu_thumb })
 
 -- Code constructs
+hi("Conditional",   { fg = c.ember })
 hi("Comment",       { fg = c.fg_comment })
 hi("Todo",          { fg = c.fg_todo,       bold = true })
 hi("Constant",      { fg = c.fg_constant })
