@@ -18,10 +18,25 @@ $MANAGER_CMD install sshpass
 $MANAGER_CMD install universal-ctags
 $MANAGER_CMD install mlocate ## && updatedb
 
+## nvm
+
+## rust/cargo
 echo $MANAGER_CMD install clang
 echo 'curl https://sh.rustup.rs -sSf | sh'
+
+## tree-sitter
 echo cargo install --locked tree-sitter-cli
+
+## claude
+
+## luals
+echo 'https://github.com/LuaLS/lua-language-server/releases'
+# in /opt/luals
 
 ## TODO: -c "q" quits before loading
 echo nvim --headless -c "GoInstallBinaries" ## -c "q"
 echo nvim --headless -c "TSInstall go" ## -c "q"
+
+###
+## nvim lsp configs
+## https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
