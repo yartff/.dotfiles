@@ -19,6 +19,7 @@ $MANAGER_CMD install universal-ctags
 $MANAGER_CMD install mlocate ## && updatedb
 
 ## nvm
+echo 'https://github.com/nvm-sh/nvm#installing-and-updating'
 
 ## rust/cargo
 echo $MANAGER_CMD install clang
