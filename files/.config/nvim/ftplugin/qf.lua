@@ -15,6 +15,8 @@ local function HighlightLine(duration)
 	end, duration)
 end
 
+vim.opt_local.winhighlight = 'CursorLine:QFCursorLine'
+
 local buf = { buffer = true }
 
 vim.keymap.set('n', '<C-w><CR>', '<C-w><CR><C-w>w<Cmd>lclose<CR><Cmd>lwindow<CR><CR>', buf)

@@ -79,7 +79,13 @@ vim.keymap.set({ 'n', 'v' }, 'j', 'gj', { silent = true })
 
 -- Code navigation
 vim.keymap.set('n', '<C-n>', '<C-]>', { silent = true })
-vim.keymap.set('n', '<C-h>', _G.with_flash(function() vim.cmd.pop() end), { silent = true })
+vim.keymap.set('n', '<C-h>', function()
+	if vim.fn.gettagstack().curidx > 1 then
+		_G.with_flash(vim.cmd.pop)()
+	else
+		vim.notify('At bottom of tag stack', vim.log.levels.WARN)
+	end
+end, { silent = true })
 vim.keymap.set('n', '<C-t>', clear_tags) -- default: pop tag stack (jump back)
 
 -- File navigation

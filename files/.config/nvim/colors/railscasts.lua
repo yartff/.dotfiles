@@ -146,6 +146,9 @@ hi("mailSubject",               { link = "mailHeaderKey" })
 hi("TreesitterContext", { bg = "#4a3c10" })
 hi("TreesitterContextLineNumber", { bg = "#4a3c10" })
 
+-- Quickfix cursorline
+hi("QFCursorLine", { bg = "#303636" })
+
 -- Floating windows (LSP hover, etc.)
 hi("NormalFloat", { fg = c.fg_normal, bg = "#2e2e42" })
 hi("FloatBorder", { fg = "#606060", bg = "#2e2e42" })
