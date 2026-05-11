@@ -32,6 +32,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set('n', 'gD', _G.with_flash(vim.lsp.buf.type_definition), opts)
 		vim.keymap.set('n', 'gi', _G.with_flash(vim.lsp.buf.implementation), opts)
 		vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+		vim.keymap.set('n', 'gz', vim.lsp.buf.incoming_calls, opts)
 		vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
 		-- gt available
 

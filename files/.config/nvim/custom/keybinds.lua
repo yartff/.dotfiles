@@ -6,6 +6,7 @@
 -- Functions
 local function clear_tags()
 	vim.fn.settagstack(vim.fn.winnr(), { items = {} })
+	vim.cmd.redrawstatus()
 	vim.api.nvim_echo({ { 'Tag list emptied', 'Normal' } }, false, {})
 end
 
@@ -46,9 +47,9 @@ local function jump_to_other_file(forward)
 	local jumps, pos    = unpack(vim.fn.getjumplist())  -- jumps: 1-indexed list of {bufnr,lnum,col}; pos: 0-based index of current entry
 
 	local start         = forward and pos + 2 or
-	pos                                                 -- pos+1 is current entry (1-based), so +2 is next; pos is previous
-	local stop          = forward and #jumps or 1       -- walk to the newest or oldest end of the list
-	local step          = forward and 1 or -1           -- direction of iteration
+			pos                                      -- pos+1 is current entry (1-based), so +2 is next; pos is previous
+	local stop          = forward and #jumps or 1 -- walk to the newest or oldest end of the list
+	local step          = forward and 1 or -1    -- direction of iteration
 
 	for i = start, stop, step do
 		local entry = jumps[i]                            -- jump record at this position

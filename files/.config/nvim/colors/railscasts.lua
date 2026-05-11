@@ -11,13 +11,14 @@ local c = {
 	-- UI
 	bg_normal        = "#121212",
 	fg_normal        = "#e4e4e4",
-	bg_cursor        = "#181818",
+	bg_cursor        = "#151515",
 	fg_linenr        = "#666666",
-	fg_cursor_linenr = "#a0a0a0",
+	fg_cursor_linenr = "#909090",
+	bg_cursor_linenr = "#303030",
 	fg_search        = "#000000",
 	bg_search        = "#907515",
 	bg_search_cur    = "#cc9011",
-	bg_color_column  = '#1c1c1c',
+	bg_color_column  = '#141414',
 	bg_visual        = "#5f5f87",
 
 	-- Borders
@@ -74,10 +75,10 @@ hi("Normal", { fg = c.fg_normal, bg = c.bg_normal })
 hi("Search", { fg = c.fg_search, bg = c.bg_search })
 hi("CurSearch", { fg = c.fg_search, bg = c.bg_search_cur })
 hi("Visual", { bg = c.bg_visual })
-hi("LineNr", { fg = c.fg_linenr })
+hi("LineNr", { bg = c.black, fg = c.fg_linenr })
 hi("Cursor", { fg = c.black, bg = c.white })
 hi("CursorLine", { bg = c.bg_cursor })
-hi("CursorLineNr", { fg = c.fg_cursor_linenr })
+hi("CursorLineNr", { bg = c.bg_cursor_linenr, fg = c.fg_cursor_linenr })
 hi("ColorColumn", { bg = c.bg_color_column })
 hi("WinSeparator", { fg = c.fg_winsep })
 hi("SignColumn", { fg = c.white })
@@ -135,12 +136,20 @@ hi("Removed", { fg = "#d00000" })
 hi("NewFile", { fg = c.white, bold = true })
 hi("diffFile", { fg = "#6565aa", bold = true })
 
-
 --[[ Mail
 hi("mailEmail",                 { fg = "#87af5f", italic = true })
 hi("mailHeaderKey",             { fg = "#ffdf5f" })
 hi("mailSubject",               { link = "mailHeaderKey" })
 --]]
+
+-- Treesitter context
+hi("TreesitterContext", { bg = "#4a3c10" })
+hi("TreesitterContextLineNumber", { bg = "#4a3c10" })
+
+-- Floating windows (LSP hover, etc.)
+hi("NormalFloat", { fg = c.fg_normal, bg = "#2e2e42" })
+hi("FloatBorder", { fg = "#606060", bg = "#2e2e42" })
+hi("FloatTitle", { fg = c.white, bg = "#46467a" })
 
 -- Spell
 hi("SpellBad", { fg = "#d70000", undercurl = true })

@@ -67,6 +67,7 @@ shopt -s no_empty_cmd_completion
 
 if [[ $- = *i* ]]; then ## load bind source file instead
   bind	'"\e(": complete-into-braces'
+  bind	'"\ew": kill-word'
   # bind -r '\e\e' ## double ESC
   # "\e*"
   # unbind "\e{"

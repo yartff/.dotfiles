@@ -13,6 +13,7 @@ vim.o.matchtime   = 3
 
 vim.o.splitright  = true
 vim.o.splitbelow  = true
+vim.o.equalalways = false
 
 -- Status Bar
 function _G.flash_statusline()
