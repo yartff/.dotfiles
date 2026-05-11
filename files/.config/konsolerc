@@ -22,9 +22,6 @@ MemoryLimitValue=384
 [SearchSettings]
 SearchNoWrap=true
 
-[SplitView]
-SplitViewVisibility=AlwaysShowSplitHeader
-
 [TabBar]
 CloseTabButton=None
 SearchTabsButton=HideSearchTabsButton

@@ -6,34 +6,34 @@ vim.o.timeoutlen = 400
 -- Load ./custom and ./custom/plugins
 local dir = vim.fn.stdpath('config') .. '/custom/'
 for _, path in ipairs(vim.fn.glob(dir .. 'plugins/*.lua', false, true)) do
-  local ok, err = pcall(dofile, path)
-  if not ok then
-    vim.notify('Error loading ' .. path .. ': ' .. err, vim.log.levels.ERROR)
-  end
+	local ok, err = pcall(dofile, path)
+	if not ok then
+		vim.notify('Error loading ' .. path .. ': ' .. err, vim.log.levels.ERROR)
+	end
 end
 
 for _, path in ipairs(vim.fn.glob(dir .. '*.lua', false, true)) do
-  local ok, err = pcall(dofile, path)
-  if not ok then
-    vim.notify('Error loading ' .. path .. ': ' .. err, vim.log.levels.ERROR)
-  end
+	local ok, err = pcall(dofile, path)
+	if not ok then
+		vim.notify('Error loading ' .. path .. ': ' .. err, vim.log.levels.ERROR)
+	end
 end
 
 --[[
 for _, name in ipairs({
-  'system',
-  'display',
-  'keybinds',
-  'filetype',
-  'fold',
-  'functions'
+	'system',
+	'display',
+	'keybinds',
+	'filetype',
+	'fold',
+	'functions'
 }) do
-  dofile(dir .. name .. '.lua')
+dofile(dir .. name .. '.lua')
 end
 --]]
 
 --[[
-:h CTRL-]  
+:h CTRL-]
 :h i_CTRL-X
 :h v_CTRL-]
 :h c_CTRL-R -- Command line
@@ -55,12 +55,12 @@ print customs:
 --
 --[[
 -- Code Nav
---   
+--
 -- <C-n> Jump to tag		| <C-]>
 -- <C-n> Jumb back		| <C-t> X
 -- gd	Go to local decl
 -- gd	Go to global decl
--- ga	print 
+-- ga	print
 --]]
 
 --[[

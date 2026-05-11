@@ -11,6 +11,7 @@ export PATH=$PATH:"$_dotfiles/bin"
 export PATH=$PATH:"$_gobase/root/bin":"$GOPATH/bin"
 export PATH=$PATH:"${HOME}/.local/bin"
 export PATH=$PATH:"/opt/nvim-linux-x86_64/bin"
+export PATH=$PATH:"/opt/luals/bin"
 
 #########################
 #
