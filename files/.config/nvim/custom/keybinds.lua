@@ -130,7 +130,9 @@ vim.keymap.set('n', '<M-right>',  '<Cmd>vertical resize +1<CR>',{ silent = true 
 -- Search
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', '#', function()
-  vim.fn.setreg('/', '\\<' .. vim.fn.expand('<cword>') .. '\\>')
+  local word = vim.fn.expand('<cword>')
+  vim.fn.setreg('*', word)
+  vim.fn.setreg('/', '\\<' .. word .. '\\>')
   vim.v.searchforward = 1
   vim.opt.hlsearch = true
 end, { silent = true })
