@@ -1,3 +1,8 @@
+#!/bin/bash
+
+# bind -r '\e\e' ## double ESC
+# bind -p > file
+
 ## CUSTOM
 
 ## NAV
@@ -25,7 +30,8 @@
 # - | "\C-h": backward-delete-char	## Backspace
 # bind -r '\C-?'	## : backward-delete-char
 
-# ! | "\ed": kill-word			## Alt d
+# ! | "\ed": kill-word			## Alt d ## TODO delete
+bind	'"\ew": kill-word'
 # ! | "\e[3;5~": kill-word		## Ctrl Del
 # - | "\e\C-d": shell-kill-word		## Ctrl Alt d
 
@@ -52,7 +58,6 @@
 
 # == COMPLETION
 # - | "\C-i": complete			## Tab || Ctrl i
-# - | "\e(": complete-into-braces
 # - | "\e$": complete-variable
 # ! | "\e=": possible-completions
 # - | "\e*": insert-completions
@@ -116,6 +121,7 @@ bind -r '\en'		## : non-incremental-forward-search-history
 bind -r '\ep'		## : non-incremental-reverse-search-history
 
 ## == COMPLETE
+bind	'"\e(": complete-into-braces'
 bind -r '\e!'		## : complete-command
 bind -r '\e/'		## : complete-filename
 bind -r '\e@'		## : complete-hostname

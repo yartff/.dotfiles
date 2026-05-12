@@ -1,6 +1,7 @@
 _vim_sessions="${HOME}/sessions"
 _workstation="${HOME}/workstation"
 _dotfiles="${HOME}/.dotfiles"
+_dotfiles_bash="${HOME}/.dotfiles/misc/bash"
 _gobase="$_workstation/go"
 
 #########################
@@ -50,7 +51,7 @@ gsh() {
 
 alias vpa="$PAGER"
 
-for srcfile in "$_dotfiles/misc/bash/source/"*
+for srcfile in "$_dotfiles_bash/source/"*
 do
   source "$srcfile"
 done
@@ -66,12 +67,7 @@ unset _vim_sessions
 shopt -s no_empty_cmd_completion
 
 if [[ $- = *i* ]]; then ## load bind source file instead
-  bind	'"\e(": complete-into-braces'
-  bind	'"\ew": kill-word'
-  # bind -r '\e\e' ## double ESC
-  # "\e*"
-  # unbind "\e{"
-  # bind -p > file
+  . $_dotfiles_bash/binds.sh
 fi
 
 #########################
