@@ -51,10 +51,12 @@ gsh() {
 
 alias vpa="$PAGER"
 
-for srcfile in "$_dotfiles_bash/source/"*
-do
-  source "$srcfile"
-done
+if [[ $- = *i* ]]; then
+  for srcfile in "$_dotfiles_bash/source/"*
+  do
+    source "$srcfile"
+  done
+fi
 
 # !!!!!!!!!!!!!!!!!!!!!!!
 unset _gobase
@@ -65,10 +67,6 @@ unset _vim_sessions
 #########################
 ## Binds
 shopt -s no_empty_cmd_completion
-
-if [[ $- = *i* ]]; then ## load bind source file instead
-  . $_dotfiles_bash/binds.sh
-fi
 
 #########################
 ##                     ##
