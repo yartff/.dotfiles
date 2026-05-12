@@ -35,9 +35,20 @@ local function preview()
 	vim.api.nvim_set_current_win(qf_win)
 end
 
+vim.keymap.set('n', '<C-m>', function()
+	vim.cmd('normal! \r')
+	vim.cmd('cclose')
+end, buf)
+
 vim.keymap.set('n', 'h', preview, buf)
-vim.keymap.set('n', 'J', function() vim.cmd('normal! j') preview() end, buf)
-vim.keymap.set('n', 'K', function() vim.cmd('normal! k') preview() end, buf)
+vim.keymap.set('n', 'J', function()
+	vim.cmd('normal! j')
+	preview()
+end, buf)
+vim.keymap.set('n', 'K', function()
+	vim.cmd('normal! k')
+	preview()
+end, buf)
 vim.keymap.set('n', '<leader>h', function()
 	local idx   = vim.fn.getqflist({ idx = 0 }).idx
 	local entry = vim.fn.getqflist()[idx]

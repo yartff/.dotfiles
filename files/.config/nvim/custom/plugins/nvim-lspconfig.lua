@@ -27,10 +27,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		local opts = { buffer = ev.buf }
 
 		--[[ Go-To ]]
-		vim.keymap.set('n', 'gd', _G.with_flash(vim.lsp.buf.definition), opts)
-		vim.keymap.set('n', '<C-n>', _G.with_flash(vim.lsp.buf.definition), opts)
-		vim.keymap.set('n', 'gD', _G.with_flash(vim.lsp.buf.type_definition), opts)
-		vim.keymap.set('n', 'gi', _G.with_flash(vim.lsp.buf.implementation), opts)
+		vim.keymap.set('n', 'gd', _G.withFlash_fileChange(vim.lsp.buf.definition), opts)
+		vim.keymap.set('n', '<C-n>', _G.withFlash_fileChange(vim.lsp.buf.definition), opts)
+		vim.keymap.set('n', 'gD', _G.withFlash_fileChange(vim.lsp.buf.type_definition), opts)
+		vim.keymap.set('n', 'gi', _G.withFlash_fileChange(vim.lsp.buf.implementation), opts)
 		vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
 		vim.keymap.set('n', 'gz', vim.lsp.buf.incoming_calls, opts)
 		vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
@@ -60,8 +60,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set('n', '<C-w><C-n>', function() goto_definition('vsplit') end, opts)
 		vim.keymap.set('n', '<C-w>n', function() goto_definition('split') end, opts)
 		vim.keymap.set('n', '<C-w>N', function() goto_definition('tabedit') end, opts)
-		vim.keymap.set('n', '<leader>gn', _G.with_flash(function() vim.lsp.buf.definition({ reuse_win = true }) end), opts)
-		vim.keymap.set('n', '<leader>gN', _G.with_flash(function() vim.lsp.buf.type_definition({ reuse_win = true }) end),
+		vim.keymap.set('n', '<leader>gn', _G.withFlash_fileChange(function() vim.lsp.buf.definition({ reuse_win = true }) end), opts)
+		vim.keymap.set('n', '<leader>gN', _G.withFlash_fileChange(function() vim.lsp.buf.type_definition({ reuse_win = true }) end),
 			opts)
 
 		--[[ Preview ]]

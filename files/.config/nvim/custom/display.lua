@@ -16,13 +16,26 @@ vim.o.splitbelow  = true
 vim.o.equalalways = false
 
 -- Status Bar
-function _G.flash_statusline()
-	local saved = vim.api.nvim_get_hl(0, { name = 'StatusLine' })
-	vim.api.nvim_set_hl(0, 'StatusLine', { bg = '#ff8800', fg = '#000000', bold = true })
-	vim.defer_fn(function() vim.api.nvim_set_hl(0, 'StatusLine', saved) end, 250)
+local _flash_timer = nil
+local _flash_saved = nil
+
+function _G.flash_statusline(color)
+	if _flash_timer ~= nil then
+		_flash_timer:stop()
+		_flash_timer:close()
+		_flash_timer = nil
+	else
+		_flash_saved = vim.api.nvim_get_hl(0, { name = 'StatusLine' })
+	end
+	vim.api.nvim_set_hl(0, 'StatusLine', { bg = color or '#ff8800', fg = '#000000', bold = true })
+	_flash_timer = vim.defer_fn(function()
+		vim.api.nvim_set_hl(0, 'StatusLine', _flash_saved)
+		_flash_timer = nil
+		_flash_saved = nil
+	end, 250)
 end
 
-function _G.with_flash(fn)
+function _G.withFlash_fileChange(fn)
 	return function()
 		local prev_buf = vim.api.nvim_get_current_buf()
 		local au = vim.api.nvim_create_autocmd('BufEnter', {

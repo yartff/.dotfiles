@@ -30,6 +30,15 @@ local function toggle_loc()
 	end
 end
 
+local function toggle_qf()
+	local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
+	if qf_winid ~= 0 then
+		vim.cmd.cclose()
+	else
+		vim.cmd.copen()
+	end
+end
+
 local function search_selection()
 	local text     = vim.fn.getreg('*')
 	local text_ori = vim.fn.escape(text, '\\/.$^~[]')
@@ -65,6 +74,20 @@ local function jump_to_other_file(forward)
 	vim.notify(forward and 'Already on last file' or 'Already on first file', vim.log.levels.WARN)
 end
 
+-- Search navigation with wrap flash
+local function search_next(dir)
+	local before = vim.fn.searchcount({ recompute = true })
+	vim.cmd('normal! ' .. dir)
+	local after = vim.fn.searchcount({ recompute = true })
+	local wrapped = after.total > 0 and (
+		(dir == 'n' and before.current == before.total and after.current == 1) or
+		(dir == 'N' and before.current == 1 and after.current == after.total)
+	)
+	if wrapped then _G.flash_statusline('#6c8c3c') end
+end
+vim.keymap.set('n', 'n', function() search_next('n') end, { silent = true })
+vim.keymap.set('n', 'N', function() search_next('N') end, { silent = true })
+
 -- Basic navigation
 vim.keymap.set('n', 'h', '<Backspace>')
 vim.keymap.set('n', 'l', '<Space>')
@@ -81,7 +104,7 @@ vim.keymap.set({ 'n', 'v' }, 'j', 'gj', { silent = true })
 vim.keymap.set('n', '<C-n>', '<C-]>', { silent = true })
 vim.keymap.set('n', '<C-h>', function()
 	if vim.fn.gettagstack().curidx > 1 then
-		_G.with_flash(vim.cmd.pop)()
+		_G.withFlash_fileChange(vim.cmd.pop)()
 	else
 		vim.notify('At bottom of tag stack', vim.log.levels.WARN)
 	end
@@ -127,6 +150,7 @@ vim.keymap.set('n', '<A-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 vim.keymap.set('n', '<C-j>', '<Cmd>tabn<CR>', { silent = true }) -- default: line down (j)
 vim.keymap.set('n', '<C-k>', '<Cmd>tabp<CR>', { silent = true })
 vim.keymap.set('n', '<C-w><C-t>', '<C-w>T')                      -- default: go to top-left window
+vim.keymap.set('n', '<C-w>T', '<Cmd>tab split<CR>')              -- default: go to top-left window
 vim.keymap.set({ 'n', 'v' }, '<C-w><C-w>', '<C-w>c', { silent = true })
 vim.keymap.set({ 'n', 'v' }, '<C-w>w', '<C-w>c', { silent = true })
 
@@ -135,6 +159,7 @@ vim.keymap.set('n', '<M-up>', '<Cmd>resize -1<CR>', { silent = true })
 vim.keymap.set('n', '<M-left>', '<Cmd>vertical resize -1<CR>', { silent = true })
 vim.keymap.set('n', '<M-right>', '<Cmd>vertical resize +1<CR>', { silent = true })
 -- vim.keymap.set('n', '<C-r>',      toggle_loc,                   { silent = true })
+vim.keymap.set('n', '<C-q>', toggle_qf, { silent = true })
 
 -- Search
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
