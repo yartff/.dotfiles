@@ -77,7 +77,11 @@ end
 -- Search navigation with wrap flash
 local function search_next(dir)
 	local before = vim.fn.searchcount({ recompute = true })
-	vim.cmd('normal! ' .. dir)
+	local ok = pcall(vim.cmd, 'normal! ' .. dir)
+	if not ok then
+		_G.flash_statusline('#cc0000')
+		return
+	end
 	local after = vim.fn.searchcount({ recompute = true })
 	local wrapped = after.total > 0 and (
 		(dir == 'n' and before.current == before.total and after.current == 1) or

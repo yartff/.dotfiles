@@ -2,6 +2,7 @@
 	diff = auto
 	status = auto
 	branch = auto
+
 [user]
 	name = yartFF
 	email = 2074648+yartff@users.noreply.github.com
@@ -19,3 +20,5 @@
 	clean = git media clean %f
 	smudge = git media smudge %f
 	required = true
+[pager]
+	diff = false

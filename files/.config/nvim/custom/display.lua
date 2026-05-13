@@ -49,15 +49,18 @@ function _G.withFlash_fileChange(fn)
 	end
 end
 
-function _G.StatuslineClick(_, _, button, _)
-	if button == 'r' then
-		local path = vim.fn.expand('%:p')
+vim.keymap.set('n', '<RightMouse>', function()
+	local pos = vim.fn.getmousepos()
+	if pos.winid ~= 0 and pos.winrow > vim.api.nvim_win_get_height(pos.winid) then
+		local path = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(pos.winid))
 		vim.fn.setreg('+', path)
 		print('copied: ' .. path)
+	else
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<RightMouse>', true, false, true), 'n', true)
 	end
-end
+end)
 
-vim.o.statusline = [[%@v:lua.StatuslineClick@%<%f%X %h%m%r%=T%{gettagstack().curidx-1}  %-16.(%l,%c /%L%) %P]]
+vim.o.statusline = [[%<%f %h%m%r%=T%{gettagstack().curidx-1}  %-16.(%l,%c /%L%) %P]]
 
 -- vim.o.signcolumn = 'yes'
 -- Colorcolumn: highlight columns 90-101

@@ -126,16 +126,6 @@ hi("PreProc", { fg = c.fg_preproc })
 hi("Special", { fg = c.fg_special })
 -- hi("Boolean",       { fg = c.copper, bold = true })
 
--- Diffs
-hi("DiffAdd", { fg = "#e4e4e4", bg = "#519f50" })
-hi("DiffDelete", { fg = c.black, bg = "#660000", bold = true })
-hi("DiffChange", { fg = c.white, bg = "#870087" })
-hi("DiffText", { fg = c.white, bg = "#ff0000", bold = true })
-hi("Added", { fg = "#00d000" })
-hi("Removed", { fg = "#d00000" })
-hi("NewFile", { fg = c.white, bold = true })
-hi("diffFile", { fg = "#6565aa", bold = true })
-
 --[[ Mail
 hi("mailEmail",                 { fg = "#87af5f", italic = true })
 hi("mailHeaderKey",             { fg = "#ffdf5f" })
