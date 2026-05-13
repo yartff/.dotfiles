@@ -10,7 +10,7 @@
 	path = ~/.config/git/pro
 
 [core]
-	editor = vim
+	editor = nvim
 [web]
 	browser = google-chrome
 [push]
