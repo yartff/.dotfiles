@@ -21,6 +21,15 @@ vim.lsp.config('lua_ls', {
 vim.lsp.enable('gopls')
 vim.lsp.enable('lua_ls')
 
+local function push_tagstack()
+	-- tagstack entry: {bufnr, line, col, coladd} — records where we jumped from
+	-- getpos returns {0, lnum, col, off}; replace bufnum (always 0) with actual bufnr
+	local from = vim.fn.getpos('.')
+	from[1] = vim.fn.bufnr('%')
+	local tagname = vim.fn.expand('<cword>')
+	vim.fn.settagstack(vim.fn.win_getid(), { items = { { tagname = tagname, from = from } } }, 't')
+end
+
 vim.api.nvim_create_autocmd('LspAttach', {
 	group = vim.api.nvim_create_augroup('UserLspAttach', { clear = true }),
 	callback = function(ev)
@@ -31,8 +40,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set('n', '<C-n>', _G.withFlash_fileChange(vim.lsp.buf.definition), opts)
 		vim.keymap.set('n', 'gD', _G.withFlash_fileChange(vim.lsp.buf.type_definition), opts)
 		vim.keymap.set('n', 'gi', _G.withFlash_fileChange(vim.lsp.buf.implementation), opts)
-		vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-		vim.keymap.set('n', 'gz', vim.lsp.buf.incoming_calls, opts)
+		vim.keymap.set('n', 'gr', function()
+			push_tagstack(); vim.lsp.buf.references()
+		end, opts)
+		vim.keymap.set('n', 'gz', function()
+			push_tagstack(); vim.lsp.buf.incoming_calls()
+		end, opts)
 		vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
 		-- gt available
 
@@ -41,8 +54,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set('i', '<C-n>', vim.lsp.completion._omnifunc, opts)
 
 		local function goto_definition(split)
-			local from = { vim.fn.bufnr('%'), vim.fn.line('.'), vim.fn.col('.'), 0 }
-			local tagname = vim.fn.expand('<cword>')
+			push_tagstack()
 			local params = vim.lsp.util.make_position_params(0, 'utf-16')
 			vim.lsp.buf_request(0, 'textDocument/definition', params, function(err, result)
 				if err or not result or vim.tbl_isempty(result) then return end
@@ -53,7 +65,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 				if range then
 					vim.api.nvim_win_set_cursor(0, { range.start.line + 1, range.start.character })
 				end
-				vim.fn.settagstack(vim.fn.win_getid(), { items = { { tagname = tagname, from = from } } }, 't')
 			end)
 		end
 
@@ -92,8 +103,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.diagnostic.enable(false)
 		vim.keymap.set('n', '<leader>d', function() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end)
 		vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
-		vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-		vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+		vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, opts)
+		vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, opts)
 		vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
 
 		--[[ buf ]]

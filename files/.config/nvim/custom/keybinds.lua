@@ -153,8 +153,7 @@ vim.keymap.set('n', '<A-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<A-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 vim.keymap.set('n', '<C-j>', '<Cmd>tabn<CR>', { silent = true }) -- default: line down (j)
 vim.keymap.set('n', '<C-k>', '<Cmd>tabp<CR>', { silent = true })
-vim.keymap.set('n', '<C-w><C-t>', '<C-w>T')                      -- default: go to top-left window
-vim.keymap.set('n', '<C-w>T', '<Cmd>tab split<CR>')              -- default: go to top-left window
+vim.keymap.set('n', '<C-w><C-t>', '<Cmd>tab split<CR>')
 vim.keymap.set({ 'n', 'v' }, '<C-w><C-w>', '<C-w>c', { silent = true })
 vim.keymap.set({ 'n', 'v' }, '<C-w>w', '<C-w>c', { silent = true })
 
