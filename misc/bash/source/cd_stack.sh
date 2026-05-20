@@ -11,9 +11,6 @@ fi
 _cd_c_red="$(tput setaf 1)"
 _cd_c_magenta="$(tput setaf 5)"
 _cd_c_reset="$(tput sgr0)"
-_cd_cwd="$(pwd)"
-
-cd() { builtin cd "$@"; _cd_cwd="$(pwd)"; }
 
 ## TODO: cdpwd -> prints current value to insert in commands
 ## TODO: on a tmp cpy stack
@@ -36,8 +33,7 @@ deb() {
 
 __cd_print_highlightndx() {
   local mode="${1:-Normal}"
-  local hl_ndx="${2:--1}"
-  local hl_color="${3:-6}"
+  local hl_ndx="${2:-$_cd_index}"
 
   if [ "$mode" == "Clear" ]; then
     tput cuu $_cd_size          # move cursor up to first list entry
@@ -50,7 +46,7 @@ __cd_print_highlightndx() {
   local cols=$(tput cols)       # terminal width in columns
   local max_path=$((cols - 6)) # prefix is always "%2d :  " = 6 chars
 
-  local c_hl="$(tput setaf $hl_color)"
+  [[ $3 == "" ]] && local c_hl=$_cd_c_reset || local c_hl="$(tput setaf $3)"
   local c_el=""; [ "$mode" != "Normal" ] && c_el="$(tput el)"
 
   local buf=""
@@ -70,7 +66,7 @@ __cd_print_highlightndx() {
 
     if [ ! -d "${_cd_stack[$ndx]}" ]; then
       line+="$_cd_c_red"                             # red: directory does not exist
-    elif [ "$_cd_cwd" == "${_cd_stack[$ndx]}" ]; then
+    elif [ "${_cd_stack[$ndx]}" == "$PWD" ]; then
       line+="$_cd_c_magenta"                         # magenta: current working directory
     elif [ $ndx -eq $hl_ndx ]; then
       line+="$c_hl"                                  # hl_color for path
@@ -113,7 +109,7 @@ cdp() { ## TODO: maybe should be available in cds only
   fi
   cdd $toqueue > /dev/null
   unset toqueue
-  cda "$path" "0"
+  cda "$path" "0" -f
   if [ $lastndx -eq 1 ]; then
     _cd_index=$((_cd_size-1))
   fi
@@ -124,8 +120,12 @@ cda() {
   if [ "$1" != "" ]; then
     toadd=`realpath "$1"`
     if ! [ -d "$1" ]; then
-      __cd_print_error "no such directory"
-      return
+      if [ "$3" == "-f" ]; then
+	toadd="$1"
+      else
+	__cd_print_error "no such directory"
+	return
+      fi
     fi
   else
     toadd="`pwd`"
@@ -232,8 +232,8 @@ cds() {
 	;;
       "")
 	_cd_index=$localndx
-	cd "${_cd_stack[$_cd_index]}"
-	__cd_print_highlightndx Clear
+	## TODO on unexisting
+	cd "${_cd_stack[$_cd_index]}" && __cd_print_highlightndx Clear
 	break
 	;;
     esac
@@ -267,13 +267,13 @@ cdr() {
   cdl
 }
 
-cdgo() {
+cdg() {
   if [ $_cd_size -eq 0 ]; then
     __cd_print_error "no wd"
     return
   fi
   if [ $# -gt 1 ]; then
-    echo cdgo [n]
+    echo cdg [n]
     return
   fi
   if [ $# -eq 1 ]; then
@@ -304,6 +304,13 @@ cdsave() {
   printf "%s\n" "${_cd_stack[@]}" > "$target" || return 1
   printf "%d\n" "$_cd_index" >> "$target" || return 1
   echo "saved ${_cd_size} entries to $target"
+}
+
+cdlist() {
+  local f
+  for f in "$HOME/sessions/"*.cd; do
+    [ -f "$f" ] && echo "${f##*/sessions/}" | sed 's/\.cd$//'
+  done
 }
 
 cdload() {
