@@ -296,6 +296,10 @@ cdsave() {
     __cd_print_error "usage: cdsave <name|path>"
     return
   fi
+  if [ $_cd_size -eq 0 ]; then
+    __cd_print_error "no wd"
+    return
+  fi
   local target="$1"
   if [[ "$target" != /* && "$target" != ~* && "$target" != ./* && "$target" != ../* ]]; then
     target="$HOME/sessions/${target}.cd"
@@ -337,6 +341,9 @@ cdload() {
   done
   _cd_size=$(( n - 1 ))
   _cd_index="${lines[$((n-1))]}"
+  if [ $_cd_index -lt 0 ] || [ $_cd_index -ge $_cd_size ]; then
+    _cd_index=0
+  fi
   echo "loaded $_cd_size entries from $target"
   cdl
 }
@@ -359,4 +366,10 @@ cdk() {
   fi
   ((_cd_index--))
   __cd_index_go
+}
+
+complete -F __cd_complete_session cdload cdsave
+__cd_complete_session() {
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  COMPREPLY=($(compgen -W "$(cdlist)" -- "$cur"))
 }
