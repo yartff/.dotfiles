@@ -42,6 +42,11 @@ vim.keymap.set('n', '<C-m>', function()
 	vim.cmd('cclose')
 end, buf)
 
+vim.keymap.set('n', '<leader>h', function()
+	vim.cmd('normal! \r')
+	flash()
+end, buf)
+
 vim.keymap.set('n', 'h', preview, buf)
 vim.keymap.set('n', 'J', function()
 	vim.cmd('normal! j')

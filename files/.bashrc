@@ -1,8 +1,8 @@
-_vim_sessions="${HOME}/sessions"
 _workstation="${HOME}/workstation"
 _dotfiles="${HOME}/.dotfiles"
 _dotfiles_bash="${HOME}/.dotfiles/misc/bash"
 _gobase="$_workstation/go"
+_sessions="${HOME}/.sessions"
 
 #########################
 #
@@ -30,7 +30,6 @@ alias r="tput reset"
 alias cdw="cd $_workstation;l"
 ## alias cdg="cd $GOPATH/src/github.com/yartff;l" TODO: cdg -> cdgo in cd_stack
 alias vi='nvim'
-alias vt="vi -S $_vim_sessions/setup.vim"
 alias conf="$_dotfiles/run.sh"
 
 ##
@@ -61,10 +60,10 @@ if [[ $- = *i* ]]; then
 fi
 
 # !!!!!!!!!!!!!!!!!!!!!!!
+## unset _sessions ## needed by sourced files
 unset _gobase
 unset _dotfiles
 unset _workstation
-unset _vim_sessions
 
 #########################
 ## Binds

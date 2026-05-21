@@ -302,7 +302,7 @@ cdsave() {
   fi
   local target="$1"
   if [[ "$target" != /* && "$target" != ~* && "$target" != ./* && "$target" != ../* ]]; then
-    target="$HOME/sessions/${target}.cd"
+    target="$_sessions/${target}.cd"
   fi
   mkdir -p "$(dirname "$target")"
   printf "%s\n" "${_cd_stack[@]}" > "$target" || return 1
@@ -312,8 +312,9 @@ cdsave() {
 
 cdlist() {
   local f
-  for f in "$HOME/sessions/"*.cd; do
-    [ -f "$f" ] && echo "${f##*/sessions/}" | sed 's/\.cd$//'
+  for f in "$_sessions/"*.cd; do
+    ## TODO: hardcoded '.sessions' dirname
+    [ -f "$f" ] && echo "${f##*/.sessions/}" | sed 's/\.cd$//'
   done
 }
 
@@ -324,7 +325,7 @@ cdload() {
   fi
   local target="$1"
   if [[ "$target" != /* && "$target" != ~* && "$target" != ./* && "$target" != ../* ]]; then
-    target="$HOME/sessions/${target}.cd"
+    target="$_sessions/${target}.cd"
   fi
   if [ ! -f "$target" ]; then
     __cd_print_error "no such file: $target"

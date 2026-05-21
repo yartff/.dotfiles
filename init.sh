@@ -1,7 +1,7 @@
 #!/bin/bash
 
 mkdir -vp "${HOME}/workstation/{claude,download,github,go,projects}"
-mkdir -vp "${HOME}/sessions"
+mkdir -vp "${HOME}/.sessions"
 mkdir -vp "${HOME}/.local/bin"
 
 ## [[ Submodules ]]

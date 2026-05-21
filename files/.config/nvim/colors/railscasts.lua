@@ -11,7 +11,6 @@ local c = {
 	-- UI
 	bg_normal        = "#121212",
 	fg_normal        = "#e4e4e4",
-	bg_cursor        = "#151515",
 	fg_linenr        = "#666666",
 	fg_cursor_linenr = "#909090",
 	bg_cursor_linenr = "#303030",
