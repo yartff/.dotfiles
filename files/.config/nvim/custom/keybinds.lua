@@ -87,12 +87,14 @@ local function search_next(dir)
 		(dir == 'n' and before.current == before.total and after.current == 1) or
 		(dir == 'N' and before.current == 1 and after.current == after.total)
 	)
-	if wrapped then _G.flash_statusline('#6c8c3c') end
+	if wrapped then _G.flash_statusline('#cc9011') end
 end
 vim.keymap.set('n', 'n', function() search_next('n') end, { silent = true })
 vim.keymap.set('n', 'N', function() search_next('N') end, { silent = true })
 
 -- Basic navigation
+vim.keymap.set({ 'n', 'v' }, ';', ':')
+vim.keymap.set({ 'n', 'v' }, ',', ';')
 vim.keymap.set('n', 'h', '<Backspace>')
 vim.keymap.set('n', 'l', '<Space>')
 vim.keymap.set('v', 'h', '<Backspace>')
@@ -114,6 +116,12 @@ vim.keymap.set('n', '<C-h>', function()
 	end
 end, { silent = true })
 vim.keymap.set('n', '<C-t>', clear_tags) -- default: pop tag stack (jump back)
+vim.keymap.set('n', '<C-o>', _G.withFlash_fileChange(function()
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-o>', true, false, true), 'n', false)
+end), { silent = true })
+vim.keymap.set('n', '<C-i>', _G.withFlash_fileChange(function()
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-i>', true, false, true), 'n', false)
+end), { silent = true })
 
 -- File navigation
 vim.keymap.set('n', '<C-left>', '<Cmd>bp<CR>', { silent = true })  -- default: word backward (b)
@@ -125,6 +133,7 @@ vim.keymap.set('n', '<leader>i', function() jump_to_other_file(true) end)
 vim.keymap.set('n', 'U', '<Cmd>redo<CR>')
 vim.keymap.set('n', '<leader>w', toggle_wrap)
 vim.keymap.set('', 'Y', '"+y')
+vim.keymap.set('x', 'p', '"dd"0P', { silent = true })
 
 -- Insert-mode
 vim.keymap.set({ 'i', 'c' }, '<M-h>', '<C-o><Backspace>')
@@ -151,11 +160,13 @@ vim.keymap.set('n', '<A-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<A-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<A-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<A-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-vim.keymap.set('n', '<C-j>', '<Cmd>tabn<CR>', { silent = true }) -- default: line down (j)
+vim.keymap.set('n', '<C-j>', '<Cmd>tabn<CR>', { silent = true })
 vim.keymap.set('n', '<C-k>', '<Cmd>tabp<CR>', { silent = true })
 vim.keymap.set('n', '<C-w><C-t>', '<Cmd>tab split<CR>')
+vim.keymap.set('n', '<C-w><C-q>', '<Cmd>tabclose<CR>')
 vim.keymap.set({ 'n', 'v' }, '<C-w><C-w>', '<C-w>c', { silent = true })
 vim.keymap.set({ 'n', 'v' }, '<C-w>w', '<C-w>c', { silent = true })
+vim.keymap.set('n', '<C-w>W', '<Cmd>bw<CR>', { silent = true })
 
 vim.keymap.set('n', '<M-down>', '<Cmd>resize +1<CR>', { silent = true })
 vim.keymap.set('n', '<M-up>', '<Cmd>resize -1<CR>', { silent = true })

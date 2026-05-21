@@ -19,10 +19,12 @@ vim.opt_local.winhighlight = 'CursorLine:QFCursorLine'
 
 local buf = { buffer = true }
 
+vim.api.nvim_set_hl(0, 'QFFlash', { bg = '#6c8c3c', fg = '#000000' })
+
 local function flash()
 	local line     = vim.api.nvim_win_get_cursor(0)[1]
 	local winid    = vim.api.nvim_get_current_win()
-	local match_id = vim.fn.matchaddpos('Search', { { line } }, 100)
+	local match_id = vim.fn.matchaddpos('QFFlash', { { line } }, 100)
 	vim.defer_fn(function()
 		vim.api.nvim_win_call(winid, function() vim.fn.matchdelete(match_id) end)
 	end, 150)
@@ -48,13 +50,6 @@ end, buf)
 vim.keymap.set('n', 'K', function()
 	vim.cmd('normal! k')
 	preview()
-end, buf)
-vim.keymap.set('n', '<leader>h', function()
-	local idx   = vim.fn.getqflist({ idx = 0 }).idx
-	local entry = vim.fn.getqflist()[idx]
-	if not entry then return end
-	if not vim.api.nvim_buf_is_loaded(entry.bufnr) then vim.fn.bufload(entry.bufnr) end
-	require('goto-preview.lib').open_floating_win(entry.bufnr, { entry.lnum, (entry.col or 1) - 1 })
 end, buf)
 
 -- vim.keymap.set('n', '<C-w><CR>', '<C-w><CR><C-w>w<Cmd>lclose<CR><Cmd>lwindow<CR><CR>', buf)

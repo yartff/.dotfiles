@@ -40,6 +40,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set('n', '<C-n>', _G.withFlash_fileChange(vim.lsp.buf.definition), opts)
 		vim.keymap.set('n', 'gD', _G.withFlash_fileChange(vim.lsp.buf.type_definition), opts)
 		vim.keymap.set('n', 'gi', _G.withFlash_fileChange(vim.lsp.buf.implementation), opts)
+		vim.keymap.set('n', 'gs', function()
+			push_tagstack(); vim.lsp.buf.document_symbol()
+		end, opts)
 		vim.keymap.set('n', 'gr', function()
 			push_tagstack(); vim.lsp.buf.references()
 		end, opts)
@@ -71,6 +74,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set('n', '<C-w><C-n>', function() goto_definition('vsplit') end, opts)
 		vim.keymap.set('n', '<C-w>n', function() goto_definition('split') end, opts)
 		vim.keymap.set('n', '<C-w>N', function() goto_definition('tabedit') end, opts)
+
 		-- TODO: Flash only if the window was non-existant
 		-- TODO: Do not stack tag in original window
 		vim.keymap.set('n', '<leader>gn',
@@ -109,7 +113,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 		--[[ buf ]]
 		vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
-		vim.keymap.set('n', '<leader>ds', vim.lsp.buf.document_symbol, opts)
 
 		-- [[ Workspace ]]
 		vim.keymap.set('n', '<leader>ws', vim.lsp.buf.workspace_symbol, opts)
