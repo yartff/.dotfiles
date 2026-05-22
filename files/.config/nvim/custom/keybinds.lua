@@ -41,7 +41,7 @@ end
 
 local function search_selection()
 	local text     = vim.fn.getreg('*')
-	local text_ori = vim.fn.escape(text, '\\/.$^~[]')
+	local text_ori = vim.fn.escape(text, '\\')
 	local trimmed  = text_ori:gsub('^%s+', '')
 	local press_n  = trimmed ~= text_ori
 	local pattern  = trimmed:gsub('\n', '\\n')

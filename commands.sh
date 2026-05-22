@@ -18,6 +18,8 @@ $MANAGER_CMD install sshpass
 $MANAGER_CMD install universal-ctags
 $MANAGER_CMD install mlocate ## && updatedb
 
+## $MANAGER_CMD install bat
+
 ## neovim
 ## in "/opt/nvim-linux-x86_64"
 
