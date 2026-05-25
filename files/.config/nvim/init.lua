@@ -20,19 +20,6 @@ for _, path in ipairs(vim.fn.glob(dir .. '*.lua', false, true)) do
 end
 
 --[[
-for _, name in ipairs({
-	'system',
-	'display',
-	'keybinds',
-	'filetype',
-	'fold',
-	'functions'
-}) do
-dofile(dir .. name .. '.lua')
-end
---]]
-
---[[
 :h CTRL-]
 :h i_CTRL-X
 :h v_CTRL-]

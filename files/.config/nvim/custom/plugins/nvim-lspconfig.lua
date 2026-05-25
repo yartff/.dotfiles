@@ -1,3 +1,19 @@
+--[[
+nvim lsp configs
+https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+
+-- gopls
+:GoInstallBinaries
+
+-- luals
+https://github.com/LuaLS/lua-language-server/releases
+-> /opt/luals
+
+---- TS
+:TSInstall *
+
+--]]
+
 vim.lsp.config('gopls', {
 	settings = {
 		gopls = {
@@ -20,6 +36,7 @@ vim.lsp.config('lua_ls', {
 
 vim.lsp.enable('gopls')
 vim.lsp.enable('lua_ls')
+vim.lsp.enable('clangd')
 
 local function push_tagstack()
 	-- tagstack entry: {bufnr, line, col, coladd} — records where we jumped from
