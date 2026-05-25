@@ -39,18 +39,6 @@ local function toggle_qf()
 	end
 end
 
-local function search_selection()
-	local text     = vim.fn.getreg('*')
-	local text_ori = vim.fn.escape(text, '\\')
-	local trimmed  = text_ori:gsub('^%s+', '')
-	local press_n  = trimmed ~= text_ori
-	local pattern  = trimmed:gsub('\n', '\\n')
-	vim.fn.setreg('/', '\\V' .. pattern)
-	vim.cmd('normal! n')
-	if press_n then vim.cmd('normal! n') end
-	vim.cmd.redraw()
-end
-
 local function jump_to_other_file(forward)
 	local current_bufnr = vim.api.nvim_get_current_buf() -- buffer we're jumping away from
 	local jumps, pos    = unpack(vim.fn.getjumplist())  -- jumps: 1-indexed list of {bufnr,lnum,col}; pos: 0-based index of current entry
@@ -177,6 +165,12 @@ vim.keymap.set('n', '<C-q>', toggle_qf, { silent = true })
 
 -- Search
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+vim.keymap.set('n', '*', function()
+	vim.fn.setreg('*', vim.fn.expand('<cword>'))
+	vim.cmd('normal! *')
+end, { silent = true })
+
 vim.keymap.set('n', '#', function()
 	local word = vim.fn.expand('<cword>')
 	vim.fn.setreg('*', word)
@@ -185,22 +179,12 @@ vim.keymap.set('n', '#', function()
 	vim.opt.hlsearch = true
 end, { silent = true })
 
-vim.keymap.set('n', '*', function()
-	vim.fn.setreg('*', vim.fn.expand('<cword>'))
-	vim.cmd('normal! *')
-end, { silent = true })
-
--- TODO: $^ error, '.' regex
-vim.keymap.set('v', '*', function()
-	local saved, saved_type = vim.fn.getreg('"'), vim.fn.getregtype('"')
-	vim.cmd('normal! "*y')
-	vim.fn.setreg('"', saved, saved_type)
-	search_selection()
-end)
-
 -- Selection
 vim.keymap.set('n', 'vi/', 'T/vt/', { silent = true })
 vim.keymap.set('n', 'va/', 'F/vf/', { silent = true })
+
+-- Registers
+vim.keymap.set('n', '<leader>"', '<Cmd>registers<CR>', { silent = true })
 
 -- Command-mode
 vim.keymap.set('c', '<C-a>', '<Home>', { silent = true })
