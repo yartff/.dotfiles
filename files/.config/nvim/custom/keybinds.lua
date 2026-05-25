@@ -21,15 +21,6 @@ local function toggle_wrap()
 	end
 end
 
-local function toggle_loc()
-	local loclist = vim.fn.getloclist(0, { winid = 0 })
-	if loclist.winid ~= 0 then
-		vim.cmd.lclose()
-	else
-		vim.cmd.lopen()
-	end
-end
-
 local function toggle_qf()
 	local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
 	if qf_winid ~= 0 then
@@ -134,7 +125,6 @@ vim.keymap.set('i', '<C-M-h>', '<C-o>b')
 vim.keymap.set('i', '<C-a>', '<Esc>I')     -- default: re-insert previously inserted text
 vim.keymap.set('i', '<C-e>', '<End>')      -- default: insert char below cursor
 
-vim.keymap.set('i', '<M-p>', '<C-r>"')     -- paste unnamed register
 vim.keymap.set('i', '<C-d>', '<Del>')      -- default: delete one indent level
 vim.keymap.set('i', '<C-k>', '<C-o>C')     -- default: insert digraph
 vim.keymap.set('i', '<C-x>', '<Cmd>w<CR>') -- default: CTRL-X completion sub-mode
@@ -160,7 +150,6 @@ vim.keymap.set('n', '<M-down>', '<Cmd>resize +1<CR>', { silent = true })
 vim.keymap.set('n', '<M-up>', '<Cmd>resize -1<CR>', { silent = true })
 vim.keymap.set('n', '<M-left>', '<Cmd>vertical resize -1<CR>', { silent = true })
 vim.keymap.set('n', '<M-right>', '<Cmd>vertical resize +1<CR>', { silent = true })
--- vim.keymap.set('n', '<C-r>',      toggle_loc,                   { silent = true })
 vim.keymap.set('n', '<C-q>', toggle_qf, { silent = true })
 
 -- Search
@@ -184,7 +173,9 @@ vim.keymap.set('n', 'vi/', 'T/vt/', { silent = true })
 vim.keymap.set('n', 'va/', 'F/vf/', { silent = true })
 
 -- Registers
+vim.keymap.set('i', '<M-p>', '<C-r>"') -- paste unnamed register
 vim.keymap.set('n', '<leader>"', '<Cmd>registers<CR>', { silent = true })
+-- vim.keymap.set({ 'i', 'n' }, '<C-r><C-r>', open_registers_preview, { silent = true }) -- TODO
 
 -- Command-mode
 vim.keymap.set('c', '<C-a>', '<Home>', { silent = true })
@@ -192,3 +183,4 @@ vim.keymap.set('c', '<C-a>', '<Home>', { silent = true })
 -- Unbinds
 vim.keymap.set('n', '<C-LeftMouse>', '<Nop>') -- default: jump to tag
 vim.keymap.set('n', '<C-w>n', '<Nop>')        -- default: open new empty window
+vim.keymap.set('n', '<C-r>', '<Nop>')         -- default: Redo
