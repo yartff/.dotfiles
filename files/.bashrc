@@ -26,9 +26,8 @@ alias diff='diff --color'
 
 ##
 
-alias r="tput reset"
+alias r="reset"
 alias cdw="cd $_workstation;l"
-## alias cdg="cd $GOPATH/src/github.com/yartff;l" TODO: cdg -> cdgo in cd_stack
 alias vi='nvim'
 alias conf="$_dotfiles/run.sh"
 
@@ -81,8 +80,18 @@ if [ -f ~/.bashrc_sp ]; then
   . ~/.bashrc_sp
 fi
 
-PROMPT_COMMAND='ps_cd_size=$((_cd_size))'
-PS1='\[\033[0;32m\]@\h\[\033[00m\][$ps_cd_size]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+_update_prompt() {
+  ps_cd_size=$((_cd_size))
+  local _njobs
+  _njobs=$(jobs -p | wc -l)
+  if [ "$_njobs" -gt 0 ]; then
+    ps_jobs=$'{\001\e[35m\002'"${_njobs}"$'\001\e[0m\002}'
+  else
+    ps_jobs=''
+  fi
+}
+PROMPT_COMMAND='_update_prompt'
+PS1='\[\033[0;32m\]@\h\[\033[00m\][$ps_cd_size]$ps_jobs:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 ## if ! shopt -oq posix; then
 ##   if [ -f /usr/share/bash-completion/bash_completion ]; then
