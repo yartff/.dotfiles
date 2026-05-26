@@ -7,7 +7,9 @@ _sessions="${HOME}/.sessions"
 #########################
 #
 export GOPATH="$_gobase/gopath"
-export PAGER="$_dotfiles/submodules/nvimpager/nvimpager"
+## export PAGER="$_dotfiles/submodules/nvimpager/nvimpager"
+export PAGER="batcat"
+export VISUAL="nvim"
 export PATH=$PATH:"$_dotfiles/bin"
 export PATH=$PATH:"$_gobase/root/bin":"$GOPATH/bin"
 export PATH=$PATH:"${HOME}/.local/bin"

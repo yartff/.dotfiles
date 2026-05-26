@@ -71,7 +71,7 @@ end
 vim.keymap.set('n', 'n', function() search_next('n') end, { silent = true })
 vim.keymap.set('n', 'N', function() search_next('N') end, { silent = true })
 
--- Basic navigation
+-- [[ Basic navigation ]]
 vim.keymap.set({ 'n', 'v' }, ';', ':')
 vim.keymap.set({ 'n', 'v' }, ',', ';')
 vim.keymap.set('n', 'h', '<Backspace>')
@@ -85,7 +85,7 @@ vim.keymap.set({ 'n', 'v' }, 'k', 'gk', { silent = true })
 vim.keymap.set({ 'n', 'v' }, 'j', 'gj', { silent = true })
 --]]
 
--- Code navigation
+-- [[ Code navigation ]]
 vim.keymap.set('n', '<C-n>', '<C-]>', { silent = true })
 vim.keymap.set('n', '<C-h>', function()
 	if vim.fn.gettagstack().curidx > 1 then
@@ -102,19 +102,19 @@ vim.keymap.set('n', '<C-i>', _G.withFlash_fileChange(function()
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-i>', true, false, true), 'n', false)
 end), { silent = true })
 
--- File navigation
+-- [[ File navigation ]]
 vim.keymap.set('n', '<C-left>', '<Cmd>bp<CR>', { silent = true })  -- default: word backward (b)
 vim.keymap.set('n', '<C-right>', '<Cmd>bn<CR>', { silent = true }) -- default: word forward (w)
 vim.keymap.set('n', '<leader>o', function() jump_to_other_file(false) end)
 vim.keymap.set('n', '<leader>i', function() jump_to_other_file(true) end)
 
--- Binds
+-- [[ Binds ]]
 vim.keymap.set('n', 'U', '<Cmd>redo<CR>')
 vim.keymap.set('n', '<leader>w', toggle_wrap)
 vim.keymap.set('', 'Y', '"+y')
 vim.keymap.set('x', 'p', '"dd"0P', { silent = true })
 
--- Insert-mode
+-- [[ Insert-mode ]]
 vim.keymap.set({ 'i', 'c' }, '<M-h>', '<C-o><Backspace>')
 vim.keymap.set({ 'i', 'c' }, '<M-l>', '<C-o><Space>')
 vim.keymap.set('i', '<M-j>', '<Down>')
@@ -129,11 +129,11 @@ vim.keymap.set('i', '<C-d>', '<Del>')      -- default: delete one indent level
 vim.keymap.set('i', '<C-k>', '<C-o>C')     -- default: insert digraph
 vim.keymap.set('i', '<C-x>', '<Cmd>w<CR>') -- default: CTRL-X completion sub-mode
 
--- Horizontal scroll
+-- [[ Scroll ]]
 vim.keymap.set('n', '<leader>h', 'zH', { silent = true })
 vim.keymap.set('n', '<leader>l', 'zL', { silent = true })
 
--- Windows / Tabs
+-- [[ Windows / Tabs ]]
 vim.keymap.set('n', '<A-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<A-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<A-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
@@ -152,12 +152,14 @@ vim.keymap.set('n', '<M-left>', '<Cmd>vertical resize -1<CR>', { silent = true }
 vim.keymap.set('n', '<M-right>', '<Cmd>vertical resize +1<CR>', { silent = true })
 vim.keymap.set('n', '<C-q>', toggle_qf, { silent = true })
 
--- Search
+-- [[ Search ]]
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 vim.keymap.set('n', '*', function()
 	vim.fn.setreg('*', vim.fn.expand('<cword>'))
-	vim.cmd('normal! *')
+	-- TODO: Status bar flash, setreg('/') OR use '#' content
+	-- search_next('n')
+	vim.cmd.normal({ '*', bang = true })
 end, { silent = true })
 
 vim.keymap.set('n', '#', function()
@@ -168,6 +170,25 @@ vim.keymap.set('n', '#', function()
 	vim.opt.hlsearch = true
 end, { silent = true })
 
+local function selection_in_search()
+	local saved = vim.fn.getreg('"')
+	vim.cmd.normal({ '"*y', bang = true })
+	vim.fn.setreg('"', saved)
+	local escaped = vim.fn.escape(vim.fn.getreg('*'), '/\\')
+	vim.fn.setreg('/', '\\V' .. escaped)
+	vim.v.searchforward = 1
+	vim.opt.hlsearch = true
+end
+
+vim.keymap.set('x', '*', function()
+	selection_in_search()
+	search_next('n')
+end, { silent = true })
+
+vim.keymap.set('x', '#', function()
+	selection_in_search()
+end, { silent = true })
+
 -- Selection
 vim.keymap.set('n', 'vi/', 'T/vt/', { silent = true })
 vim.keymap.set('n', 'va/', 'F/vf/', { silent = true })
@@ -175,6 +196,7 @@ vim.keymap.set('n', 'va/', 'F/vf/', { silent = true })
 -- Registers
 vim.keymap.set('i', '<M-p>', '<C-r>"') -- paste unnamed register
 vim.keymap.set('n', '<leader>"', '<Cmd>registers<CR>', { silent = true })
+vim.keymap.set('n', '<C-r><C-r>', '<Cmd>registers<CR>', { silent = true })
 -- vim.keymap.set({ 'i', 'n' }, '<C-r><C-r>', open_registers_preview, { silent = true }) -- TODO
 
 -- Command-mode

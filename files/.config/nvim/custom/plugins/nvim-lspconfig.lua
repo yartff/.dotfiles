@@ -14,6 +14,14 @@ https://github.com/LuaLS/lua-language-server/releases
 
 --]]
 
+vim.lsp.config('*', {
+	capabilities = {
+		textDocument = {
+			completion = { completionItem = { snippetSupport = false } },
+		},
+	},
+})
+
 vim.lsp.config('gopls', {
 	settings = {
 		gopls = {
@@ -69,8 +77,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
 		-- gt available
 
-		-- vim.keymap.set('n', 'gy',         vim.lsp.buf.declaration,   opts) -- TODO: doesn't work
-		-- vim.keymap.set('i', '<C-k>',      vim.lsp.buf.signature_help,    opts) -- TODO: doesn't work
+		-- vim.keymap.set('n', 'gy', vim.lsp.buf.declaration, opts) -- TODO: doesn't work
+		-- vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, opts) -- focuses float on 2nd press
 		vim.keymap.set('i', '<C-n>', vim.lsp.completion._omnifunc, opts)
 
 		local function goto_definition(split)
