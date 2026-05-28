@@ -25,7 +25,7 @@ vim.lsp.config('*', {
 vim.lsp.config('gopls', {
 	settings = {
 		gopls = {
-			buildFlags = { "-tags=testing" },
+			buildFlags = { "-tags=testing,devOnly" },
 		},
 	},
 })
@@ -130,9 +130,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 		--[[ Diagnostic ]]
 		vim.diagnostic.enable(false)
-		vim.keymap.set('n', '<leader>d', function() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end)
+		vim.keymap.set('n', '<leader>d', function() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end) -- TODO on/off in status bar
 		vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
-		vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, opts)
+		vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, opts)                    -- TODO: open float if next
 		vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, opts)
 		vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
 

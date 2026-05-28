@@ -38,6 +38,7 @@ print customs:
 --  Q (Ex mode)
 --  q (register)
 --  ZZ/ZQ prefix (save+quit, quit)
+--  Paste on select
 --]]
 --
 --[[

@@ -2,6 +2,7 @@
 -- Uniform <M-x> and <A-x> (both alt keys)
 -- registers copy/paste
 -- highlight TODO keyword
+-- context +1/-1 max_lines (>C <C)
 --
 -- Functions
 local function clear_tags()
@@ -47,6 +48,7 @@ local function jump_to_other_file(forward)
 			local key = steps ..
 					(forward and '<C-i>' or '<C-o>')            -- counted jump: e.g. "3<C-o>" goes back 3 entries in one native operation
 			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), 'n', false)
+			_G.flash_statusline('#ff8800')
 			return
 		end
 	end
@@ -74,10 +76,10 @@ vim.keymap.set('n', 'N', function() search_next('N') end, { silent = true })
 -- [[ Basic navigation ]]
 vim.keymap.set({ 'n', 'v' }, ';', ':')
 vim.keymap.set({ 'n', 'v' }, ',', ';')
-vim.keymap.set('n', 'h', '<Backspace>')
-vim.keymap.set('n', 'l', '<Space>')
-vim.keymap.set('v', 'h', '<Backspace>')
-vim.keymap.set('v', 'l', '<Space>')
+-- vim.keymap.set('n', 'h', '<Backspace>')
+-- vim.keymap.set('n', 'l', '<Space>')
+-- vim.keymap.set('v', 'h', '<Backspace>')
+-- vim.keymap.set('v', 'l', '<Space>')
 vim.keymap.set({ 'n', 'v', 'o' }, '0', '^')
 vim.keymap.set({ 'n', 'v', 'o' }, '^', '0')
 --[[
@@ -90,6 +92,7 @@ vim.keymap.set('n', '<C-n>', '<C-]>', { silent = true })
 vim.keymap.set('n', '<C-h>', function()
 	if vim.fn.gettagstack().curidx > 1 then
 		_G.withFlash_fileChange(vim.cmd.pop)()
+		vim.cmd.redrawstatus() -- redraws even if pos did not change. Ignorable overhead
 	else
 		vim.notify('At bottom of tag stack', vim.log.levels.WARN)
 	end
@@ -102,11 +105,18 @@ vim.keymap.set('n', '<C-i>', _G.withFlash_fileChange(function()
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-i>', true, false, true), 'n', false)
 end), { silent = true })
 
+vim.keymap.set('n', '<C-r><C-t>', '<Cmd>tags<CR>', { silent = true })
+vim.keymap.set('n', '<leader><C-h>', '<Cmd>tag<CR>', { silent = true })
+
 -- [[ File navigation ]]
-vim.keymap.set('n', '<C-left>', '<Cmd>bp<CR>', { silent = true })  -- default: word backward (b)
-vim.keymap.set('n', '<C-right>', '<Cmd>bn<CR>', { silent = true }) -- default: word forward (w)
-vim.keymap.set('n', '<leader>o', function() jump_to_other_file(false) end)
+vim.keymap.set('n', '<C-left>', '<Cmd>bp<CR>', { silent = true })          -- default: word backward (b)
+vim.keymap.set('n', '<C-right>', '<Cmd>bn<CR>', { silent = true })         -- default: word forward (w)
+vim.keymap.set('n', '<leader>o', function() jump_to_other_file(false) end) -- TODO test (intense use doesn't flash)
 vim.keymap.set('n', '<leader>i', function() jump_to_other_file(true) end)
+vim.keymap.set('n', '<leader>x', function()
+	vim.cmd('topleft vsplit | Ex') -- TODO: This locks whole vim
+end, { silent = true })
+
 
 -- [[ Binds ]]
 vim.keymap.set('n', 'U', '<Cmd>redo<CR>')
@@ -174,7 +184,7 @@ local function selection_in_search()
 	local saved = vim.fn.getreg('"')
 	vim.cmd.normal({ '"*y', bang = true })
 	vim.fn.setreg('"', saved)
-	local escaped = vim.fn.escape(vim.fn.getreg('*'), '/\\')
+	local escaped = vim.fn.escape(vim.fn.getreg('*'), '/\\'):gsub('[ \t]+', '\\s\\*'):gsub('\n', '\\n')
 	vim.fn.setreg('/', '\\V' .. escaped)
 	vim.v.searchforward = 1
 	vim.opt.hlsearch = true
@@ -206,3 +216,4 @@ vim.keymap.set('c', '<C-a>', '<Home>', { silent = true })
 vim.keymap.set('n', '<C-LeftMouse>', '<Nop>') -- default: jump to tag
 vim.keymap.set('n', '<C-w>n', '<Nop>')        -- default: open new empty window
 vim.keymap.set('n', '<C-r>', '<Nop>')         -- default: Redo
+vim.keymap.set('n', 'ZZ', '<Nop>')            -- save & quit

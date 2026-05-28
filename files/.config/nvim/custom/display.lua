@@ -1,37 +1,34 @@
-vim.o.shiftwidth  = 2
+vim.o.shiftwidth   = 2
 
-vim.o.breakindent = true
-vim.o.scrolloff   = 6
-vim.o.wrap        = false
-vim.o.laststatus  = 2
-vim.o.showcmd     = true
-vim.o.showmode    = true
-vim.o.number      = true
-vim.o.cursorline  = true
-vim.o.showmatch   = true
-vim.o.matchtime   = 3
+vim.o.breakindent  = true
+vim.o.scrolloff    = 6
+vim.o.wrap         = false
+vim.o.laststatus   = 2
+vim.o.showcmd      = true
+vim.o.showmode     = true
+vim.o.number       = true
+vim.o.cursorline   = true
+vim.o.showmatch    = true
+vim.o.matchtime    = 3
 
-vim.o.splitright  = true
-vim.o.splitbelow  = true
-vim.o.equalalways = false
+vim.o.splitright   = true
+vim.o.splitbelow   = true
+vim.o.equalalways  = false
 
 -- Status Bar
 local _flash_timer = nil
-local _flash_saved = nil
+local _flash_saved = vim.api.nvim_get_hl(0, { name = 'StatusLine' })
 
 function _G.flash_statusline(color)
 	if _flash_timer ~= nil then
 		_flash_timer:stop()
 		_flash_timer:close()
 		_flash_timer = nil
-	else
-		_flash_saved = vim.api.nvim_get_hl(0, { name = 'StatusLine' })
 	end
-	vim.api.nvim_set_hl(0, 'StatusLine', { bg = color or '#ff8800', fg = '#000000', bold = true })
+	vim.api.nvim_set_hl(0, 'StatusLine', { bg = color, fg = '#000000', bold = true })
 	_flash_timer = vim.defer_fn(function()
 		vim.api.nvim_set_hl(0, 'StatusLine', _flash_saved)
 		_flash_timer = nil
-		_flash_saved = nil
 	end, 250)
 end
 
@@ -41,7 +38,7 @@ function _G.withFlash_fileChange(fn)
 		local au = vim.api.nvim_create_autocmd('BufEnter', {
 			once = true,
 			callback = function()
-				if vim.api.nvim_get_current_buf() ~= prev_buf then _G.flash_statusline() end
+				if vim.api.nvim_get_current_buf() ~= prev_buf then _G.flash_statusline('#ff8800') end
 			end,
 		})
 		vim.defer_fn(function() pcall(vim.api.nvim_del_autocmd, au) end, 500)
