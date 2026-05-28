@@ -35,18 +35,16 @@ local function jump_to_other_file(forward)
 	local current_bufnr = vim.api.nvim_get_current_buf() -- buffer we're jumping away from
 	local jumps, pos    = unpack(vim.fn.getjumplist())  -- jumps: 1-indexed list of {bufnr,lnum,col}; pos: 0-based index of current entry
 
-	local start         = forward and pos + 2 or
-			pos                                      -- pos+1 is current entry (1-based), so +2 is next; pos is previous
-	local stop          = forward and #jumps or 1 -- walk to the newest or oldest end of the list
-	local step          = forward and 1 or -1    -- direction of iteration
+	local start         = forward and pos + 2 or pos    -- pos+1: current, +2: next; pos: prev
+	local stop          = forward and #jumps or 1       -- walk to the newest or oldest end of the list
+	local step          = forward and 1 or -1           -- direction of iteration
 
 	for i = start, stop, step do
 		local entry = jumps[i]                            -- jump record at this position
 		if entry and vim.api.nvim_buf_is_valid(entry.bufnr) -- skip stale/closed buffers
 				and entry.bufnr ~= current_bufnr then         -- skip entries in the same file
 			local steps = math.abs(i - (pos + 1))           -- pos is 0-based so pos+1 is the 1-based current; distance to target index i
-			local key = steps ..
-					(forward and '<C-i>' or '<C-o>')            -- counted jump: e.g. "3<C-o>" goes back 3 entries in one native operation
+			local key = steps .. (forward and '<C-i>' or '<C-o>')
 			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), 'n', false)
 			_G.flash_statusline('#ff8800')
 			return
@@ -109,14 +107,13 @@ vim.keymap.set('n', '<C-r><C-t>', '<Cmd>tags<CR>', { silent = true })
 vim.keymap.set('n', '<leader><C-h>', '<Cmd>tag<CR>', { silent = true })
 
 -- [[ File navigation ]]
-vim.keymap.set('n', '<C-left>', '<Cmd>bp<CR>', { silent = true })          -- default: word backward (b)
-vim.keymap.set('n', '<C-right>', '<Cmd>bn<CR>', { silent = true })         -- default: word forward (w)
-vim.keymap.set('n', '<leader>o', function() jump_to_other_file(false) end) -- TODO test (intense use doesn't flash)
+vim.keymap.set('n', '<C-left>', '<Cmd>bp<CR>', { silent = true })  -- default: word backward (b)
+vim.keymap.set('n', '<C-right>', '<Cmd>bn<CR>', { silent = true }) -- default: word forward (w)
+vim.keymap.set('n', '<leader>o', function() jump_to_other_file(false) end)
 vim.keymap.set('n', '<leader>i', function() jump_to_other_file(true) end)
 vim.keymap.set('n', '<leader>x', function()
 	vim.cmd('topleft vsplit | Ex') -- TODO: This locks whole vim
 end, { silent = true })
-
 
 -- [[ Binds ]]
 vim.keymap.set('n', 'U', '<Cmd>redo<CR>')
@@ -165,19 +162,21 @@ vim.keymap.set('n', '<C-q>', toggle_qf, { silent = true })
 -- [[ Search ]]
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
-vim.keymap.set('n', '*', function()
-	vim.fn.setreg('*', vim.fn.expand('<cword>'))
-	-- TODO: Status bar flash, setreg('/') OR use '#' content
-	-- search_next('n')
-	vim.cmd.normal({ '*', bang = true })
-end, { silent = true })
-
-vim.keymap.set('n', '#', function()
+local function search_cword()
 	local word = vim.fn.expand('<cword>')
 	vim.fn.setreg('*', word)
 	vim.fn.setreg('/', '\\<' .. word .. '\\>')
 	vim.v.searchforward = 1
 	vim.opt.hlsearch = true
+end
+
+vim.keymap.set('n', '*', function()
+	search_cword()
+	search_next('n')
+end, { silent = true })
+
+vim.keymap.set('n', '#', function()
+	search_cword()
 end, { silent = true })
 
 local function selection_in_search()

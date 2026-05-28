@@ -51,3 +51,6 @@ vim.keymap.set('x', 'ap', function()
 end, { silent = true })
 
 vim.keymap.set('n', 'zt', 'za', { silent = true })
+
+-- Unbinds
+vim.keymap.set('n', 'za', '<Nop>') -- toggle fold

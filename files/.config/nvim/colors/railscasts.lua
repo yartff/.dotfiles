@@ -12,8 +12,8 @@ local c = {
 	bg_normal        = "#121212",
 	fg_normal        = "#e4e4e4",
 	fg_linenr        = "#666666",
-	fg_cursor_linenr = "#909090",
-	bg_cursor_linenr = "#303030",
+	fg_cursor_linenr = "#204050",
+	bg_cursor_linenr = "#909090",
 	fg_search        = "#000000",
 	bg_search        = "#907515",
 	bg_search_cur    = "#cc9011",
@@ -28,7 +28,8 @@ local c = {
 	fg_winsep        = "#c0c0c0",
 
 	-- Fold
-	bg_folded        = "#444470",
+	bg_folded        = "#504065",
+	fg_fold_linenr   = "#504065",
 
 	-- Flash
 	bg_yank_hl_flash = '#00afcc',
@@ -75,9 +76,12 @@ hi("Search", { fg = c.fg_search, bg = c.bg_search })
 hi("CurSearch", { fg = c.fg_search, bg = c.bg_search_cur })
 hi("Visual", { bg = c.bg_visual })
 hi("LineNr", { bg = c.black, fg = c.fg_linenr })
+hi("LineNrFold", { bg = c.black, fg = c.fg_fold_linenr })
 hi("Cursor", { fg = c.black, bg = c.white })
-hi("CursorLine", { bg = c.bg_cursor })
+hi("CursorLine", { bg = c.bg_normal })
 hi("CursorLineNr", { bg = c.bg_cursor_linenr, fg = c.fg_cursor_linenr })
+hi("CursorLineSign", { bg = c.bg_normal })
+hi("CursorLineFold", { bg = c.bg_normal })
 hi("ColorColumn", { bg = c.bg_color_column })
 hi("WinSeparator", { fg = c.fg_winsep })
 hi("SignColumn", { fg = c.white })

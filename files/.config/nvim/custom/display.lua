@@ -1,23 +1,24 @@
-vim.o.shiftwidth   = 2
+vim.o.shiftwidth     = 2
 
-vim.o.breakindent  = true
-vim.o.scrolloff    = 6
-vim.o.wrap         = false
-vim.o.laststatus   = 2
-vim.o.showcmd      = true
-vim.o.showmode     = true
-vim.o.number       = true
-vim.o.cursorline   = true
-vim.o.showmatch    = true
-vim.o.matchtime    = 3
+vim.o.breakindent    = true
+vim.o.scrolloff      = 6
+vim.o.wrap           = false
+vim.o.laststatus     = 2
+vim.o.showcmd        = true
+vim.o.showmode       = true
+vim.o.number         = true
+vim.o.statuscolumn   = '%s%=%{%v:relnum==0?"%#CursorLineNr#":foldlevel(v:lnum)>0&&foldclosed(v:lnum)<0?"%#LineNrFold#":"%#LineNr#"%}%l%#LineNr# '
+vim.o.cursorline     = true
+vim.o.showmatch      = true
+vim.o.matchtime      = 3
 
-vim.o.splitright   = true
-vim.o.splitbelow   = true
-vim.o.equalalways  = false
+vim.o.splitright     = true
+vim.o.splitbelow     = true
+vim.o.equalalways    = false
 
 -- Status Bar
-local _flash_timer = nil
-local _flash_saved = vim.api.nvim_get_hl(0, { name = 'StatusLine' })
+local _flash_timer   = nil
+local _flash_default = vim.api.nvim_get_hl(0, { name = 'StatusLine' })
 
 function _G.flash_statusline(color)
 	if _flash_timer ~= nil then
@@ -27,7 +28,7 @@ function _G.flash_statusline(color)
 	end
 	vim.api.nvim_set_hl(0, 'StatusLine', { bg = color, fg = '#000000', bold = true })
 	_flash_timer = vim.defer_fn(function()
-		vim.api.nvim_set_hl(0, 'StatusLine', _flash_saved)
+		vim.api.nvim_set_hl(0, 'StatusLine', _flash_default)
 		_flash_timer = nil
 	end, 250)
 end

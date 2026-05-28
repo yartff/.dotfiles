@@ -26,9 +26,62 @@ vim.lsp.config('gopls', {
 	settings = {
 		gopls = {
 			buildFlags = { "-tags=testing,devOnly" },
+
+			--[[
+			-- enable additional analyses beyond the default
+			analyses = {
+				unusedparams  = true,  -- warn on unused function parameters
+				shadow        = true,  -- warn on shadowed variables
+				unusedvariable = true, -- warn on unused variables
+				nilness       = true,  -- check for nil dereferences
+				useany        = true,  -- check for unnecessary use of any/interface{}
+			},
+
+			-- staticcheck runs extra linting via staticcheck.io analyzers
+			staticcheck = true,
+
+			-- gofumpt enforces stricter formatting than gofmt
+			gofumpt = true,
+
+			-- show inlay hints (parameter names, type hints)
+			hints = {
+				assignVariableTypes    = true,
+				compositeLiteralFields = true,
+				compositeLiteralTypes  = true,
+				constantValues         = true,
+				functionTypeParameters = true,
+				parameterNames         = true,
+				rangeVariableTypes     = true,
+			},
+
+			-- codelens actions shown above functions (run test, generate, etc.)
+			codelenses = {
+				gc_details  = true,  -- show compiler optimization details
+				generate    = true,  -- run go generate
+				regenerate_cgo = true,
+				run_govulncheck = true,
+				test        = true,  -- run individual tests
+				tidy        = true,  -- run go mod tidy
+				upgrade_dependency = true,
+				vendor      = true,
+			},
+
+			-- complete unimported packages automatically
+			completeUnimported = true,
+
+			-- use placeholders for function arguments in completions
+			usePlaceholders = true,
+
+			-- semantic tokens for richer highlighting (types, functions, etc.)
+			semanticTokens = true,
+			--]]
 		},
 	},
 })
+
+-- capabilities tells gopls what features the client supports
+-- if you use nvim-cmp, pass its capabilities here for better completion
+-- capabilities = require('cmp_nvim_lsp').default_capabilities(), })
 
 vim.lsp.config('lua_ls', {
 	settings = {
@@ -131,6 +184,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		--[[ Diagnostic ]]
 		vim.diagnostic.enable(false)
 		vim.keymap.set('n', '<leader>d', function() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end) -- TODO on/off in status bar
+		vim.keymap.set('n', '<leader>H', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, opts)
 		vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
 		vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, opts)                    -- TODO: open float if next
 		vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, opts)

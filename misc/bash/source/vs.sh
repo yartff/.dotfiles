@@ -5,6 +5,13 @@ vs() {
   nvim -S "$session"
 }
 
+vsrm() {
+  local f
+  for f in "$@"; do
+    rm -f "$_sessions/${f}.vim"
+  done
+}
+
 _vs_complete() {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   local sessions
@@ -13,3 +20,4 @@ _vs_complete() {
 }
 
 complete -F _vs_complete vs
+complete -F _vs_complete vsrm
