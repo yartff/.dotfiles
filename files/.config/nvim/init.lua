@@ -33,14 +33,14 @@ print customs:
 --]]
 
 --[[
---  yap/vap
---  z (fold)
 --  Q (Ex mode)
 --  q (register)
 --  ZZ/ZQ prefix (save+quit, quit)
 --  Paste on select
+--  Uniform <M-x> and <A-x> (both alt keys)
+--  highlight TODO keyword
 --]]
---
+
 --[[
 -- Code Nav
 --
@@ -59,7 +59,6 @@ print customs:
 | `Ctrl-w }` | Preview tag in preview window |
 | `:tnext` / `:tprev` | Next/prev tag match |
 | `:tselect` | List all tag matches |
-
 ### LSP (Neovim native, `vim.lsp`)
 | Key | Action |
 |-----|--------|
@@ -67,3 +66,5 @@ print customs:
 | `gq` (on range) | Format via LSP |
 For Go/C/C++ specifically, **ctags** (`Ctrl-]`) covers most cases without LSP, but pairing with `clangd` or `gopls` via the native LSP client gives you the full `gd`/`gr`/`gi` suite with no plugins required.
 --]]
+--
+-- TODOs:

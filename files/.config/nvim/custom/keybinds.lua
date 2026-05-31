@@ -1,9 +1,3 @@
--- TODOs:
--- Uniform <M-x> and <A-x> (both alt keys)
--- registers copy/paste
--- highlight TODO keyword
--- context +1/-1 max_lines (>C <C)
---
 -- Functions
 local function clear_tags()
 	vim.fn.settagstack(vim.fn.winnr(), { items = {} })
