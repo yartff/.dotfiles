@@ -12,7 +12,7 @@ require("nvim-treesitter-textobjects").setup {
 		-- mapping query_strings to modes.
 		selection_modes = {
 			['@parameter.outer'] = 'v', -- charwise
-			['@function.outer'] = 'V',  -- linewise
+			['@function.outer'] = 'V', -- linewise
 			-- ['@class.outer'] = '<c-v>', -- blockwise
 		},
 		-- If you set this to `true` (default is `false`) then any textobject is
@@ -28,21 +28,43 @@ require("nvim-treesitter-textobjects").setup {
 	},
 }
 
-require("treesitter-context").setup {
-	enable = true,           -- Enable this plugin (Can be enabled/disabled later via commands)
-	multiwindow = true,      -- Enable multiwindow support.
-	max_lines = 1,           -- How many lines the window should span. Values <= 0 mean no limit.
-	min_window_height = 0,   -- Minimum editor window height to enable context. Values <= 0 mean no limit.
-	line_numbers = true,
-	multiline_threshold = 4, -- Maximum number of lines to show for a single context
-	trim_scope = 'inner',    -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-	mode = 'topline',        -- Line used to calculate context. Choices: 'cursor', 'topline'
-	-- Separator between context and content. Should be a single character string, like '-'.
-	-- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
-	separator = nil,
-	zindex = 20,     -- The Z-index of the context window
-	on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
-}
+local ctx = require("treesitter-context")
+local ctx_max_lines = 1
+
+local function ctx_setup()
+	ctx.setup {
+		enable = true,
+		multiwindow = true,
+		max_lines = ctx_max_lines,
+		min_window_height = 0,
+		line_numbers = true,
+		multiline_threshold = 4,
+		trim_scope = 'inner',
+		mode = 'topline',
+		separator = nil,
+		zindex = 20,
+		on_attach = nil,
+	}
+	vim.schedule(function()
+		for _, win in ipairs(vim.api.nvim_list_wins()) do
+			vim.api.nvim_win_call(win, function()
+				vim.api.nvim_exec_autocmds('User', { pattern = 'SessionSavePost' })
+			end)
+		end
+	end)
+end
+ctx_setup()
+
+vim.keymap.set('n', '>C', function()
+	ctx_max_lines = ctx_max_lines + 1
+	ctx_setup()
+	vim.notify('context max_lines: ' .. ctx_max_lines, vim.log.levels.INFO)
+end, { silent = true })
+vim.keymap.set('n', '<C', function()
+	ctx_max_lines = math.max(1, ctx_max_lines - 1)
+	ctx_setup()
+	vim.notify('context max_lines: ' .. ctx_max_lines, vim.log.levels.INFO)
+end, { silent = true })
 
 -- treesitter-context's WinScrolled handler only updates the current window.
 -- Re-fire it as a User event (which the plugin handles across all windows in multiwindow mode).
