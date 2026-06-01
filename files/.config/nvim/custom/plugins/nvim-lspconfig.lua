@@ -7,6 +7,11 @@ gd
 				| <C-w>}		-- Preview window. TODO: useful in qf?
 gD
 gr
+
+-- to look into
+| `Ctrl-k` | `vim.lsp.buf.signature_help()` |
+| `Ctrl-w }` | Preview tag in preview window |
+| `gq` (on range) | Format via LSP |
 --]]
 
 vim.lsp.config('*', {

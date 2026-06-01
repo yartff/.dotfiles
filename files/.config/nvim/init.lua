@@ -32,30 +32,19 @@ print customs:
 :lua =vim.o.name
 --]]
 
---[[
+--[[ TODO's
 --  <C-r>@			-> apply next <key> (check if Q redoes the same)
 --  <C-r><C-r>	-> (in normal mode) Insert
---  ZZ/ZQ prefix (save+quit, quit)
 --  Q (Ex mode)
 --  Paste on select
 --  Uniform <M-x> and <A-x> (both alt keys)
 --  highlight TODO keyword
 --]]
 
---[[
+--[[ Nice to learn
+--  ZZ/ZQ prefix (save+quit, quit)
 ### Tag / Definition Jumping
-| Key | Action |
-|-----|--------|
-| `Ctrl-w ]` | Open tag in horizontal split |
-| `Ctrl-w }` | Preview tag in preview window |
-| `:tnext` / `:tprev` | Next/prev tag match |
-| `:tselect` | List all tag matches |
+`:tnext` / `:tprev` | Next/prev tag match
+`:tselect` | List all tag matches |
 ### LSP (Neovim native, `vim.lsp`)
-| Key | Action |
-|-----|--------|
-| `Ctrl-k` | `vim.lsp.buf.signature_help()` |
-| `gq` (on range) | Format via LSP |
-For Go/C/C++ specifically, **ctags** (`Ctrl-]`) covers most cases without LSP, but pairing with `clangd` or `gopls` via the native LSP client gives you the full `gd`/`gr`/`gi` suite with no plugins required.
 --]]
---
--- TODOs:

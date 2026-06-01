@@ -261,4 +261,3 @@ vim.keymap.set('i', '<C-r><C-r>', open_registers_preview, { silent = true })
 vim.keymap.set('n', '<C-LeftMouse>', '<Nop>') -- default: jump to tag
 vim.keymap.set('n', '<C-w>n', '<Nop>')        -- default: open new empty window
 vim.keymap.set('n', '<C-r>', '<Nop>')         -- default: Redo
-vim.keymap.set('n', 'ZZ', '<Nop>')            -- save & quit
