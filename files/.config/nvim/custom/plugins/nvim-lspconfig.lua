@@ -1,17 +1,12 @@
 --[[
-nvim lsp configs
-https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
-
--- gopls
-:GoInstallBinaries
-
--- luals
-https://github.com/LuaLS/lua-language-server/releases
--> /opt/luals
-
----- TS
-:TSInstall *
-
+gd
+<C-n>		| <C-]>
+<C-w>n	| <C-w>]
+<C-w><C-n>
+<C-w>N
+				| <C-w>}		-- Preview window. TODO: useful in qf?
+gD
+gr
 --]]
 
 vim.lsp.config('*', {
@@ -153,12 +148,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set('n', '<C-w>n', function() goto_definition('split') end, opts)
 		vim.keymap.set('n', '<C-w>N', function() goto_definition('tabedit') end, opts)
 
-		-- TODO: Flash only if the window was non-existant
+		-- TODO: Flash bar if window used is the same && buffer has changed
 		-- TODO: Do not stack tag in original window
-		vim.keymap.set('n', '<leader>gn',
-			_G.withFlash_fileChange(function() vim.lsp.buf.definition({ reuse_win = true }) end), opts)
-		vim.keymap.set('n', '<leader>gN',
-			_G.withFlash_fileChange(function() vim.lsp.buf.type_definition({ reuse_win = true }) end), opts)
+		vim.keymap.set('n', '<leader>gn', function() vim.lsp.buf.definition({ reuse_win = true }) end, opts)
+		vim.keymap.set('n', '<leader>gN', function() vim.lsp.buf.type_definition({ reuse_win = true }) end, opts)
 
 		--[[ Preview ]]
 		local gp = require('goto-preview')
@@ -186,7 +179,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set('n', '<leader>d', function() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end) -- TODO on/off in status bar
 		vim.keymap.set('n', '<leader>H', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, opts)
 		vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
-		vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, opts)                    -- TODO: open float if next
+		vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, opts) -- TODO: open float if next
 		vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, opts)
 		vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
 
@@ -241,3 +234,18 @@ vim.api.nvim_create_autocmd('LspAttach', {
   --]]
 
 })
+
+--[[
+nvim lsp configs
+https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+
+-- gopls
+:GoInstallBinaries
+
+-- luals
+https://github.com/LuaLS/lua-language-server/releases
+-> /opt/luals
+
+---- TS
+:TSInstall *
+--]]

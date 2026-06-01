@@ -68,10 +68,8 @@ vim.keymap.set('n', 'N', function() search_next('N') end, { silent = true })
 -- [[ Basic navigation ]]
 vim.keymap.set({ 'n', 'v' }, ';', ':')
 vim.keymap.set({ 'n', 'v' }, ',', ';')
--- vim.keymap.set('n', 'h', '<Backspace>')
--- vim.keymap.set('n', 'l', '<Space>')
--- vim.keymap.set('v', 'h', '<Backspace>')
--- vim.keymap.set('v', 'l', '<Space>')
+vim.keymap.set({ 'n', 'v' }, 'h', '<Backspace>')
+vim.keymap.set({ 'n', 'v' }, 'l', '<Space>')
 vim.keymap.set({ 'n', 'v', 'o' }, '0', '^')
 vim.keymap.set({ 'n', 'v', 'o' }, '^', '0')
 --[[
@@ -97,7 +95,6 @@ vim.keymap.set('n', '<C-i>', _G.withFlash_fileChange(function()
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-i>', true, false, true), 'n', false)
 end), { silent = true })
 
-vim.keymap.set('n', '<C-r><C-t>', '<Cmd>tags<CR>', { silent = true })
 vim.keymap.set('n', '<leader><C-h>', '<Cmd>tag<CR>', { silent = true })
 
 -- [[ File navigation ]]
@@ -199,11 +196,15 @@ vim.keymap.set('n', 'va/', 'F/vf/', { silent = true })
 -- Registers
 vim.keymap.set('i', '<M-p>', '<C-r>"') -- paste unnamed register
 vim.keymap.set('n', '<leader>"', '<Cmd>registers<CR>', { silent = true })
-vim.keymap.set('n', '<C-r><C-r>', '<Cmd>registers<CR>', { silent = true })
--- vim.keymap.set({ 'i', 'n' }, '<C-r><C-r>', open_registers_preview, { silent = true }) -- TODO
 
 -- Command-mode
 vim.keymap.set('c', '<C-a>', '<Home>', { silent = true })
+
+-- <C-r> lists
+vim.keymap.set('n', '<C-r><C-t>', '<Cmd>tags<CR>', { silent = true })
+vim.keymap.set('n', '<C-r><C-r>', '<Cmd>registers<CR>', { silent = true })
+vim.keymap.set('n', '<C-r><C-b>', '<Cmd>buffers<CR>', { silent = true })
+-- vim.keymap.set({ 'i', 'n' }, '<C-r><C-r>', open_registers_preview, { silent = true }) -- TODO
 
 -- Unbinds
 vim.keymap.set('n', '<C-LeftMouse>', '<Nop>') -- default: jump to tag
