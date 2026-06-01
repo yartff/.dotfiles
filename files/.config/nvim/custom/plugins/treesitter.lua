@@ -30,21 +30,15 @@ require("nvim-treesitter-textobjects").setup {
 
 local ctx = require("treesitter-context")
 local ctx_max_lines = 1
+local ctx_config = {
+	multiwindow = true,
+	multiline_threshold = 4,
+	trim_scope = 'inner',
+	mode = 'topline',
+}
 
 local function ctx_setup()
-	ctx.setup {
-		enable = true,
-		multiwindow = true,
-		max_lines = ctx_max_lines,
-		min_window_height = 0,
-		line_numbers = true,
-		multiline_threshold = 4,
-		trim_scope = 'inner',
-		mode = 'topline',
-		separator = nil,
-		zindex = 20,
-		on_attach = nil,
-	}
+	ctx.setup(vim.tbl_extend('force', ctx_config, { max_lines = ctx_max_lines }))
 	vim.schedule(function()
 		for _, win in ipairs(vim.api.nvim_list_wins()) do
 			vim.api.nvim_win_call(win, function()
@@ -55,16 +49,15 @@ local function ctx_setup()
 end
 ctx_setup()
 
-vim.keymap.set('n', '>C', function()
-	ctx_max_lines = ctx_max_lines + 1
+local function set_ctx_max_lines(nb_lines)
+	ctx_max_lines = nb_lines
 	ctx_setup()
 	vim.notify('context max_lines: ' .. ctx_max_lines, vim.log.levels.INFO)
-end, { silent = true })
-vim.keymap.set('n', '<C', function()
-	ctx_max_lines = math.max(1, ctx_max_lines - 1)
-	ctx_setup()
-	vim.notify('context max_lines: ' .. ctx_max_lines, vim.log.levels.INFO)
-end, { silent = true })
+end
+
+vim.keymap.set('n', '>C', function() set_ctx_max_lines(ctx_max_lines + 1) end, { silent = true })
+vim.keymap.set('n', '<C', function() set_ctx_max_lines(math.max(1, ctx_max_lines - 1)) end, { silent = true })
+vim.keymap.set('n', '<c', function() set_ctx_max_lines(1) end, { silent = true })
 
 -- treesitter-context's WinScrolled handler only updates the current window.
 -- Re-fire it as a User event (which the plugin handles across all windows in multiwindow mode).
