@@ -13,7 +13,6 @@ _cd_c_magenta="$(tput setaf 5)"
 _cd_c_reset="$(tput sgr0)"
 
 ## TODO: on a tmp cpy stack
-## TODO: in cds: J/K move with entry
 ## TODO: cdhelp: usage
 
 __cd_is_num() {
@@ -242,6 +241,28 @@ cds() {
 	;;
       "k")
 	if ! [ $localndx -le 0 ]; then
+	  ((localndx--))
+	  __cd_print_highlightndx Clear $localndx 6
+	fi
+	;;
+      "J")
+	if ! [ $localndx -eq $((_cd_size - 1)) ]; then
+	  local _tmp="${_cd_stack[$localndx]}"
+	  _cd_stack[$localndx]="${_cd_stack[$((localndx+1))]}"
+	  _cd_stack[$((localndx+1))]="$_tmp"
+	  [ $_cd_index -eq $localndx ] && _cd_index=$((localndx+1)) \
+	    || { [ $_cd_index -eq $((localndx+1)) ] && _cd_index=$localndx; }
+	  ((localndx++))
+	  __cd_print_highlightndx Clear $localndx 6
+	fi
+	;;
+      "K")
+	if ! [ $localndx -le 0 ]; then
+	  local _tmp="${_cd_stack[$localndx]}"
+	  _cd_stack[$localndx]="${_cd_stack[$((localndx-1))]}"
+	  _cd_stack[$((localndx-1))]="$_tmp"
+	  [ $_cd_index -eq $localndx ] && _cd_index=$((localndx-1)) \
+	    || { [ $_cd_index -eq $((localndx-1)) ] && _cd_index=$localndx; }
 	  ((localndx--))
 	  __cd_print_highlightndx Clear $localndx 6
 	fi
