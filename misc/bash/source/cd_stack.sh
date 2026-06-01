@@ -13,7 +13,6 @@ _cd_c_magenta="$(tput setaf 5)"
 _cd_c_reset="$(tput sgr0)"
 
 ## TODO: on a tmp cpy stack
-## TODO: cdhelp: usage
 
 __cd_is_num() {
   [[ "$1" =~ ^[0-9]+$ ]]
@@ -408,6 +407,32 @@ cdk() {
   fi
   ((_cd_index--))
   __cd_index_go
+}
+
+cdhelp() {
+  cat <<'EOF'
+cd stack commands:
+  cdl                  list stack
+  cdp [n]              print path of entry n (or current) — for use in $() or ``
+  cda [dir]            add dir (or pwd) to stack
+  cdd [n|all]          drop entry n (or current), or clear entire stack
+  cdg [n]              cd to entry n (or current)
+  cdj                  cd to next entry
+  cdk                  cd to previous entry
+  cdr [dir]            replace current entry with dir (or pwd)
+  cds                  interactive selector (see bindings below)
+  cdsave <name|path>   save stack to a named session or file path
+  cdload <name|path>   load stack from a named session or file path
+  cdlist               list saved sessions
+
+cds bindings:
+  j / k        move cursor down / up
+  J / K        move entry down / up (swap with neighbor, cursor follows)
+  d            delete highlighted entry
+  p            push highlighted entry to back of stack
+  Enter        cd to highlighted entry and exit
+  q            quit without cd
+EOF
 }
 
 complete -F __cd_complete_session cdload cdsave
