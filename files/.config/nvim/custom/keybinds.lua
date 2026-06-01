@@ -1,5 +1,5 @@
 -- Functions
-local function open_registers_preview(on_select)
+local function open_registers_preview(get_sequence, mode)
 	local reg_names = { '"', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
 		'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -43,7 +43,7 @@ local function open_registers_preview(on_select)
 	vim.api.nvim_win_close(win, true)
 
 	if not ok or char == '\27' or char == '' then return end
-	on_select(char)
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(get_sequence(char), true, false, true), mode, true)
 end
 
 local function clear_tags()
@@ -252,19 +252,13 @@ vim.keymap.set('n', '<C-r><C-t>', '<Cmd>tags<CR>', { silent = true })
 vim.keymap.set('n', '<C-r><C-r>', '<Cmd>registers<CR>', { silent = true })
 vim.keymap.set('n', '<C-r><C-b>', '<Cmd>buffers<CR>', { silent = true })
 vim.keymap.set('i', '<C-r><C-r>', function()
-	open_registers_preview(function(char)
-		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-r>' .. char, true, false, true), 'i', true)
-	end)
+	open_registers_preview(function(char) return '<C-r>' .. char end, 'i')
 end, { silent = true })
 vim.keymap.set('n', '<C-r><C-r>', function()
-	open_registers_preview(function(char)
-		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('"' .. char .. 'p', true, false, true), 'n', true)
-	end)
+	open_registers_preview(function(char) return '"' .. char .. 'p' end, 'n')
 end, { silent = true })
 vim.keymap.set('n', '<C-r><C-q>', function()
-	open_registers_preview(function(char)
-		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('@' .. char, true, false, true), 'n', true)
-	end)
+	open_registers_preview(function(char) return '@' .. char end, 'n')
 end, { silent = true })
 
 -- Unbinds
