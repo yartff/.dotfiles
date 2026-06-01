@@ -33,22 +33,13 @@ print customs:
 --]]
 
 --[[
---  Q (Ex mode)
---  q (register)
+--  <C-r>@			-> apply next <key> (check if Q redoes the same)
+--  <C-r><C-r>	-> (in normal mode) Insert
 --  ZZ/ZQ prefix (save+quit, quit)
+--  Q (Ex mode)
 --  Paste on select
 --  Uniform <M-x> and <A-x> (both alt keys)
 --  highlight TODO keyword
---]]
-
---[[
--- Code Nav
---
--- <C-n> Jump to tag		| <C-]>
--- <C-n> Jumb back		| <C-t> X
--- gd	Go to local decl
--- gd	Go to global decl
--- ga	print
 --]]
 
 --[[

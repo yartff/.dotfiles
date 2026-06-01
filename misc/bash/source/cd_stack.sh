@@ -12,9 +12,8 @@ _cd_c_red="$(tput setaf 1)"
 _cd_c_magenta="$(tput setaf 5)"
 _cd_c_reset="$(tput sgr0)"
 
-## TODO: cdpwd -> prints current value to insert in commands
+## TODO: cdp -> prints current value to insert in commands
 ## TODO: on a tmp cpy stack
-## TODO: all var local instead of unset
 
 __cd_is_num() {
   [[ "$1" =~ ^[0-9]+$ ]]
@@ -82,7 +81,7 @@ cdl() {
   __cd_print_highlightndx
 }
 
-cdp() { ## TODO: maybe should be available in cds only
+__cd_push_back() { ## TODO: maybe should be available in cds only
   if [ $_cd_size -eq 0 ]; then
     __cd_print_error "no wd"
     return
@@ -227,7 +226,7 @@ cds() {
 	fi
 	;;
       "p")
-	cdp $localndx "0"
+	__cd_push_back $localndx "0"
 	__cd_print_highlightndx Clear $localndx 6
 	;;
       "")
