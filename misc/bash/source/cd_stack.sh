@@ -12,8 +12,9 @@ _cd_c_red="$(tput setaf 1)"
 _cd_c_magenta="$(tput setaf 5)"
 _cd_c_reset="$(tput sgr0)"
 
-## TODO: cdp -> prints current value to insert in commands
 ## TODO: on a tmp cpy stack
+## TODO: in cds: J/K move with entry
+## TODO: cdhelp: usage
 
 __cd_is_num() {
   [[ "$1" =~ ^[0-9]+$ ]]
@@ -79,6 +80,26 @@ __cd_print_highlightndx() {
 
 cdl() {
   __cd_print_highlightndx
+}
+
+cdp() {
+  if [ $_cd_size -eq 0 ]; then
+    __cd_print_error "no wd" >&2
+    return 1
+  fi
+  local ndx=$_cd_index
+  if [ $# -ge 1 ]; then
+    if ! __cd_is_num "$1"; then
+      __cd_print_error "$1: not a number" >&2
+      return 1
+    fi
+    if [ $1 -lt 0 ] || [ $1 -ge $_cd_size ]; then
+      __cd_print_error "$1: out of bound" >&2
+      return 1
+    fi
+    ndx=$1
+  fi
+  printf "%s" "${_cd_stack[$ndx]}"
 }
 
 __cd_push_back() { ## TODO: maybe should be available in cds only
@@ -240,7 +261,7 @@ cds() {
   unset localndx
 }
 
-cdr() {
+cdreplace() {
   if [ $_cd_size -eq 0 ]; then
     __cd_print_error "no wd"
     return
