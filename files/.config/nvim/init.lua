@@ -33,8 +33,6 @@ print customs:
 --]]
 
 --[[ TODO's
---  <C-r>@			-> apply next <key> (check if Q redoes the same)
---  <C-r><C-r>	-> (in normal mode) Insert
 --  Q (Ex mode)
 --  Paste on select
 --  Uniform <M-x> and <A-x> (both alt keys)

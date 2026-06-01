@@ -1,5 +1,5 @@
 -- Functions
-local function open_registers_preview()
+local function open_registers_preview(on_select)
 	local reg_names = { '"', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
 		'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -37,17 +37,13 @@ local function open_registers_preview()
 	})
 	vim.wo[win].winhl = 'Normal:NormalFloat'
 
+
 	vim.cmd('redraw')
 	local ok, char = pcall(vim.fn.getcharstr)
 	vim.api.nvim_win_close(win, true)
-	vim.cmd('redraw')
 
 	if not ok or char == '\27' or char == '' then return end
-
-	vim.api.nvim_feedkeys(
-		vim.api.nvim_replace_termcodes('<C-r>' .. char, true, false, true),
-		'i', true
-	)
+	on_select(char)
 end
 
 local function clear_tags()
@@ -255,7 +251,21 @@ vim.keymap.set('c', '<C-a>', '<Home>', { silent = true })
 vim.keymap.set('n', '<C-r><C-t>', '<Cmd>tags<CR>', { silent = true })
 vim.keymap.set('n', '<C-r><C-r>', '<Cmd>registers<CR>', { silent = true })
 vim.keymap.set('n', '<C-r><C-b>', '<Cmd>buffers<CR>', { silent = true })
-vim.keymap.set('i', '<C-r><C-r>', open_registers_preview, { silent = true })
+vim.keymap.set('i', '<C-r><C-r>', function()
+	open_registers_preview(function(char)
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-r>' .. char, true, false, true), 'i', true)
+	end)
+end, { silent = true })
+vim.keymap.set('n', '<C-r><C-r>', function()
+	open_registers_preview(function(char)
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('"' .. char .. 'p', true, false, true), 'n', true)
+	end)
+end, { silent = true })
+vim.keymap.set('n', '<C-r><C-q>', function()
+	open_registers_preview(function(char)
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('@' .. char, true, false, true), 'n', true)
+	end)
+end, { silent = true })
 
 -- Unbinds
 vim.keymap.set('n', '<C-LeftMouse>', '<Nop>') -- default: jump to tag

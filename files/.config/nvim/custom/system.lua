@@ -7,6 +7,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 	callback = function() vim.hl.on_yank({ higroup = 'YankHighlight' }) end,
 })
 
+if vim.fn.filereadable('/proc/sys/fs/binfmt_misc/WSLInterop') == 1 then
+	vim.g.clipboard = { name = 'none', copy = {}, paste = {}, cache_enabled = false }
+end
+
 -- System
 vim.o.shell       = 'bash'
 vim.o.mouse       = 'a'
