@@ -35,8 +35,14 @@ print customs:
 --[[ TODO's
 --  Q (Ex mode)
 --  Paste on select
+--  Adding notes for files in sessions
 --  Uniform <M-x> and <A-x> (both alt keys)
 --  highlight TODO keyword
+--  # puts cursor at beginning of search
+--
+--  Search:
+--    Flash Status Red while typing in /
+--    ? search without moving window? superseeded by terminal Ctrl-Shift-f
 --]]
 
 --[[ Nice to learn

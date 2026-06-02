@@ -1,3 +1,17 @@
+--[[
+-- h, J, K		- Preview (reuses window if in current tab - else uses origin)
+--
+-- :col / :cnew
+-- :chistory
+--
+-- TODO:
+--  Have qf as floating window accross all tabs
+--  <leader>gn
+--]]
+
+
+
+
 -- vim.api.nvim_set_hl(0, 'FlashLine', {
 -- 	reverse = true,
 -- 	ctermfg = 136,

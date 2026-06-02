@@ -21,8 +21,8 @@ local function open_registers_preview(get_sequence, mode)
 	vim.bo[buf].modifiable = false
 	vim.bo[buf].bufhidden = 'wipe'
 
-	local width = 70
-	local height = math.min(#lines, 20)
+	local width = 90
+	local height = #lines
 	local ui = vim.api.nvim_list_uis()[1]
 	local win = vim.api.nvim_open_win(buf, false, {
 		relative = 'editor',
@@ -249,13 +249,12 @@ vim.keymap.set('c', '<C-a>', '<Home>', { silent = true })
 
 -- <C-r> lists
 vim.keymap.set('n', '<C-r><C-t>', '<Cmd>tags<CR>', { silent = true })
-vim.keymap.set('n', '<C-r><C-r>', '<Cmd>registers<CR>', { silent = true })
 vim.keymap.set('n', '<C-r><C-b>', '<Cmd>buffers<CR>', { silent = true })
 vim.keymap.set('i', '<C-r><C-r>', function()
 	open_registers_preview(function(char) return '<C-r>' .. char end, 'i')
 end, { silent = true })
 vim.keymap.set('n', '<C-r><C-r>', function()
-	open_registers_preview(function(char) return '"' .. char .. 'p' end, 'n')
+	open_registers_preview(function(char) return '"' .. char .. 'P' end, 'n')
 end, { silent = true })
 vim.keymap.set('n', '<C-r><C-q>', function()
 	open_registers_preview(function(char) return '@' .. char end, 'n')
