@@ -38,7 +38,9 @@ print customs:
 --  Adding notes for files in sessions
 --  Uniform <M-x> and <A-x> (both alt keys)
 --  highlight TODO keyword
---  # puts cursor at beginning of search
+--  {'n', 'v'} '#' puts cursor at beginning of search
+--  <leader><C-o> / <leader><C-i> to change files (replaces <leader>o / <leader>i )
+--  add custom jump list and nav with <leader>o / <leader>i
 --
 --  Search:
 --    Flash Status Red while typing in /

@@ -1,51 +1,4 @@
 -- Functions
-local function open_registers_preview(get_sequence, mode)
-	local reg_names = { '"', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-		'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-		'-', '.', ':', '%', '#', '*', '+', '/' }
-
-	local lines = {}
-	for _, name in ipairs(reg_names) do
-		local content = vim.fn.getreg(name)
-		if content ~= '' then
-			content = content:gsub('\n', '↵'):gsub('\t', '→')
-			if #content > 60 then content = content:sub(1, 57) .. '…' end
-			table.insert(lines, string.format(' %s  %s', name, content))
-		end
-	end
-	if #lines == 0 then lines = { '  (empty)' } end
-
-	local buf = vim.api.nvim_create_buf(false, true)
-	vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-	vim.bo[buf].modifiable = false
-	vim.bo[buf].bufhidden = 'wipe'
-
-	local width = 90
-	local height = #lines
-	local ui = vim.api.nvim_list_uis()[1]
-	local win = vim.api.nvim_open_win(buf, false, {
-		relative = 'editor',
-		width = width,
-		height = height,
-		col = math.floor((ui.width - width) / 2),
-		row = math.floor((ui.height - height) / 2),
-		style = 'minimal',
-		border = 'rounded',
-		title = ' registers ',
-		title_pos = 'center',
-	})
-	vim.wo[win].winhl = 'Normal:NormalFloat'
-
-
-	vim.cmd('redraw')
-	local ok, char = pcall(vim.fn.getcharstr)
-	vim.api.nvim_win_close(win, true)
-
-	if not ok or char == '\27' or char == '' then return end
-	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(get_sequence(char), true, false, true), mode, true)
-end
-
 local function clear_tags()
 	vim.fn.settagstack(vim.fn.winnr(), { items = {} })
 	vim.cmd.redrawstatus()
@@ -246,19 +199,6 @@ vim.keymap.set('n', '<leader>"', '<Cmd>registers<CR>', { silent = true })
 
 -- Command-mode
 vim.keymap.set('c', '<C-a>', '<Home>', { silent = true })
-
--- <C-r> lists
-vim.keymap.set('n', '<C-r><C-t>', '<Cmd>tags<CR>', { silent = true })
-vim.keymap.set('n', '<C-r><C-b>', '<Cmd>buffers<CR>', { silent = true })
-vim.keymap.set('i', '<C-r><C-r>', function()
-	open_registers_preview(function(char) return '<C-r>' .. char end, 'i')
-end, { silent = true })
-vim.keymap.set('n', '<C-r><C-r>', function()
-	open_registers_preview(function(char) return '"' .. char .. 'P' end, 'n')
-end, { silent = true })
-vim.keymap.set('n', '<C-r><C-q>', function()
-	open_registers_preview(function(char) return '@' .. char end, 'n')
-end, { silent = true })
 
 -- Unbinds
 vim.keymap.set('n', '<C-LeftMouse>', '<Nop>') -- default: jump to tag
