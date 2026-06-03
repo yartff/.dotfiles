@@ -9,12 +9,13 @@ local function open_registers_preview(get_sequence, mode)
 		'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 		'-', '.', ':', '%', '#', '*', '+', '/' }
 
+	local width = 90
 	local lines = {}
 	for _, name in ipairs(reg_names) do
 		local content = vim.fn.getreg(name)
 		if content ~= '' then
 			content = content:gsub('\n', '↵'):gsub('\t', '→')
-			if #content > 60 then content = content:sub(1, 57) .. '…' end
+			if #content > width then content = content:sub(1, width - 3) .. '…' end
 			table.insert(lines, string.format(' %s  %s', name, content))
 		end
 	end
@@ -26,8 +27,7 @@ local function open_registers_preview(get_sequence, mode)
 	vim.bo[buf].bufhidden = 'wipe'
 
 	local ui = vim.api.nvim_list_uis()[1]
-	local width = 90
-	local height = math.min(#lines, math.floor(ui.height * 0.8))
+	local height = math.min(#lines, math.floor(ui.height * 0.7))
 	local win = vim.api.nvim_open_win(buf, false, {
 		relative = 'editor',
 		width = width,
@@ -40,6 +40,7 @@ local function open_registers_preview(get_sequence, mode)
 		title_pos = 'center',
 	})
 	vim.wo[win].winhl = 'Normal:NormalFloat'
+	vim.api.nvim_win_call(win, function() vim.fn.matchadd('String', '[↵→]') end)
 
 	vim.cmd('redraw')
 	while true do
