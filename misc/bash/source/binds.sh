@@ -1,5 +1,9 @@
 #!/bin/bash
 
+## TODO:
+# Alt-k
+# bind	'"\ek": kill-word'
+
 # bind -r '\e\e' ## double ESC
 # bind -p > file
 
