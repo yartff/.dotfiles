@@ -45,6 +45,15 @@ print customs:
 --  Search:
 --    Flash Status Red while typing in /
 --    ? search without moving window? superseeded by terminal Ctrl-Shift-f
+--
+--  zh / zl, like zz, but for H and L (scroll)
+--]]
+
+--[[ Available keybinds
+--
+--  <C-w> h/j/k/l
+--  zu
+--
 --]]
 
 --[[ Nice to learn

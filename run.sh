@@ -1,5 +1,9 @@
 #!/bin/bash
 
+## TODO: dirdiff to list out what files are not present in both
+## conf dirdiff .config/nvim
+## < .config/nvim/custom/newfile.lua
+
 DOTFILES_DIRNAME="files"
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$DOTFILES_DIRNAME"
 DESTINATION_DIR="${HOME}"

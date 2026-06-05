@@ -9,14 +9,22 @@ local function open_registers_preview(get_sequence, mode)
 		'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 		'-', '.', ':', '%', '#', '*', '+', '/' }
 
-	local width = 90
+	local MAX_COL = 120
 	local lines = {}
 	for _, name in ipairs(reg_names) do
 		local content = vim.fn.getreg(name)
 		if content ~= '' then
-			content = content:gsub('\n', '↵'):gsub('\t', '→')
-			if #content > width then content = content:sub(1, width - 3) .. '…' end
-			table.insert(lines, string.format(' %s  %s', name, content))
+			local parts = vim.split(content, '\n', { plain = true })
+			if parts[#parts] == '' then table.remove(parts) end
+			for i, part in ipairs(parts) do
+				part = part:gsub('\t', '→')
+				if #part > MAX_COL then part = part:sub(1, MAX_COL - 1) .. '…' end
+				if i == 1 then
+					table.insert(lines, string.format(' %s  %s', name, part))
+				else
+					table.insert(lines, '    ' .. part)
+				end
+			end
 		end
 	end
 	if #lines == 0 then lines = { '  (empty)' } end
@@ -27,6 +35,12 @@ local function open_registers_preview(get_sequence, mode)
 	vim.bo[buf].bufhidden = 'wipe'
 
 	local ui = vim.api.nvim_list_uis()[1]
+	local max_len = 0
+	for _, line in ipairs(lines) do
+		local w = vim.fn.strdisplaywidth(line)
+		if w > max_len then max_len = w end
+	end
+	local width = math.min(max_len + 2, math.floor(ui.width * 0.95))
 	local height = math.min(#lines, math.floor(ui.height * 0.7))
 	local win = vim.api.nvim_open_win(buf, false, {
 		relative = 'editor',
@@ -40,7 +54,7 @@ local function open_registers_preview(get_sequence, mode)
 		title_pos = 'center',
 	})
 	vim.wo[win].winhl = 'Normal:NormalFloat'
-	vim.api.nvim_win_call(win, function() vim.fn.matchadd('String', '[↵→]') end)
+	vim.api.nvim_win_call(win, function() vim.fn.matchadd('String', '→') end)
 
 	vim.cmd('redraw')
 	while true do
