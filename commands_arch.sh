@@ -9,6 +9,7 @@ pacman -Syu ## Upgrades everything
 pacman -S neovim
 pacman -S cmake
 pacman -S tree
+pacman -S docker
 
 ## $MANAGER_CMD install sharutils
 ## $MANAGER_CMD install clang

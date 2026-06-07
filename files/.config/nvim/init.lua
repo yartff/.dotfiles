@@ -47,6 +47,10 @@ print customs:
 --    ? search without moving window? superseeded by terminal Ctrl-Shift-f
 --
 --  zh / zl, like zz, but for H and L (scroll)
+--
+--  ## Shell execute command (C-x_C-e)
+--  make tab (when on a word) autocompletes with bash
+--  Get the bash completion list by spawning a bash
 --]]
 
 --[[ Available keybinds

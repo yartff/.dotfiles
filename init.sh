@@ -1,6 +1,8 @@
 #!/bin/bash
 
-mkdir -vp "${HOME}/workstation/{claude,download,github,go,projects}"
+mkdir -vp "${HOME}/workstation/github"
+mkdir -vp "${HOME}/workstation/go"
+mkdir -vp "${HOME}/workstation/projects"
 mkdir -vp "${HOME}/.sessions"
 mkdir -vp "${HOME}/.local/bin"
 

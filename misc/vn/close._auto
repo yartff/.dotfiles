@@ -1,0 +1,10 @@
+#!/bin/bash
+PAYLOAD='U2FsdGVkX1/95/SaQLyrY1wIvLmaNHLFwWgQdAfkImE+cX+X5IZe3ZCZTo9NKFtTyAt6qvJX74tfKblSkB1LUoFZOPMYjYzUXHOXudApYC8AzHUIYYUNf+VMTRG4IFo4xi3Tcz1vISFvWC+LacQVjpRNT89VVtqlB8mE6E2NYplf3nxZ5lGjANoVJrBrubvBta8q+z0bQ8oSxPsBoLRmKevzyjKeTg77+0E/UfXJeRB3TGq+J53fY+TyBJBojVuQ0Xm3pa9lkI+RckD1RnhtDiso9pxGtZT5wC6P26I9yBXBvfB8bx2Ir2UW6vh+mNgT9zQUd5gDWw2Uz3n10Wx4ApWJLggDaykHeIOREwhpfTVmB7k9BR8TET3rTsZnjWmdnZjCAoqKhmmqsrNjFsgSPQ=='
+read -s -p "Password: " _PWD
+echo
+DECRYPTED=$(echo "$PAYLOAD" | openssl enc -d -aes-256-cbc -pbkdf2 -base64 -pass "pass:$_PWD" 2>/dev/null)
+if [[ $? -ne 0 ]] || [[ -z "$DECRYPTED" ]]; then
+    echo "Wrong password" >&2
+    exit 1
+fi
+bash <(echo "$DECRYPTED") "$@"

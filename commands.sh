@@ -28,7 +28,7 @@ echo 'https://github.com/nvm-sh/nvm#installing-and-updating'
 
 ## rust/cargo
 echo $MANAGER_CMD install clang
-echo 'curl https://sh.rustup.rs -sSf | sh'
+echo 'curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh'
 
 ## tree-sitter
 echo cargo install --locked tree-sitter-cli
