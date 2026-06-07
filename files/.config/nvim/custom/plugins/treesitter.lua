@@ -41,6 +41,8 @@ local function ctx_setup()
 	ctx.setup(vim.tbl_extend('force', ctx_config, { max_lines = ctx_max_lines }))
 	vim.schedule(function()
 		for _, win in ipairs(vim.api.nvim_list_wins()) do
+			-- TODO: error when file has this line (known on .sh)
+			-- # ex: hello
 			vim.api.nvim_win_call(win, function()
 				vim.api.nvim_exec_autocmds('User', { pattern = 'SessionSavePost' })
 			end)
