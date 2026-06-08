@@ -49,17 +49,15 @@ end
 
 -- Search navigation with wrap flash
 local function search_next(dir)
-	local before = vim.fn.searchcount({ recompute = true })
+	local before = { vim.fn.line('.'), vim.fn.col('.') }
 	local ok = pcall(vim.cmd, 'normal! ' .. dir)
 	if not ok then
 		_G.flash_statusline('#cc0000')
 		return
 	end
-	local after = vim.fn.searchcount({ recompute = true })
-	local wrapped = after.total > 0 and (
-		(dir == 'n' and before.current == before.total and after.current == 1) or
-		(dir == 'N' and before.current == 1 and after.current == after.total)
-	)
+	local after = { vim.fn.line('.'), vim.fn.col('.') }
+	local wrapped = (dir == 'n' and (before[1] > after[1] or (before[1] == after[1] and before[2] >= after[2]))) or
+			(dir == 'N' and (before[1] < after[1] or (before[1] == after[1] and before[2] <= after[2])))
 	if wrapped then _G.flash_statusline('#cc9011') end
 end
 vim.keymap.set('n', 'n', function() search_next('n') end, { silent = true })
