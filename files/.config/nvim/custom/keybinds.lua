@@ -70,7 +70,7 @@ vim.keymap.set({ 'n', 'v' }, 'h', '<Backspace>')
 vim.keymap.set({ 'n', 'v' }, 'l', '<Space>')
 vim.keymap.set({ 'n', 'v', 'o' }, '0', '^')
 vim.keymap.set({ 'n', 'v', 'o' }, '^', '0')
--- TODO: <leader><C-u> <leader><C-d> up/down without moving cursor
+-- TODO: <leader>e <leader>y up/down without moving cursor
 --[[
 vim.keymap.set({ 'n', 'v' }, 'k', 'gk', { silent = true })
 vim.keymap.set({ 'n', 'v' }, 'j', 'gj', { silent = true })
