@@ -38,7 +38,7 @@ alias conf="$_dotfiles/run.sh"
 ## TODO: bash/source
 alias gst="git status"
 alias gpl="git pull"
-alias gps="git push"
+##alias gps="git push"
 alias gci="git commit"
 alias gdiff="git diff"
 
