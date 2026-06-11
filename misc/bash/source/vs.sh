@@ -2,7 +2,7 @@
 
 vs() {
   local session="$_sessions/${1}.vim"
-  nvim -S "$session"
+  eval nvim -S "$session"
 }
 
 vsrm() {
