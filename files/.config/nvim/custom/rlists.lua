@@ -9,6 +9,7 @@ local function open_registers_preview(get_sequence, mode)
 		'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 		'-', '.', ':', '%', '#', '*', '+', '/' }
 
+	-- TODO: Strip entries >= 20 lines
 	local MAX_COL = 120
 	local lines = {}
 	for _, name in ipairs(reg_names) do
