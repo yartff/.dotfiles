@@ -1,15 +1,19 @@
 #!/bin/bash
 
-mkdir -vp "${HOME}/workstation/github"
+mkdir -vp "${HOME}/workstation/github/yartff"
 mkdir -vp "${HOME}/workstation/go"
+mkdir -vp "${HOME}/workstation/go/gopath/src"
+mkdir -vp "${HOME}/workstation/go/gopath/pkg"
+mkdir -vp "${HOME}/workstation/go/gopath/bin"
 mkdir -vp "${HOME}/workstation/projects"
 mkdir -vp "${HOME}/.sessions"
 mkdir -vp "${HOME}/.local/bin"
 
 ## [[ Submodules ]]
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SUBMODULES_DIR="$SCRIPT_DIR/submodules"
+cd "$(dirname "$0")"
+
+SUBMODULES_DIR="./submodules"
 PATHS_JSON="$SUBMODULES_DIR/paths.json"
 
 git submodule update --init --recursive || exit

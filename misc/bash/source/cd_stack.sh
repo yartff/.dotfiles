@@ -80,6 +80,7 @@ cdl() {
   __cd_print_highlightndx
 }
 
+## TODO: test with ' ' in names
 cdp() {
   if [ $_cd_size -eq 0 ]; then
     __cd_print_error "no wd" >&2

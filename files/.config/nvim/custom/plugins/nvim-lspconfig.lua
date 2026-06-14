@@ -78,10 +78,7 @@ vim.lsp.config('gopls', {
 		},
 	},
 })
-
--- capabilities tells gopls what features the client supports
--- if you use nvim-cmp, pass its capabilities here for better completion
--- capabilities = require('cmp_nvim_lsp').default_capabilities(), })
+vim.lsp.enable('gopls')
 
 vim.lsp.config('lua_ls', {
 	settings = {
@@ -94,11 +91,12 @@ vim.lsp.config('lua_ls', {
 		},
 	},
 })
-
-vim.lsp.enable('gopls')
 vim.lsp.enable('lua_ls')
+
+--
 vim.lsp.enable('clangd')
 
+-- [[ ]]
 local function push_tagstack()
 	-- tagstack entry: {bufnr, line, col, coladd} — records where we jumped from
 	-- getpos returns {0, lnum, col, off}; replace bufnum (always 0) with actual bufnr
@@ -254,3 +252,7 @@ https://github.com/LuaLS/lua-language-server/releases
 ---- TS
 :TSInstall *
 --]]
+
+-- capabilities tells gopls what features the client supports
+-- if you use nvim-cmp, pass its capabilities here for better completion
+-- capabilities = require('cmp_nvim_lsp').default_capabilities(), })
