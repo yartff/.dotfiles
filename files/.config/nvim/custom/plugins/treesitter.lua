@@ -1,3 +1,10 @@
+-- enable treesitter highlighting for any filetype with an installed parser
+vim.api.nvim_create_autocmd('FileType', {
+	callback = function(args)
+		pcall(vim.treesitter.start, args.buf)
+	end,
+})
+
 ---- basic configuration from treesitter readme
 require("nvim-treesitter-textobjects").setup {
 	select = {

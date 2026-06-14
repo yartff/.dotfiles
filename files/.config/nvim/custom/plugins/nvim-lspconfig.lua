@@ -93,6 +93,13 @@ vim.lsp.config('lua_ls', {
 })
 vim.lsp.enable('lua_ls')
 
+
+
+vim.lsp.config('elixirls', {
+	cmd = { "/opt/lsp/elixirls/language_server.sh" },
+})
+vim.lsp.enable('elixirls')
+
 --
 vim.lsp.enable('clangd')
 
@@ -243,11 +250,16 @@ nvim lsp configs
 https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 
 -- gopls
+golang
+-> go/root
 :GoInstallBinaries
 
 -- luals
 https://github.com/LuaLS/lua-language-server/releases
--> /opt/luals
+-> /opt/lsp/lua_ls
+
+-- elixirls
+apt install elixir erlang-dev erlang-dialyzer erlang-syntax-tools
 
 ---- TS
 :TSInstall *
