@@ -1,6 +1,6 @@
 #!/bin/bash
-PAYLOAD='U2FsdGVkX19HMiQFY+Nx+Feqi2JMxWTq0nRBSfL26yhrfyvFFOzNx0AnrshK0xHRnNYEf9XVDH8W7cfM4pAilg3MQ1VflIqg0tvOXbWnjE3ov7v9+ClWFCsUnerz6V0TTwHJ2pmU8MvzrfBgp/9i97WidEL23YRsx3jcI/uAYwEygCvv/Lk0RR8NxMVzpEwLGtZiQvBuhCDaBZykpiD/uT1V09E0A83LSlCOT0t1p39Nix+sl6zz8FqfUWQWJfN7'
-read -s -p "Password: " _PWD
+PAYLOAD='U2FsdGVkX18Z9fm+PAFfaJHbgQtJ3rxQBybbuuGs9IN+oUdFFPmlUyvde3T2KUjbZ9rd3LG5LYB5BvbECoHsym7jA85wmUpAPTDjMCevUWk75llohuyj6ikY+KdImeX1GZ+eLnS7QwH7Fc8dgc26XmgS87/5udLYRJ1YqVChdtoInnB+6Mw3qOLYGcSDizWsQOkmxX8gmrIZBaALullyOThVQuUw+zVa8pAc/pDCrUpccAmhQaGxXpkMxP3cED8tWrOZpkz4IN5dcdVQFTwu61kIjJNigGUM3x3/Z+oqngPzj7757ph7EP4qh6u1Hb9uSU3E+mWTfEt1RLkoioaH3ZwfkLjHOl1Lrw9SraMk0JcoofT8H8JxeH4OgJbqxnDxi4NPfU1KQ5m6TclP9hsJfifM2BrE+IwF53e5D5adDR8qY4SDEYlZ2bOV2hoTGgCzLscL7sGlD8xk2MQP2gyfNPRj3eso0FiH2PBH5HSMJwg8NbOL9KbS1NEKXc2HxQWetHDKRDRWr3ApO/M3EbbgjOG41sLpLP7uQTTCbVXs/8HIRjsHTIdlMsakT0St5o8LJidUha/KrHGOwQerZHvA7w=='
+read -s _PWD
 echo
 DECRYPTED=$(echo "$PAYLOAD" | openssl enc -d -aes-256-cbc -pbkdf2 -base64 -pass "pass:$_PWD" 2>/dev/null)
 if [[ $? -ne 0 ]] || [[ -z "$DECRYPTED" ]]; then
