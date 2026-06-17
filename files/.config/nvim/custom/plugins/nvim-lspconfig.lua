@@ -122,7 +122,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set('n', 'gd', _G.withFlash_fileChange(vim.lsp.buf.definition), opts)
 		vim.keymap.set('n', '<C-n>', _G.withFlash_fileChange(vim.lsp.buf.definition), opts)
 		vim.keymap.set('n', 'gD', _G.withFlash_fileChange(vim.lsp.buf.type_definition), opts)
-		vim.keymap.set('n', 'gi', _G.withFlash_fileChange(vim.lsp.buf.implementation), opts)
+		vim.keymap.set('n', 'gi', _G.withFlash_fileChange(vim.lsp.buf.implementation), opts) -- TODO push_tagstack()
 		vim.keymap.set('n', 'gs', function()
 			push_tagstack(); vim.lsp.buf.document_symbol()
 		end, opts)
