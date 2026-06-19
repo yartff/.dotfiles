@@ -14,14 +14,24 @@ gr
 | `gq` (on range) | Format via LSP |
 --]]
 
+--[[ lsp configs
+https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+:TSInstall ${lang}
+--]]
+
 vim.lsp.config('*', {
 	capabilities = {
 		textDocument = {
 			completion = { completionItem = { snippetSupport = false } },
+			-- TODO: snippetSupport in go?
 		},
 	},
 })
 
+--[[ go
+golang -> go/root
+:GoInstallBinaries
+--]]
 vim.lsp.config('gopls', {
 	settings = {
 		gopls = {
@@ -79,7 +89,12 @@ vim.lsp.config('gopls', {
 	},
 })
 vim.lsp.enable('gopls')
+--[[ !go ]]
 
+--[[ lua
+https://github.com/LuaLS/lua-language-server/releases
+tar -xzf ~/Downloads/lua-language-server-{}-linux-x64.tar.gz -C /opt/lsp/lua_ls/
+--]]
 vim.lsp.config('lua_ls', {
 	settings = {
 		Lua = {
@@ -92,16 +107,21 @@ vim.lsp.config('lua_ls', {
 	},
 })
 vim.lsp.enable('lua_ls')
+--[[ !lua ]]
 
-
-
+--[[ elixir
+unzip ~/Downloads/elixir-ls-v0.31.1.zip -d /opt/lsp/elixirls/
+sudo pacman -S elixir erlang
+--]]
 vim.lsp.config('elixirls', {
 	cmd = { "/opt/lsp/elixirls/language_server.sh" },
 })
 vim.lsp.enable('elixirls')
+--[[ !elixir ]]
 
---
+--[[ c/cpp ]]
 vim.lsp.enable('clangd')
+--[[ !c/!cpp ]]
 
 -- [[ ]]
 local function push_tagstack()
@@ -203,67 +223,45 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set('n', '<leader>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, opts)
 	end,
 
-	-- diagnostic display
-	--[[
-  vim.diagnostic.config({
-    virtual_text    = true,
-    update_in_insert = false,
-    severity_sort   = true,
-    signs           = true,
-    underline       = true,
-    float = {
-      border = 'rounded',
-      source = true,
-    },
-  })
-  --]]
+	--[[ diagnostic display
+	vim.diagnostic.config({
+		virtual_text    = true,
+		update_in_insert = false,
+		severity_sort   = true,
+		signs           = true,
+		underline       = true,
+		float = {
+			border = 'rounded',
+			source = true,
+		},
+	})
+	--]]
 
 	--[[
-  {
-    -- to add:
-    incoming_calls = <function 13>,
-    outgoing_calls = <function 15>,
+	{
+		-- to add:
+		incoming_calls = <function 13>,
+		outgoing_calls = <function 15>,
 
-    -- already here but figure out
-    signature_help = <function 20>,
-    code_action = <function 3>,
-    document_symbol = <function 8>,
-    add_workspace_folder = <function 1>,
-    list_workspace_folders = <function 14>,
-    remove_workspace_folder = <function 17>,
-    workspace_symbol = <function 24>
+		-- already here but figure out
+		signature_help = <function 20>,
+		code_action = <function 3>,
+		document_symbol = <function 8>,
+		add_workspace_folder = <function 1>,
+		list_workspace_folders = <function 14>,
+		remove_workspace_folder = <function 17>,
+		workspace_symbol = <function 24>
 
-    -- absent
-    clear_references = <function 2>,
-    document_highlight = <function 7>,
-    execute_command = <function 9>,
-    selection_range = <function 19>,
-    typehierarchy = <function 22>,
-    workspace_diagnostics = <function 23>,
-  }
-  --]]
-
+		-- absent
+		clear_references = <function 2>,
+		document_highlight = <function 7>,
+		execute_command = <function 9>,
+		selection_range = <function 19>,
+		typehierarchy = <function 22>,
+		workspace_diagnostics = <function 23>,
+	}
+	--]]
 })
-
---[[
-nvim lsp configs
-https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
-
--- gopls
-golang
--> go/root
-:GoInstallBinaries
-
--- luals
-https://github.com/LuaLS/lua-language-server/releases
--> /opt/lsp/lua_ls
-
--- elixirls
-apt install elixir erlang-dev erlang-dialyzer erlang-syntax-tools
-
----- TS
-:TSInstall *
---]]
 
 -- capabilities tells gopls what features the client supports
 -- if you use nvim-cmp, pass its capabilities here for better completion
