@@ -13,7 +13,7 @@ mkdir -vp "${HOME}/.local/bin"
 
 cd "$(dirname "$0")"
 
-SUBMODULES_DIR="./submodules"
+SUBMODULES_DIR="${HOME}/.dotfiles/submodules"
 PATHS_JSON="$SUBMODULES_DIR/paths.json"
 
 git submodule update --init --recursive || exit

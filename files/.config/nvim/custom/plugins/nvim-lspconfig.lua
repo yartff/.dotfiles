@@ -133,6 +133,25 @@ local function push_tagstack()
 	vim.fn.settagstack(vim.fn.win_getid(), { items = { { tagname = tagname, from = from } } }, 't')
 end
 
+-- reuse_win only jumps to another window if one already shows the target buffer;
+-- when it doesn't, the buffer changes in the current window instead, so flash to flag that
+local function withFlash_ifNotReused(fn)
+	return function()
+		local prev_win = vim.api.nvim_get_current_win()
+		local prev_buf = vim.api.nvim_get_current_buf()
+		local au = vim.api.nvim_create_autocmd('BufEnter', {
+			once = true,
+			callback = function()
+				if vim.api.nvim_get_current_win() == prev_win and vim.api.nvim_get_current_buf() ~= prev_buf then
+					_G.flash_statusline('#ff8800')
+				end
+			end,
+		})
+		vim.defer_fn(function() pcall(vim.api.nvim_del_autocmd, au) end, 500)
+		fn()
+	end
+end
+
 vim.api.nvim_create_autocmd('LspAttach', {
 	group = vim.api.nvim_create_augroup('UserLspAttach', { clear = true }),
 	callback = function(ev)
@@ -178,10 +197,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set('n', '<C-w>n', function() goto_definition('split') end, opts)
 		vim.keymap.set('n', '<C-w>N', function() goto_definition('tabedit') end, opts)
 
-		-- TODO: Flash bar if window used is the same && buffer has changed
-		-- TODO: Do not stack tag in original window
-		vim.keymap.set('n', '<leader>gn', function() vim.lsp.buf.definition({ reuse_win = true }) end, opts)
-		vim.keymap.set('n', '<leader>gN', function() vim.lsp.buf.type_definition({ reuse_win = true }) end, opts)
+		vim.keymap.set('n', '<leader>gn', withFlash_ifNotReused(function()
+			vim.lsp.buf.definition({ reuse_win = true })
+		end), opts
+		)
+		vim.keymap.set('n', '<leader>gN', withFlash_ifNotReused(function()
+			vim.lsp.buf.type_definition({ reuse_win = true })
+		end), opts
+		)
 
 		--[[ Preview ]]
 		local gp = require('goto-preview')

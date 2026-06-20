@@ -152,6 +152,60 @@ vim.keymap.set('n', '<C-q>', toggle_qf, { silent = true })
 -- [[ Search ]]
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Shows '?' at the cmdline (so it reads as backward) but actually searches
+-- forward -- and the view must never scroll:
+-- 2. v:event.abort = true is a no-op from Lua (vim.v.event is a *copy*, the
+--    write never reaches the real dict), and even via vimscript Nvim may
+--    still jump for "/"/"?" cmdline types -- so winrestview undoes the final
+--    jump after <CR> regardless of whether the abort attempt took effect.
+vim.keymap.set('n', '?', function()
+	local view         = vim.fn.winsaveview()
+	local had_hlsearch = vim.o.hlsearch
+	local prev_pattern = vim.fn.getreg('/')
+	vim.o.incsearch    = false
+
+	local group        = vim.api.nvim_create_augroup('NoScrollSearch', { clear = true }) -- fresh augroup, clearing any leftovers
+
+	-- highlight all matches for whatever's typed so far, without moving the cursor
+	vim.api.nvim_create_autocmd('CmdlineChanged', {
+		group = group,
+		pattern = '\\?',                   -- only for backward-search cmdline (escaped: literal '?')
+		callback = function()
+			local pattern = vim.fn.getcmdline() -- read whatever has been typed so far
+			if pattern ~= '' then            -- skip an empty pattern (nothing to highlight)
+				vim.fn.setreg('/', pattern)    -- push it into the search register live
+				vim.opt.hlsearch = true        -- make sure matches are actually highlighted
+				vim.cmd.redraw()               -- force a redraw so highlights show immediately
+			end
+		end,
+	})
+
+	vim.api.nvim_create_autocmd('CmdlineLeave', { -- fires once when leaving the command-line
+		group = group,                             -- same group as the autocmd above
+		pattern = '\\?',                           -- escaped: a bare '?' is a glob wildcard matching ANY cmdline type
+		once = true,                               -- auto-remove itself after firing once
+		callback = function()
+			vim.o.incsearch = true
+			vim.api.nvim_del_augroup_by_id(group)              -- tear down the CmdlineChanged autocmd too
+			if vim.v.event.abort then                          -- cancelled (<Esc>/<C-c>): undo the live-preview register change
+				vim.fn.setreg('/', prev_pattern)                 -- put the old search pattern back
+				vim.opt.hlsearch = had_hlsearch                  -- put hlsearch back to its old state
+				return                                           -- nothing else to do, search was cancelled
+			end
+			local pattern = vim.fn.getcmdline()                -- the final pattern that was confirmed with <CR>
+			vim.cmd('let v:event.abort = v:true')              -- best effort, see note above
+			if pattern ~= '' then                              -- skip an empty pattern (repeat-last-search case)
+				vim.fn.setreg('/', pattern)                      -- store the confirmed pattern in the search register
+				vim.fn.histadd('search', pattern)                -- add it to search history, like a real search would
+			end
+			vim.v.searchforward = 1                            -- the real command was '?' (backward) -- force forward anyway
+			vim.opt.hlsearch = true                            -- keep matches highlighted after confirming
+			vim.schedule(function() vim.fn.winrestview(view) end) -- next tick: snap the view back if it moved anyway
+		end,
+	})
+	vim.api.nvim_feedkeys('?', 'n', false) -- shows '?' at the cmdline, but searchforward above keeps it forward
+end, { silent = true })
+
 local function search_cword()
 	local word = vim.fn.expand('<cword>')
 	vim.fn.setreg('*', word)

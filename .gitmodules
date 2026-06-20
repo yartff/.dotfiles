@@ -31,3 +31,6 @@
 [submodule "submodules/nvim-treesitter-context"]
 	path = submodules/nvim-treesitter-context
 	url = git@github.com:nvim-treesitter/nvim-treesitter-context.git
+[submodule "submodules/winshift.nvim"]
+	path = submodules/winshift.nvim
+	url = git@github.com:sindrets/winshift.nvim.git

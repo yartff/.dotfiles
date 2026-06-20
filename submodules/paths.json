@@ -5,6 +5,7 @@
   "nvim-lspconfig"		: ".config/nvim/pack/nvim/start/nvim-lspconfig",
   "goto-preview"		: ".config/nvim/pack/plugins/start/goto-preview",
   "snacks.nvim"			: ".config/nvim/pack/plugins/start/snacks.nvim",
+  "winshift.nvim"               : ".config/nvim/pack/plugins/start/winshift.nvim",
   "nvim-treesitter"		: ".config/nvim/pack/treesitter/start/nvim-treesitter",
   "nvim-treesitter-textobjects"	: ".config/nvim/pack/treesitter/start/nvim-treesitter-textobjects",
   "nvim-treesitter-context"	: ".config/nvim/pack/treesitter/start/nvim-treesitter-context",
