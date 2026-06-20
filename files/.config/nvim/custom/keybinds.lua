@@ -225,9 +225,9 @@ end, { silent = true })
 
 local function selection_in_search()
 	local saved = vim.fn.getreg('"')
-	vim.cmd.normal({ '"*y', bang = true })
+	vim.cmd.normal({ '"vy', bang = true })
 	vim.fn.setreg('"', saved)
-	local escaped = vim.fn.escape(vim.fn.getreg('*'), '/\\'):gsub('[ \t]+', '\\s\\*'):gsub('\n', '\\n')
+	local escaped = vim.fn.escape(vim.fn.getreg('v'), '/\\'):gsub('[ \t]+', '\\s\\*'):gsub('\n', '\\n')
 	vim.fn.setreg('/', '\\V' .. escaped)
 	vim.v.searchforward = 1
 	vim.opt.hlsearch = true

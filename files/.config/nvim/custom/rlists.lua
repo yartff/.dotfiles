@@ -2,6 +2,8 @@ local CTRL_E = '\x05'
 local CTRL_Y = '\x19'
 local CTRL_D = '\x04'
 local CTRL_U = '\x15'
+local MAX_COL = 120
+local STRIP_ENTRIES = 5
 
 local function open_registers_preview(get_sequence, mode)
 	local reg_names = { '"', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -9,8 +11,6 @@ local function open_registers_preview(get_sequence, mode)
 		'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 		'-', '.', ':', '%', '#', '*', '+', '/' }
 
-	-- TODO: Strip entries >= 20 lines
-	local MAX_COL = 120
 	local lines = {}
 	for _, name in ipairs(reg_names) do
 		local content = vim.fn.getreg(name)
@@ -22,8 +22,11 @@ local function open_registers_preview(get_sequence, mode)
 				if #part > MAX_COL then part = part:sub(1, MAX_COL - 1) .. '…' end
 				if i == 1 then
 					table.insert(lines, string.format(' %s  %s', name, part))
-				else
+				elseif i <= STRIP_ENTRIES then
 					table.insert(lines, '    ' .. part)
+				else
+					table.insert(lines, '...' .. part)
+					break
 				end
 			end
 		end
