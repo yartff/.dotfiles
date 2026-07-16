@@ -67,6 +67,8 @@ end
 vim.keymap.set('n', '>C', function() set_ctx_max_lines(ctx_max_lines + 1) end, { silent = true })
 vim.keymap.set('n', '<C', function() set_ctx_max_lines(math.max(1, ctx_max_lines - 1)) end, { silent = true })
 vim.keymap.set('n', '<c', function() set_ctx_max_lines(1) end, { silent = true })
+-- TODO: context overlaps window previews (try <leader>gd from a window above)
+-- TODO: allow 0
 
 -- treesitter-context's WinScrolled handler only updates the current window.
 -- Re-fire it as a User event (which the plugin handles across all windows in multiwindow mode).

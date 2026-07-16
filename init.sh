@@ -2,7 +2,7 @@
 
 mkdir -vp "${HOME}/workstation/github/yartff"
 mkdir -vp "${HOME}/workstation/go"
-mkdir -vp "${HOME}/workstation/go/gopath/src"
+## mkdir -vp "${HOME}/workstation/go/gopath/src"
 mkdir -vp "${HOME}/workstation/go/gopath/pkg"
 mkdir -vp "${HOME}/workstation/go/gopath/bin"
 mkdir -vp "${HOME}/workstation/projects"
